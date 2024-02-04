@@ -21,6 +21,7 @@ import ViewsProfile from "./viewsProfile/viewsProfile";
 import Loading from "./loading/loading";
 import { doc, getDoc } from "firebase/firestore";
 import MessageIndex from "./message";
+import EmptyMessage from "./message/layout/empty";
 
 function App() {
     const [userId, setUserId] = useState(null);
@@ -119,7 +120,7 @@ function App() {
                         <Route key={route.id} path={route.path} element={route.element} />
                     ))}
                     <Route path={`/m=split${split}/message`} element={<MessageIndex />}>
-                        <Route />
+                        <Route index element={<EmptyMessage />} />
                     </Route>
                 </Route>
                 {GhostUser.map((route) => (

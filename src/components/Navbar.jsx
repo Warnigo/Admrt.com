@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Navbar, MobileNav, Typography, Button, IconButton } from "@material-tailwind/react";
+import { Navbar, Typography, IconButton } from "@material-tailwind/react";
 import Logo from '../images/Group 1000005596 (2).svg'
 import userPhoto from '../Layout/AuthPage/images/Group 1000005937.svg'
 import { Link, useNavigate } from "react-router-dom";
@@ -196,7 +196,9 @@ function StickyNavbar({ authenticated, onUserSelect }) {
           variant="small"
           className="p-1 text-black text-lg font-normal"
         >
-          <img src={Notification} alt="Notification" />
+          <button>
+            <img src={Notification} alt="Notification" />
+          </button>
         </Typography>
       </ul>
       <div className='cursor-pointer hidden lg:flex border-2 border-blue-500 p-1 rounded-full'
