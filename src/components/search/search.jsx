@@ -9,6 +9,8 @@ const Search = () => {
   const [userId, setUserId] = useState(null);
   const [searchValue, setSearchValue] = useState('');
   const [userUID, setUserUID] = useState([]);
+  const [userImage, setUserImage] = useState();
+  const avater = 'https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg'
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -30,10 +32,21 @@ const Search = () => {
   
         if (!snapshot.empty) {
           const usersData = snapshot.docs.map((doc) => doc.data());
-          const usernames = usersData.map((user) => user.username);
-          const userUIDs = usersData.map((user) => user.userId);
-          setUserNames(usernames);
-          setUserUID(userUIDs);
+  
+          const filteredUsers = usersData.filter((user) => user.split === 'adSpaceHost');
+  
+          if (filteredUsers.length > 0) {
+            const usernames = filteredUsers.map((user) => user.username);
+            const userUIDs = filteredUsers.map((user) => user.userId);
+            const userImages = filteredUsers.map((user) => user.imageUrl);
+            console.log(userImages);
+            setUserNames(usernames);
+            setUserUID(userUIDs);
+            setUserImage(userImages);
+          } else {
+            setUserNames([]);
+            setUserUID([]);
+          }
         } else {
           setUserNames([]);
           setUserUID([]);
@@ -46,6 +59,7 @@ const Search = () => {
     fetchData();
   }, []);
   
+
 
   const filteredNames = userNames.filter(
     (username) =>
@@ -74,14 +88,22 @@ const Search = () => {
       )}
       {searchValue && filteredNames.length > 0 && (
         <div className="absolute mt-2 w-full bg-white border rounded-md shadow-lg">
-          <ul>
+          <ul className='m-1 border border-gray-300 rounded-sm'>
             {filteredNames.map((username, index) => (
-              <li
-                key={index}
-                className="py-2 px-4 cursor-pointer hover:bg-gray-100 text-black"
-              >
-                <Link to={`profile/${userUID[index]}`}>{username}</Link>
-              </li>
+              <Link to={`profile/${userUID[index]}`}>
+                <div className='flex px-3 py-2 hover:bg-gray-100 border-b'>
+                  <li key={index} className=''>
+                    <img src={userImage[index] || avater} alt="" className='w-10 rounded-full border border-blue-700 p-0.5' />
+                  </li>
+                  <li
+                    key={index}
+                    className="py-2 px-4 cursor-pointer hover:bg-gray-100 text-black"
+                  >
+                    {username}
+                  </li>
+                </div>
+              </Link>
+
             ))}
           </ul>
         </div>

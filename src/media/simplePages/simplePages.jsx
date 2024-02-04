@@ -39,8 +39,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import view_eye from '../../image/eye 1.svg';
 import view_search from '../../image/search 1.svg';
 
-
-
 function SiplePages() {
     const [userId, setUserId] = useState(null);
     const [split, setSplit] = useState(null);
