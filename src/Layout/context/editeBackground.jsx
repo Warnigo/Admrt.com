@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {storage, db, auth} from "../../firebase/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
@@ -71,7 +71,6 @@ const EditBackground = ({ userId }) => {
             setError("Error uploading image. Please try again.");
         } finally {
             setIsLoading(false);
-            window.location.reload();
         }
     };
 
@@ -110,7 +109,7 @@ const EditBackground = ({ userId }) => {
                                 onClick={handleCancel}
                                 className="px-4 py-2 text-gray-700 border rounded-lg hover:border-indigo-600 active:shadow-lg"
                             >
-                                Cancel
+                                {error || "Cancel"}
                             </button>
                         </div>
                     </div>

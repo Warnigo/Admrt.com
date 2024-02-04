@@ -122,7 +122,7 @@ const IntoDescription = () => {
                 </form>
             )}
             {userData && (
-                <div className="">
+                <div className="mt-5">
                     <div className="flex justify-between">
                         <h1 className="text-2xl font-semibold">Intro Description</h1>
                         <div className="flex  justify-center items-center cursor-pointer mx-5">

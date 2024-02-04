@@ -84,7 +84,7 @@ function StickyNavbar({ authenticated, onUserSelect }) {
   const navigation = [
     { title: "Dashboard", path: "/" },
     { title: "Profile", path: `/t=split${split}/${userId}` },
-    { title: "Settings", path: `/t=?${split}/${userId}/settings` },
+    { title: "Settings", path: `/t=split${split}/${userId}/settings` },
   ];
 
   const handleLogout = () => {
@@ -187,7 +187,7 @@ function StickyNavbar({ authenticated, onUserSelect }) {
           variant="small"
           className="p-1 text-black text-lg font-normal"
         >
-          <Link to={"/message"} className="flex items-center hover:text-blue-700 hover:shadow-sm">
+          <Link to={`/m=split${split}/message`} className="flex items-center hover:text-blue-700 hover:shadow-sm">
             <h1>Message</h1>
           </Link>
         </Typography>
@@ -257,7 +257,7 @@ function StickyNavbar({ authenticated, onUserSelect }) {
               <div className="mr-4 hidden lg:block">{authenticated ? getUser : ghostUser}</div>
             </div>
           </div>
-          <MobileNav open={openNav}>
+          {/* <MobileNav open={openNav}>
             {authenticated ? getUser : ghostUser}
             <div className="flex items-center gap-x-1">
               <Button fullWidth variant="text" size="sm" className="">
@@ -267,7 +267,7 @@ function StickyNavbar({ authenticated, onUserSelect }) {
                 <a href="/register"><span>Sign up</span></a>
               </Button>
             </div>
-          </MobileNav>
+          </MobileNav> */}
         </Navbar>
       </div>
     </div>

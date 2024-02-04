@@ -55,15 +55,13 @@ const EditeUser = () => {
   
   const updateAvatar = (imgSrc) => {
     const newCroppedImage = imgSrc + `?key=${Date.now()}`;
-    console.log('Before update:', croppedImage);
     setCroppedImage(newCroppedImage);
-    console.log('After update:', croppedImage);
 
     window.location.reload();
   };
 
   return (
-    <div className="flex -mt-6 ml-4">
+    <div className="flex -mt-10 ml-4">
       <div className="relative">
         <img
           key={croppedImage}

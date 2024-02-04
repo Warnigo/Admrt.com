@@ -20,6 +20,7 @@ import Home from "./components/Home";
 import ViewsProfile from "./viewsProfile/viewsProfile";
 import Loading from "./loading/loading";
 import { doc, getDoc } from "firebase/firestore";
+import MessageIndex from "./message";
 
 function App() {
     const [userId, setUserId] = useState(null);
@@ -79,7 +80,7 @@ function App() {
         { id: 4, path: `/t=split${split}/${userId}/settings`, element: <Settings /> },
         { id: 5, path: `/t=split${split}/${userId}/qwerty`, element: <Billings /> },
         { id: 6, path: "/profile/:userUID", element: <ViewsProfile onUserUID={handleUserSelect} /> },
-        { id: 7, path: "*", element: <NotFound /> },
+        { id: 0, path: "*", element: <NotFound /> },
     ];
 
     const GhostUser = [
@@ -93,6 +94,10 @@ function App() {
         { id: 8, path: "/congratulation", element: <CreateAnAcc /> },
         { id: 9, path: "*", element: <NotFound /> },
     ];
+
+    const messageLayout = [
+
+    ]
 
     const currentPath = window.location.pathname;
     useEffect(() => {
@@ -113,6 +118,9 @@ function App() {
                     {AuthUserRoutes.map((route) => (
                         <Route key={route.id} path={route.path} element={route.element} />
                     ))}
+                    <Route path={`/m=split${split}/message`} element={<MessageIndex />}>
+                        <Route />
+                    </Route>
                 </Route>
                 {GhostUser.map((route) => (
                     <Route key={route.id} path={route.path} element={route.element} />

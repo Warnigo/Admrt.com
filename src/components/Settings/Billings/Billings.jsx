@@ -2,15 +2,27 @@ import React, { useEffect, useState } from 'react'
 import card from './Card.svg'
 import './style.css'
 import { Link, useNavigate } from 'react-router-dom'
-import { auth } from '../../../firebase/firebase'
+import { auth, usersCollection } from '../../../firebase/firebase'
+import { doc, getDoc } from 'firebase/firestore'
 
 const Billings = () => {
   const [user, setUser] = useState(null);
+  const [split, setSplit] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
-    const fetchUser = auth.onAuthStateChanged((user) => {
+    const fetchUser = auth.onAuthStateChanged(async (user) => {
       setUser(user)
+      try{
+        const dbCall = await getDoc(doc(usersCollection, user.uid));
+        if(dbCall.exists()){
+          const data = dbCall.data();
+          const splitdata = data.split;
+          setSplit(splitdata)
+        }
+      }catch(error){
+        console.log(error);
+      }
     })
 
     return () => fetchUser
@@ -36,7 +48,7 @@ const Billings = () => {
             </div>
             <div class="mx-auto">
               <div class="">
-                <Link to={`/${user.uid}/settings`}>
+                <Link to={`/t=split${split}/${user.uid}/settings`}>
                   <button class="flex mt-8 w-full text-lg font-medium p-4 rounded-2xl  mb-2.5 hover:bg-gray-100">
 
                     Account

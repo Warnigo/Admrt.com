@@ -15,13 +15,24 @@ const Settings = () => {
   const { userId: userIdParam } = useParams();
   const [modal, setModal] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [split, setSplit] = useState(null)
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUser = auth.onAuthStateChanged((user) => {
+    const fetchUser = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUserId(user.uid);
+        try{
+          const getCall = await getDoc(doc(usersCollection, user.uid))
+          if(getCall.exists()) {
+            const data = getCall.data();
+            const splitCall = data.split
+            setSplit(splitCall);
+          }
+        }catch(err){
+          console.log(err);
+        }
       } else {
         setUserId(null);
       }
@@ -119,7 +130,7 @@ const Settings = () => {
                   <img class="mr-4" src="./account.svg" alt="" />
                   Account
                 </button>
-                <Link to={`/${userId}/qwerty`}>
+                <Link to={`/t=split${split}/${userId}/qwerty`}>
                   <button class="flex w-full mt-8 text-lg font-medium p-4 mb-2.5 rounded-2xl hover:bg-gray-100">
                     <img class="mr-4" src="./Billings.svg" alt="" />
                     Billings
