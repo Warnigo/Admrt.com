@@ -8,6 +8,7 @@ const Search = () => {
   const [userNames, setUserNames] = useState([]);
   const [userId, setUserId] = useState(null);
   const [searchValue, setSearchValue] = useState('');
+  const [split, setSplit] = useState(null)
   const [userUID, setUserUID] = useState([]);
   const [userImage, setUserImage] = useState();
   const avater = 'https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg'
@@ -39,10 +40,12 @@ const Search = () => {
             const usernames = filteredUsers.map((user) => user.username);
             const userUIDs = filteredUsers.map((user) => user.userId);
             const userImages = filteredUsers.map((user) => user.imageUrl);
+            const userSplit = filteredUsers.map((user) => user.split);
             console.log(userImages);
             setUserNames(usernames);
             setUserUID(userUIDs);
             setUserImage(userImages);
+            setSplit(userSplit);
           } else {
             setUserNames([]);
             setUserUID([]);
@@ -90,7 +93,7 @@ const Search = () => {
         <div className="absolute mt-2 w-full bg-white border rounded-md shadow-lg">
           <ul className='m-1 border border-gray-300 rounded-sm'>
             {filteredNames.map((username, index) => (
-              <Link to={`profile/${userUID[index]}`}>
+              <Link to={`p=profileut/${split}/${userUID[index]}`}>
                 <div className='flex px-3 py-2 hover:bg-gray-100 border-b'>
                   <li key={index} className=''>
                     <img src={userImage[index] || avater} alt="" className='w-10 rounded-full border border-blue-700 p-0.5' />
