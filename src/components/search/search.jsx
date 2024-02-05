@@ -41,7 +41,6 @@ const Search = () => {
             const userUIDs = filteredUsers.map((user) => user.userId);
             const userImages = filteredUsers.map((user) => user.imageUrl);
             const userSplit = filteredUsers.map((user) => user.split);
-            console.log(userImages);
             setUserNames(usernames);
             setUserUID(userUIDs);
             setUserImage(userImages);

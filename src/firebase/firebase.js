@@ -23,8 +23,20 @@ const storage = getStorage(app);
 const database = getDatabase(app);
 const usersCollection = collection(db, 'users');
 const usernameCollection = collection(db, 'username');
+const requestCollection = collection(db, 'request');
 
-export { auth, googleProvider, facebookProvider, usersCollection, usernameCollection, storage, db, app, database };
+export {
+  auth,
+  googleProvider,
+  facebookProvider,
+  usersCollection,
+  usernameCollection,
+  storage,
+  db,
+  app,
+  database,
+  requestCollection
+};
 
 export async function saveUserDataToFirebase(userId, userData) {
   try {

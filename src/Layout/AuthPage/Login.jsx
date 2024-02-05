@@ -95,7 +95,7 @@ function Login() {
               </h1>
               <p className="my-4 text-sm md:text-base font-light md:my-8">Don’t have an account? <span className="text-blue-700 font-normal cursor-pointer"><a href="/register">Create an account</a></span></p>
               <form className="md:space-y-6" onSubmit={handleLogin}>
-              <p className="error-message text-white bg-red-400 border border-gray-200 text-center">{errorMessage}</p>
+              {errorMessage && <p className="error-message text-white p-2 bg-red-400 border-2 border-red-800 text-center rounded-lg">{errorMessage}</p>}
                 <div>
                   <h3 className="text-base font-medium">Email Address</h3>
                   <input
