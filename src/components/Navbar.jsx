@@ -7,8 +7,10 @@ import Notification from '../images/notification.svg'
 import down from '../svgs/down.svg'
 import { ref, getDownloadURL } from 'firebase/storage'
 import { auth, storage, usersCollection } from '../firebase/firebase'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import Search from "./search/search";
+import Chek from '../svgs/chek.svg'
+import Close from '../svgs/close.svg'
 
 function StickyNavbar({ authenticated, onUserSelect }) {
   const [openNav, setOpenNav] = React.useState(false);
@@ -20,6 +22,8 @@ function StickyNavbar({ authenticated, onUserSelect }) {
   const [split, setSplit] = useState(null)
   const navigate = useNavigate();
   const defaultAvate = "https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg";
+  const [modal, setModal] = useState(false)
+  const [comeRequest, setComeRequest] = useState(null)
 
   useEffect(() => {
     const unsebscribe = auth.onAuthStateChanged(async (user) => {
@@ -30,10 +34,12 @@ function StickyNavbar({ authenticated, onUserSelect }) {
           const userDoc = await getDoc(doc(usersCollection, user.uid));
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            const fullName = userData.fullName;
+            const fullName = userData.username;
             const splitCall = userData.split
+            const comeRequestCall = userData.requests;
             setUserFullName(fullName);
             setSplit(splitCall)
+            setComeRequest(comeRequestCall)
           }
         } catch (error) {
           console.error('Error getting user data:', error);
@@ -62,7 +68,6 @@ function StickyNavbar({ authenticated, onUserSelect }) {
 
     document.addEventListener('click', handleDropDown);
     document.addEventListener('scroll', handleClickOutside);
-
   }, [profileRef]);
 
   useEffect(() => {
@@ -93,6 +98,22 @@ function StickyNavbar({ authenticated, onUserSelect }) {
     window.location.reload();
   }
 
+  const handleChek = async (username) => {
+    try {
+      const userDocRef = doc(usersCollection, userId);
+      await updateDoc(userDocRef, {
+        [`requests.${username}`]: true,
+      });
+      setComeRequest((prevRequests) => ({
+        ...prevRequests,
+        [username]: true,
+      }));
+    } catch (error) {
+      console.error('Error updating request status:', error);
+    }
+  };
+  
+ 
   const ghostUser = (
     <div className="flex">
       <ul className="mt-2 mb-2 mr-6 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -180,8 +201,9 @@ function StickyNavbar({ authenticated, onUserSelect }) {
 
   const getUser = (
     <div className="flex items-center gap-2">
-      <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-        <Search onUserSelect={onUserSelect} />
+
+      <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center ml-8">
+        <Search onUserSelect={onUserSelect} className={"mr-8"} />
         <Typography
           as="li"
           variant="small"
@@ -196,9 +218,50 @@ function StickyNavbar({ authenticated, onUserSelect }) {
           variant="small"
           className="p-1 text-black text-lg font-normal"
         >
-          <button>
-            <img src={Notification} alt="Notification" />
+          <button className="pt-3 px-4"
+            onClick={() => setModal(true)}
+            onMouseLeave={() => setModal(false)}
+          >
+            <img src={Notification} alt="" className="w-7" />
+            {modal && (
+              <div className='absolute shadow-lg bg-gray-100 py-0 z-[1000] border rounded-lg w-[300px]'>
+                <div className="flex items-center justify-between my-2 px-4 border-b">
+                  <p className="text-xs text-blue-500 cursor-pointer hover:bg-gray-300 p-1 rounded-sm">Clear all</p>
+                  <p className="text-xs text-blue-500 cursor-pointer hover:bg-gray-300 p-1 rounded-sm">Accept all</p>
+                </div>
+                <div>
+                  <div>
+                    {comeRequest && (
+                      <div className="">
+                        {Object.entries(comeRequest)
+                          .filter(([key, value]) => value === false)
+                          .map(([key]) => (
+                            <ul className="flex">
+                              <li key={key}
+                                className="flex py-1 hover:bg-gray-200 border-b text-start px-2 w-full justify-between"
+                              >
+                                {key}
+                                <span className="text-sm text-gray-500">request sent you</span>
+                                <div className="flex">
+                                  <li className="hover:bg-gray-300 rounded-sm p-1"  onClick={() => handleChek(key)} >
+                                    <img src={Chek} alt="" />
+                                  </li>
+                                  <li className="hover:bg-gray-300 rounded-sm p-1">
+                                    <img src={Close} alt="" />
+                                  </li>
+                                </div>
+                              </li>
+                            </ul>
+                          ))}
+                      </div>
+                    )}
+
+                  </div>
+                </div>
+              </div>
+            )}
           </button>
+
         </Typography>
       </ul>
       <div className='cursor-pointer hidden lg:flex border-2 border-blue-500 p-1 rounded-full'
@@ -259,17 +322,7 @@ function StickyNavbar({ authenticated, onUserSelect }) {
               <div className="mr-4 hidden lg:block">{authenticated ? getUser : ghostUser}</div>
             </div>
           </div>
-          {/* <MobileNav open={openNav}>
-            {authenticated ? getUser : ghostUser}
-            <div className="flex items-center gap-x-1">
-              <Button fullWidth variant="text" size="sm" className="">
-                <a href="/login"><span>Sign In</span></a>
-              </Button>
-              <Button fullWidth variant="" size="sm" className="bg-blue-700">
-                <a href="/register"><span>Sign up</span></a>
-              </Button>
-            </div>
-          </MobileNav> */}
+
         </Navbar>
       </div>
     </div>
