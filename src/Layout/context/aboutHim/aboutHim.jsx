@@ -250,7 +250,7 @@ const AboutHim = () => {
                                 <img src={shape4} alt='' />
                             </div>
                             <div>
-                                <h1>Working at Youtube ({userData.services ? (userData.services.fullTime ? 'Full Time' : userData.services.partTime ? 'Part Time' : 'None') : 'None'})</h1>
+                                <h1>Working at Youtube ({userData.services ? (userData.services.fullTime ? 'Full Time' : userData.services.partTime ? 'Part Time' : 'none') : 'none'})</h1>
                             </div>
                         </div>
                         <div className='flex justify-center items-center cursor-pointer'>

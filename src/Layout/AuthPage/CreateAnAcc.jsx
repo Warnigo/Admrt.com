@@ -1,13 +1,13 @@
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import { Icon } from 'react-icons-kit';
 import { eyeOff } from 'react-icons-kit/feather/eyeOff';
 import { eye } from 'react-icons-kit/feather/eye';
 import Checkbox from '@mui/material/Checkbox';
 import SlideShow from '../SlideShow';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, usersCollection } from '../../firebase/firebase';
+import { auth, db, usersCollection } from '../../firebase/firebase';
 import { doc, setDoc } from 'firebase/firestore'
-import { Link, useNavigate, useParams} from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 
 const CreateAnAcc = () => {
@@ -68,6 +68,12 @@ const CreateAnAcc = () => {
         country,
         registrationDate: currentDate,
       });
+
+      const usernameRef = doc(db, "search", fullName);
+      await setDoc(usernameRef, {
+        userId,
+        split,
+      })
 
       navigate(`/`);
     } catch (err) {

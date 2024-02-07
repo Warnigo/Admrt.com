@@ -96,10 +96,6 @@ function App() {
         { id: 9, path: "*", element: <NotFound /> },
     ];
 
-    const messageLayout = [
-
-    ]
-
     const currentPath = window.location.pathname;
     useEffect(() => {
         if (currentPath !== "/") {

@@ -4,12 +4,12 @@ import ImageCropper from "./cropImg/modal";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
 import { ref, getDownloadURL } from "firebase/storage";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
-import { usersCollection, storage } from "../../firebase/firebase";
+import { usersCollection, storage, db } from "../../firebase/firebase";
 import edit_svg_blue from "../../image/edit_svg_blue.svg";
 
 const EditeUser = () => {
   const auth = getAuth();
-  const [currentUser, setCurrentUser] = useState(null);
+  const [, setCurrentUser] = useState(null);
   const avatarUrl = useRef("https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg");
   const [modalOpen, setModalOpen] = useState(false);
   const [fullName, setFullName] = useState("");
@@ -25,6 +25,7 @@ const EditeUser = () => {
     });
 
     return () => unsubscribe();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
   const fetchUserData = async (userId) => {
@@ -47,12 +48,15 @@ const EditeUser = () => {
   
       const userDocRef = doc(usersCollection, userId);
       await updateDoc(userDocRef, { imageUrl });
+
+      const usernameref = doc(db, 'search', fullName);
+      await updateDoc(usernameref, { imageUrl });
   
     } catch (error) {
       console.error("Error fetching user image:", error);
     }
   };
-  
+
   const updateAvatar = (imgSrc) => {
     const newCroppedImage = imgSrc + `?key=${Date.now()}`;
     setCroppedImage(newCroppedImage);
