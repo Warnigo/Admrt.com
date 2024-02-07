@@ -233,7 +233,7 @@ const AboutHim = () => {
                                 <img src={shape3} alt='' />
                             </div>
                             <div>
-                                <h1>Joined January 2024</h1>
+                            <h1>Joined {userData.registrationDate ? new Date(userData.registrationDate.seconds * 1000).toLocaleDateString('en-GB') : 'Unknown'}</h1>
                             </div>
                         </div>
                         <div className='flex justify-center items-center cursor-pointer'>
@@ -250,7 +250,7 @@ const AboutHim = () => {
                                 <img src={shape4} alt='' />
                             </div>
                             <div>
-                                <h1>Working at Youtube ()</h1>
+                                <h1>Working at Youtube ({userData.services ? (userData.services.fullTime ? 'Full Time' : userData.services.partTime ? 'Part Time' : 'None') : 'None'})</h1>
                             </div>
                         </div>
                         <div className='flex justify-center items-center cursor-pointer'>
@@ -281,7 +281,7 @@ const AboutHim = () => {
                 </div>
             )}
 
-            
+
         </div>
     )
 }

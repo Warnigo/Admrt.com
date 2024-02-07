@@ -52,13 +52,12 @@ const CreateAnAcc = () => {
       return;
     }
 
-
-
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userId = userCredential.user.uid;
 
       const infoRef = doc(usersCollection, userId);
+      const currentDate = new Date();
       await setDoc(infoRef, {
         fullName,
         email,
@@ -67,6 +66,7 @@ const CreateAnAcc = () => {
         password,
         phoneNumber,
         country,
+        registrationDate: currentDate,
       });
 
       navigate(`/`);

@@ -26,24 +26,24 @@ export default function App() {
         <SwiperSlide>
         <div className='card-slide'>  
           <div>
-            <img class="w-56 mt-32 fill-white" src={svg1} alt='' />
-            <h1 class="mt-6 text-3xl text-white md:text-3xl lg:text-4xl xl:text-5xl">Improve your business with AdMrt!</h1>
+            <img className="w-56 mt-32 fill-white" src={svg1} alt='' />
+            <h1 className="mt-6 text-3xl text-white md:text-3xl lg:text-4xl xl:text-5xl">Improve your business with AdMrt!</h1>
            </div>
           </div>
         </SwiperSlide>
         <SwiperSlide>
         <div className='card-slide'>  
           <div>
-            <img class="w-56 mt-32" src={svg1} alt='' />
-            <h1 class="mt-6 text-3xl text-white md:text-3xl lg:text-4xl xl:text-5xl">Improve your business with AdMrt!</h1>
+            <img className="w-56 mt-32" src={svg1} alt='' />
+            <h1 className="mt-6 text-3xl text-white md:text-3xl lg:text-4xl xl:text-5xl">Improve your business with AdMrt!</h1>
           </div>
         </div>
         </SwiperSlide>
         <SwiperSlide>
          <div className='card-slide'>
           <div> 
-            <img class="w-56 mt-32" src={svg1} alt='' />
-            <h1 class="mt-6 text-3xl text-white md:text-3xl lg:text-4xl xl:text-5xl">Improve your business with AdMrt!</h1>
+            <img className="w-56 mt-32" src={svg1} alt='' />
+            <h1 className="mt-6 text-3xl text-white md:text-3xl lg:text-4xl xl:text-5xl">Improve your business with AdMrt!</h1>
           </div> 
          </div>
         </SwiperSlide>

@@ -34,7 +34,7 @@ function StickyNavbar({ authenticated, onUserSelect }) {
           const userDoc = await getDoc(doc(usersCollection, user.uid));
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            const fullName = userData.username;
+            const fullName = userData.fullName;
             const splitCall = userData.split
             const comeRequestCall = userData.requests;
             setUserFullName(fullName);
