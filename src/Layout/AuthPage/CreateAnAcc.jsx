@@ -19,7 +19,6 @@ const CreateAnAcc = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [type, setType] = useState('password');
   const [icon, setIcon] = useState(eyeOff);
-  const [errorUsername, setErrorUsername] = useState('')
   const { split } = useParams();
   const navigate = useNavigate();
 
@@ -37,7 +36,6 @@ const CreateAnAcc = () => {
     e.preventDefault();
 
     setErrorMessage('');
-    setErrorUsername('');
 
     if (!fullName.trim() || !email.trim() || !phoneNumber.trim() || !password.trim() || !country.trim()) {
       setErrorMessage('All fields are required.');
