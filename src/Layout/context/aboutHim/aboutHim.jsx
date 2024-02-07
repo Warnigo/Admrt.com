@@ -104,7 +104,7 @@ const AboutHim = () => {
                     <div className="fixed inset-0 z-50 overflow-hidden flex bg-opacity-50 bg-gray-500 justify-center items-center">
                         <div className="relative w-96 mx-auto bg-white rounded-lg shadow-lg">
                             <div className="flex items-start justify-between p-5 border-b border-blueGray-200 rounded-t">
-                                <h3 className="text-2xl font-semibold">Edit About Him</h3>
+                                <h3 className="text-2xl font-semibold">Edit About</h3>
                             </div>
                             <div className="p-6 space-y-4">
                                 <h1 className="text-xl font-medium">Enter your information correctly</h1>
@@ -179,7 +179,7 @@ const AboutHim = () => {
             <div className='mt-0'>
                 <div className='flex justify-between my-3'>
                     <div>
-                        <h1 className='font-semibold'>About Him</h1>
+                        <h1 className='font-semibold'>About</h1>
                     </div>
                     <div>
                         <img src={shape} alt='' />
@@ -187,7 +187,7 @@ const AboutHim = () => {
                 </div>
                 <div className='border'></div>
                 <div className='my-3'>
-                    <h1>Some other Information to make it Trusted these information's are verified.</h1>
+                    <h1>Tell potential advertisers more about you.</h1>
                 </div>
                 <div className='border'></div>
             </div>

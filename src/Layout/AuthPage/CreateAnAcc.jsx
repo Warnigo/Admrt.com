@@ -5,10 +5,9 @@ import { eye } from 'react-icons-kit/feather/eye';
 import Checkbox from '@mui/material/Checkbox';
 import SlideShow from '../SlideShow';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db, usersCollection } from '../../firebase/firebase';
-import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore'
+import { auth, usersCollection } from '../../firebase/firebase';
+import { doc, setDoc } from 'firebase/firestore'
 import { Link, useNavigate, useParams} from 'react-router-dom';
-import { ref, set, getDatabase } from 'firebase/database';
 
 
 const CreateAnAcc = () => {
@@ -16,14 +15,11 @@ const CreateAnAcc = () => {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
   const [country, setCountry] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [type, setType] = useState('password');
   const [icon, setIcon] = useState(eyeOff);
   const [errorUsername, setErrorUsername] = useState('')
-  const [seccedUsername, setSeccedUsername] = useState('')
-  const [usernameValid, setUsernameValid] = useState('')
   const { split } = useParams();
   const navigate = useNavigate();
 
@@ -34,26 +30,6 @@ const CreateAnAcc = () => {
     } else {
       setIcon(eyeOff);
       setType('password');
-    }
-  };
-
-  const validateUsername = async (username) => {
-    try {
-      const usersRef = collection(db, 'users');
-      const q = query(usersRef, where('username', '==', username));
-      const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
-        setErrorMessage('Username is already taken. Choose another one.');
-        setUsernameValid(false);
-      } else {
-        setErrorMessage('');
-        setUsernameValid(true);
-      }
-    } catch (error) {
-      console.error(error);
-      setUsernameValid(false);
-      setErrorMessage('Error checking username. Please try again.');
     }
   };
 
@@ -90,7 +66,6 @@ const CreateAnAcc = () => {
         email,
         split,
         userId,
-        username,
         password,
         phoneNumber,
         country,
@@ -100,28 +75,6 @@ const CreateAnAcc = () => {
     } catch (err) {
       console.error(err);
       setErrorMessage('Registration failed. Please try again.');
-    }
-  };
-
-  const handleUsernameMessage = async (e) => {
-    const value = e.target.value;
-    setUsername(value);
-    setErrorUsername('');
-    setErrorMessage('');
-    setUsernameValid('');
-    
-    if (value.trim() === '') {
-      setSeccedUsername('');
-      setErrorUsername('Username is required.');
-      return;
-    }
-  
-    await validateUsername(value);
-  
-    if (usernameValid === true) {
-      setSeccedUsername('Username available!');
-    } else if (usernameValid === false) {
-      setErrorUsername('Username is already taken. Choose another one.');
     }
   };
 
@@ -139,25 +92,6 @@ const CreateAnAcc = () => {
             </div>
           </div>
           <form onSubmit={handleConfimAuth}>
-          <div>
-          <label className="block mt-8">
-            <h3 className="text-lg font-normal">Username</h3>
-            <input
-              type="text"
-              name="text"
-              className={`mt-2.5 px-3 py-3 md:py-4 bg-white border shadow-sm 
-              ${errorUsername ? 'border-red-500 focus:border-red-500 focus:ring-red-600' : ''}
-              ${usernameValid === true ? 'border-green-500 focus:border-green-500 focus:ring-green-600' : ''}
-              ${usernameValid === false ? 'border-red-500 focus:border-red-500 focus:ring-red-600' : ''}
-              placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-blue-600 block w-full rounded-xl focus:ring-1`}
-              placeholder="Only one word"
-              value={username}
-              onChange={handleUsernameMessage}
-            />
-            {usernameValid === true && <p className='text-green-500'>{seccedUsername}</p>}
-            {usernameValid === false && <p className='text-red-500'>{errorUsername}</p>}
-          </label>
-        </div>
             <div>
               <label className="block mt-8">
                 <h3 className="text-lg font-normal">Full Name</h3>

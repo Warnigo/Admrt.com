@@ -33,14 +33,14 @@ const AboutHim = () => {
             <div className='mt-8'>
                 <div className='flex justify-between my-3'>
                     <div>
-                        <h1 className='font-semibold'>About Him</h1>
+                        <h1 className='font-semibold'>About</h1>
                     </div>
                     <div>
                     </div>
                 </div>
                 <div className='border'></div>
                 <div className='my-3'>
-                    <h1>Some other Information to make it Trusted these information's are verified.</h1>
+                    <h1>Tell potential advertisers more about you.</h1>
                 </div>
                 <div className='border'></div>
             </div>
