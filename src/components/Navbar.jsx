@@ -112,8 +112,8 @@ function StickyNavbar({ authenticated, onUserSelect }) {
       console.error('Error updating request status:', error);
     }
   };
-  
- 
+
+
   const ghostUser = (
     <div className="flex">
       <ul className="mt-2 mb-2 mr-6 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -201,7 +201,6 @@ function StickyNavbar({ authenticated, onUserSelect }) {
 
   const getUser = (
     <div className="flex items-center gap-2">
-
       <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center ml-8">
         <Search onUserSelect={onUserSelect} className={"mr-8"} />
         <Typography
@@ -230,33 +229,30 @@ function StickyNavbar({ authenticated, onUserSelect }) {
                   <p className="text-xs text-blue-500 cursor-pointer hover:bg-gray-300 p-1 rounded-sm">Accept all</p>
                 </div>
                 <div>
-                  <div>
-                    {comeRequest && (
-                      <div className="">
-                        {Object.entries(comeRequest)
-                          .filter(([key, value]) => value === false)
-                          .map(([key]) => (
-                            <ul className="flex">
-                              <li key={key}
-                                className="flex py-1 hover:bg-gray-200 border-b text-start px-2 w-full justify-between"
-                              >
-                                {key}
-                                <span className="text-sm text-gray-500">request sent you</span>
-                                <div className="flex">
-                                  <li className="hover:bg-gray-300 rounded-sm p-1"  onClick={() => handleChek(key)} >
-                                    <img src={Chek} alt="" />
-                                  </li>
-                                  <li className="hover:bg-gray-300 rounded-sm p-1">
-                                    <img src={Close} alt="" />
-                                  </li>
-                                </div>
-                              </li>
-                            </ul>
-                          ))}
-                      </div>
-                    )}
-
-                  </div>
+                  {comeRequest && (
+                    <div className="py-3">
+                      {Object.entries(comeRequest)
+                        .filter(([value]) => value === false)
+                        .map(([key]) => (
+                          <ul className="flex">
+                            <li key={key}
+                              className="flex py-1 hover:bg-gray-200 border-b text-start px-2 w-full justify-between"
+                            >
+                              {key}
+                              <span className="text-sm text-gray-500">request sent you</span>
+                              <div className="flex">
+                                <li className="hover:bg-gray-300 rounded-sm p-1" onClick={() => handleChek(key)} >
+                                  <img src={Chek} alt="" />
+                                </li>
+                                <li className="hover:bg-gray-300 rounded-sm p-1">
+                                  <img src={Close} alt="" />
+                                </li>
+                              </div>
+                            </li>
+                          </ul>
+                        ))}
+                    </div>
+                  )}
                 </div>
               </div>
             )}

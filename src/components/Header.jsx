@@ -137,25 +137,6 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div class="bg-sky-100 py-20">
-        <div class="block justify-center items-center justify-end max-w-screen-2xl px-8 mx-auto xl:px-5">
-          <div class="block text-center items-center justify-center">
-            <h1 class=" text-5xl font-bold">Testimonials and Anticipation</h1>
-            <p class="text-lg font-normal mt-4 text-gray-500">See what marketers, publishers, influencers and business owners have said</p>
-          </div>
-          <div class=" text-center">
-            <p class="text-xl font-medium mt-10 max-w-3xl mx-auto">“Admrt is the platform I go to on almost a daily basis for 2nd words and ads shopping, or to just look at dream homes in new areas. Thanks for fun home shopping and comparative analyzing, Admrt!”</p>
-            <h3 class=" text-lg font-normal mt-10">Mira Culos, <span class="text-gray-400">Renter</span></h3>
-          </div>
-          <div class="flex justify-center mt-10">
-            <div class="flex mb-10 gap-5">
-              <img src={per1} alt="" />
-              <img src={per2} alt="" />
-              <img src={per3} alt="" />
-            </div>
-          </div>
-        </div>
-      </div>
       <div>
 
       </div>
