@@ -5,6 +5,7 @@ import { eye } from 'react-icons-kit/feather/eye'
 import svg1 from './images/ic_google logo (1).svg'
 import svg2 from './images/ic_fb logo.svg'
 
+
 import SlideShow from "./../../Layout/SlideShow";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, googleProvider, facebookProvider } from "../../firebase/firebase";
@@ -83,6 +84,7 @@ function Login() {
 
   return (
     <div className="login-container min-h-screen md:flex">
+   
       <div className="md:w-1/2">
         <SlideShow />
       </div>
@@ -95,14 +97,14 @@ function Login() {
               </h1>
               <p className="my-4 text-sm md:text-base font-light md:my-8">Don’t have an account? <span className="text-blue-700 font-normal cursor-pointer"><a href="/register">Create an account</a></span></p>
               <form className="md:space-y-6" onSubmit={handleLogin}>
-              {errorMessage && <p className="error-message text-white p-2 bg-red-400 border-2 border-red-800 text-center rounded-lg">{errorMessage}</p>}
+                {errorMessage && <p className="error-message text-white p-2 bg-red-400 border-2 border-red-800 text-center rounded-lg">{errorMessage}</p>}
                 <div>
                   <h3 className="text-base font-medium">Email Address</h3>
                   <input
                     type="email"
                     name="email"
                     className={`mt-2.5 px-3 py-3 md:py-4 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-blue-600 block w-full rounded-xl focus:ring-1 ${emailError ? 'border-red-500' : ''}`}
-                    placeholder="example@gmail.com|"
+                    // placeholder="example@gmail.com|"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -116,7 +118,7 @@ function Login() {
                         className={`mt-2.5 px-3 py-3 md:py-4 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-blue-600 block w-full rounded-xl focus:ring-1 ${passwordError ? 'border-red-500' : ''}`}
                         type={type}
                         name="password"
-                        placeholder="Password"
+                        // placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         autoComplete="current-password"
@@ -139,22 +141,26 @@ function Login() {
                   </div>
                   <a href="/forgotpassword" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
                 </div>
-                <div className="mt-5 md:mt-8 social-card bg-blue-500 text-white google border rounded-xl  py-2 text-center hover:border-blue-600  hover:shadow-md md:px-16">
-                  <button type="submit" className="text-center text-gray-800 font-normal py-1 md:py-2 px-4 rounded inline-flex items-center">
+                <button type="submit" className="mt-5 w-full md:mt-8 social-card bg-blue-500 text-white border rounded-xl  py-2 text-center hover:border-blue-600  hover:shadow-md md:px-16">
+                  <div className=" text-center text-gray-800 font-normal py-1 md:py-2 px-4 rounded inline-flex items-center">
                     <span className="ml-1 md:ml-2 text-white">Sign In</span>
-                  </button>
-                </div>
+                  </div>
+                </button>
               </form>
               <div className="relative flex items-center justify-center w-full my-10 border border-t">
                 <div className="absolute px-5 bg-white">or</div>
               </div>
-              <div className="mt-3 flex justify-center items-center text-center w-full social-card text-gray-800 md:font-normal google border font-light rounded-xl py-4 px-4 text-center hover:border-blue-600 hover:shadow-md md:px-16">
+              <div className="mt-3 flex justify-center items-center text-center w-full social-card text-gray-800 md:font-normal google border font-light rounded-xl py-4 px-4 text-center hover:border-blue-600 hover:shadow-md md:px-16"
+                onClick={handleGoogleLogin}
+              >
                 <img src={svg1} alt="Google" />
-                <span className="ml-1 md:ml-2" onClick={handleGoogleLogin}>Sign in with Google</span>
+                <span className="ml-1 md:ml-2">Sign in with Google</span>
               </div>
-              <div className="mt-3 flex justify-center items-center text-center w-full social-card text-gray-800 md:font-normal facebook border font-light rounded-xl py-4 px-4 text-center hover:border-blue-600 hover:shadow-md md:px-16">
+              <div className="mt-3 flex justify-center items-center text-center w-full social-card text-gray-800 md:font-normal facebook border font-light rounded-xl py-4 px-4 text-center hover:border-blue-600 hover:shadow-md md:px-16"
+                onClick={handleFacebookLogin}
+              >
                 <img src={svg2} alt="Facebook" />
-                <span className="ml-1 md:ml-2" onClick={handleFacebookLogin}>Sign in with Facebook</span>
+                <span className="ml-1 md:ml-2">Sign in with Facebook</span>
               </div>
             </div>
           </div>

@@ -99,19 +99,19 @@ const CreateAnAcc = () => {
             <div>
               <label className="block mt-8">
                 <h3 className="text-lg font-normal">Full Name</h3>
-                <input type="text" name="text" className="mt-2.5 px-3 py-3 md:py-4 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-blue-600 block w-full rounded-xl focus:ring-1" placeholder="Pristia Misbash" onChange={(e) => setFullName(e.target.value)} />
+                <input type="text" name="text" className="mt-2.5 px-3 py-3 md:py-4 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-blue-600 block w-full rounded-xl focus:ring-1" onChange={(e) => setFullName(e.target.value)} />
               </label>
             </div>
             <div>
               <label className="block mt-8">
                 <h3 className="text-lg font-normal">Email Address</h3>
-                <input type="email" name="email" className="mt-2.5 px-3 py-3 md:py-4 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-blue-600 block w-full rounded-xl focus:ring-1" placeholder="pristia@gmail.com|" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="email" name="email" className="mt-2.5 px-3 py-3 md:py-4 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-blue-600 block w-full rounded-xl focus:ring-1" value={email} onChange={(e) => setEmail(e.target.value)} />
               </label>
             </div>
             <div>
               <label className="block mt-8">
                 <h3 className="text-lg font-normal">Phone Number</h3>
-                <input type="tel" name="tel" className="mt-2.5 px-3 py-3 md:py-4 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-blue-600 block w-full rounded-xl focus:ring-1" placeholder="Input Area" onChange={(e) => setPhoneNumber(e.target.value)} />
+                <input type="tel" name="tel" className="mt-2.5 px-3 py-3 md:py-4 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-blue-600 block w-full rounded-xl focus:ring-1" onChange={(e) => setPhoneNumber(e.target.value)} />
               </label>
             </div>
             <div>
@@ -122,7 +122,6 @@ const CreateAnAcc = () => {
                     className="mt-2.5 px-3 py-3 md:py-4 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-blue-600 block w-full rounded-xl focus:ring-1"
                     type={type}
                     name="password"
-                    placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete="current-password"
@@ -154,11 +153,11 @@ const CreateAnAcc = () => {
               </div>
             </div>
             {errorMessage && <p className="p-2 rounded-lg error-message text-white bg-red-400 border-2 border-red-800 text-center">{errorMessage}</p>}
-            <div className="mt-2 social-card bg-blue-500 text-white google border rounded-xl  py-2 text-center hover:border-blue-600  hover:shadow-md md:px-16">
-              <button type='submit' className=" text-center   text-gray-800 font-normal py-2 px-4 rounded inline-flex items-center">
+            <button type='submit' className="w-full mt-2 social-card bg-blue-500 text-white google border rounded-xl  py-2 text-center hover:border-blue-600  hover:shadow-md md:px-16">
+              <div className="text-center text-gray-800 font-normal py-2 px-4 rounded inline-flex items-center">
                 <span className="ml-1 md:ml-2 text-white">Sign Up</span>
-              </button>
-            </div>
+              </div>
+            </button>
           </form>
         </div>
       </div>

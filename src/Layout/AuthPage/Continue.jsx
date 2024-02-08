@@ -1,4 +1,3 @@
-/** @format */
 import svg from './images/megaphone 1.svg';
 import svg1 from './images/megaphone 1 (1).svg';
 import '../style.css'
@@ -12,7 +11,7 @@ function Continue() {
   const handleShoot = () => {
     console.log('adSpaceHost:', adSpaceHost);
     console.log('advertiser:', advertiser);
-  
+
     if (adSpaceHost === 'googlePay') {
       window.location.href = '/adSpaceHost/registasion';
     } else if (advertiser === 'applePay') {
@@ -33,11 +32,10 @@ function Continue() {
                 Create An Account
               </h1>
               <p class="mt-2 text-base font-light md:mt-16">Already have an account? <span class="text-purple-700 font-normal cursor-pointer"><a href="/">Login</a></span></p>
-              <p class="my-4 text-gray-400">Join as an <span class="text-blue-500 cursor-pointer">ad space host</span>  or as <span class="text-purple-700 cursor-pointer">an advertiser</span> </p>
 
               <form onSubmit={(e) => { e.preventDefault(); handleShoot(); }}>
                 <div class="gap-4 w-full  md:flex">
-                  <div  onChange={(e) => setAdSpaceHost(e.target.value)}  class="relative mt-2 w-full md:w-1/2 py-3 md:py-7 rounded-xl font-medium text-gray-700">
+                  <div onChange={(e) => setAdSpaceHost(e.target.value)} class="relative mt-2 w-full md:w-1/2 py-3 md:py-7 rounded-xl font-medium text-gray-700">
                     <input class="j2x7_17hqRVmwte_tWFa peer hidden" type="radio" name="framework" id="googlePay" value="googlePay" />
                     <label class="absolute top-0 h-full w-full cursor-pointer rounded-xl border peer-checked:border-blue-700 peer-checked:text-blue-700  peer-checked:shadow-2xl peer-checked:duration-500 peer-checked:opacity-100" for="googlePay"></label>
                     <div className="text-center">
@@ -60,11 +58,11 @@ function Continue() {
                     </div>
                   </div>
                 </div>
-                <div class="mt-5 md:mt-8 social-card bg-blue-500 text-white google border rounded-xl  py-2 text-center hover:border-blue-600  hover:shadow-md md:px-16">
-                  <button type='submit' class=" text-center text-gray-800 font-normal py-1 md:py-2 px-4 rounded inline-flex items-center">
+                <button type='submit' class="mt-5 md:mt-8 w-full social-card bg-blue-500 text-white google border rounded-xl  py-2 text-center hover:border-blue-600  hover:shadow-md md:px-16 ">
+                  <div class="text-center text-gray-800 font-normal py-1 md:py-2 px-4 rounded inline-flex items-center">
                     <span class="ml-1 md:ml-2 text-white">Continue</span>
-                  </button>
-                </div>
+                  </div>
+                </button>
               </form>
 
             </div>
