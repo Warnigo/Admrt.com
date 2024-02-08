@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import 'flowbite';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+// import Pagination from '@mui/material/Pagination';
+// import Stack from '@mui/material/Stack';
 import openSvg from '../../image/chevron-down (1) 2.svg'
 import closed from '../../image/chevron-down (1) 1.svg'
 import targetSvg from '../../svgs/specification/target.svg'
@@ -17,14 +17,14 @@ import zelleSvg from '../../svgs/payment/zille.svg'
 import venmoSvg from '../../svgs/payment/venmo.svg'
 import payoneerSvg from '../../svgs/payment/payoneer.svg'
 import star from '../../Layout/AuthPage/star.svg'
-import profile_Aus from '../../svgs/reviews/Profile-aus.svg'
-import profile_amer from '../../svgs/reviews/Profile-amer.svg'
-import profile_china from '../../svgs/reviews/Profile-china.svg'
-import flag_Aus from '../../svgs/reviews/Rectangle 6596.svg'
-import reviews_img from '../../svgs/reviews/Rectangle 6596 (1).svg'
-import reviews_img2 from '../../svgs/reviews/Rectangle 6596 (2).svg'
-import reviews_img3 from '../../svgs/reviews/Rectangle 6596 (3).svg'
-import reviews_img4 from '../../svgs/reviews/Rectangle 6596 (4).svg'
+// import profile_Aus from '../../svgs/reviews/Profile-aus.svg'
+// import profile_amer from '../../svgs/reviews/Profile-amer.svg'
+// import profile_china from '../../svgs/reviews/Profile-china.svg'
+// import flag_Aus from '../../svgs/reviews/Rectangle 6596.svg'
+// import reviews_img from '../../svgs/reviews/Rectangle 6596 (1).svg'
+// import reviews_img2 from '../../svgs/reviews/Rectangle 6596 (2).svg'
+// import reviews_img3 from '../../svgs/reviews/Rectangle 6596 (3).svg'
+// import reviews_img4 from '../../svgs/reviews/Rectangle 6596 (4).svg'
 import edit_svg_blue from '../../image/edit_svg_blue.svg'
 import ModalFeedbackCard from '../../Modals/ModalFeedbackCard';
 import ModalDelete from '../../Modals/ModalDelete';
@@ -32,7 +32,7 @@ import EditBackground from "../../Layout/context/editeBackground";
 import EditeUser from "../../Layout/context/user";
 import IntoDescription from "../../Layout/context/intoDescription";
 import { auth, usersCollection } from "../../firebase/firebase";
-import shape from '../../svgs/about/Shape.svg';
+// import shape from '../../svgs/about/Shape.svg';
 import AboutHim from '../../Layout/context/aboutHim/aboutHim';
 import SocialMedia from '../../Layout/context/socialMedia/socialMedia';
 import { doc, getDoc } from 'firebase/firestore';
@@ -412,7 +412,7 @@ function SiplePages() {
                                         </div>
                                     </div>
                                 </div>
-                                <div>
+                                {/* <div>
                                     <div>
                                         <div className='flex'>
                                             <div className='w-32'>
@@ -632,16 +632,16 @@ function SiplePages() {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
-                        <div>
+                        {/* <div>
                             <div className='flex justify-center items-center p-4'>
                                 <Stack spacing={2}>
                                     <Pagination count={10} />
                                 </Stack>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
 

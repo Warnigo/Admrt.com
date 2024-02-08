@@ -11,7 +11,6 @@ import Main from "./components/Main";
 import './App.css'
 import About from "./components/About";
 import Contact from "./components/Contact";
-import Billings from "./components/Settings/Billings/Billings";
 import Profile from "./Layout/AuthPage/Profile";
 import { auth, usersCollection } from "./firebase/firebase";
 import { NotFound } from "./404/404";

@@ -99,6 +99,7 @@ const AboutHim = () => {
 
     return (
         <div>
+
             {aboutHimShow && (
                 <form>
                     <div className="fixed inset-0 z-50 overflow-hidden flex bg-opacity-50 bg-gray-500 justify-center items-center">
