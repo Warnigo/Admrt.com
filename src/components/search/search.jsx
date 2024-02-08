@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { auth, db } from '../../firebase/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import search from '../../Layout/AuthPage/images/search-normal.svg';
 import { Link } from 'react-router-dom';
 
 const Search = () => {
@@ -41,7 +42,7 @@ const Search = () => {
   );
 
   return (
-    <div className="relative">
+    <div className="relative mr-3">
       <div className="relative w-full lg:w-72">
         <input
           value={searchValue}
@@ -51,6 +52,7 @@ const Search = () => {
           required
         />
         <div className="absolute top-0 right-0 p-2 pr-3 text-sm font-medium h-full text-white focus:ring-4 focus:outline-none focus:ring-blue-300">
+          <img src={search} alt="" />
         </div>
       </div>
       {searchValue && filteredUsers.length === 0 && (

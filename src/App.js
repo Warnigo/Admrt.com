@@ -79,7 +79,7 @@ function App() {
         { id: 2, path: "/contact", element: <Contact /> },
         { id: 3, path: `/t=split${split}/${userId}`, element: <Profile /> },
         { id: 4, path: `/t=split${split}/${userId}/settings`, element: <Settings /> },
-        { id: 5, path: `/t=split${split}/${userId}/qwerty`, element: <Billings /> },
+        // { id: 5, path: `/t=split${split}/${userId}/qwerty`, element: <Billings /> },
         { id: 6, path: `/p=profileut/:split/:userUID`, element: <ViewsProfile onUserUID={handleUserSelect} /> },
         { id: 0, path: "*", element: <NotFound /> },
     ];

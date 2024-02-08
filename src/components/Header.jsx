@@ -5,9 +5,6 @@ import bg from '../Layout/AuthPage/images/marketing-pillar-page-marketing-overvi
 import bg1 from '../Layout/AuthPage/images/marketing-pillar-page-marketing-job-outlook-salary.png';
 import bg2 from '../Layout/AuthPage/images/marketing-pillar-page-types-of-marketing.png';
 import fff from '../images/C0D4C3B0-111B-41CF-952D-926464E01F8F.jpeg';
-import per1 from '../Layout/AuthPage/images/per1.svg'
-import per2 from '../Layout/AuthPage/images/per2.svg'
-import per3 from '../Layout/AuthPage/images/per3.svg'
 
 const Header = () => {
   return (
@@ -15,7 +12,7 @@ const Header = () => {
       <div class=" h-full my-20 px-5">
         <div class="text-center items-center">
           <h1 class=" font-bold text-4xl">How it <span class="text-blue-600">Works</span> </h1>
-          <p class="font-normal text-lg mt-2.5 text-gray-400">“Promote smarter – here is how! </p>
+          <p class="font-normal text-lg mt-2.5 text-gray-400">Promote Smarter – here is how! </p>
         </div>
         <div class=" mt-32 mb-4 max-w-full mx-auto max-w-screen-2xl max-auto place-content-center justify-center justify-items-center grid md:grid-cols-2 lg:grid-cols-4 gap-x-20 gap-y-20">
           <div class=" number ease-in duration-700 cursor-pointer hover:shadow-2xl rounded-xl overflow-hidden max-w-xs order-first lg:order-none">

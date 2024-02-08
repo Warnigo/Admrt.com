@@ -31,7 +31,7 @@ function Continue() {
               <h1 class="mb-2 font-normal text-3xl lg:text-5xl sm:text-3xl">
                 Create An Account
               </h1>
-              <p class="mt-2 text-base font-light md:mt-16">Already have an account? <span class="text-purple-700 font-normal cursor-pointer"><a href="/">Login</a></span></p>
+              <p class="mt-2 text-base font-light md:mt-16">Already have an account? <span class="text-purple-700 font-normal cursor-pointer"><a href="/login">Login</a></span></p>
 
               <form onSubmit={(e) => { e.preventDefault(); handleShoot(); }}>
                 <div class="gap-4 w-full  md:flex">

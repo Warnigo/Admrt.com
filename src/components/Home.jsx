@@ -43,7 +43,7 @@ const Home = () => {
           <div class="w-full bg-2 bg-white rounded-xl py-8 px-10 md:w-2/5 ">
             <div class="text-center h-auto overflow-hidden rounded-md  sm:rounded-xl">
               <h1 class="text-3xl font-semibold">Sell your ad space</h1>
-              <Link to="">
+              <Link to="/register">
                 <button class="my-5 py-2 px-12 text-white rounded-full bg-blue-600"><h1>Host ads now</h1></button>
               </Link>
               <div class="flex justify-center items-center">

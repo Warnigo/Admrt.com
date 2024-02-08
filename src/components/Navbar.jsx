@@ -87,7 +87,6 @@ function StickyNavbar({ authenticated, onUserSelect }) {
   }, [userId]);
 
   const navigation = [
-    { title: "Dashboard", path: "/" },
     { title: "Profile", path: `/t=split${split}/${userId}` },
     { title: "Settings", path: `/t=split${split}/${userId}/settings` },
   ];
@@ -117,7 +116,7 @@ function StickyNavbar({ authenticated, onUserSelect }) {
   const ghostUser = (
     <div className="flex">
       <ul className="mt-2 mb-2 mr-6 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-        <Search onUserSelect={onUserSelect} />
+        <Search className={"mr-8"} />
         <Typography
           as="li"
           variant="small"
@@ -202,7 +201,34 @@ function StickyNavbar({ authenticated, onUserSelect }) {
   const getUser = (
     <div className="flex items-center gap-2">
       <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center ml-8">
-        <Search onUserSelect={onUserSelect} className={"mr-8"} />
+        <Search />
+        <Typography
+          as="li"
+          variant="small"
+          className="p-1 text-black text-lg font-normal mr-3"
+        >
+          <Link to="/" className="flex items-center hover:text-blue-700 hover:shadow-sm">
+            <h1>Home</h1>
+          </Link>
+        </Typography>
+        <Typography
+          as="li"
+          variant="small"
+          className="p-1 text-black text-lg font-normal  mr-3"
+        >
+          <Link to="/about" className="flex items-center hover:text-blue-700 hover:shadow-sm">
+            <h1>About</h1>
+          </Link>
+        </Typography>
+        <Typography
+          as="li"
+          variant="small"
+          className="p-1 text-black text-lg font-normal  mr-3"
+        >
+          <a href="/contact" className="flex items-center hover:text-blue-700 hover:shadow-sm">
+            <h1>Contact</h1>
+          </a>
+        </Typography>
         <Typography
           as="li"
           variant="small"
@@ -318,7 +344,6 @@ function StickyNavbar({ authenticated, onUserSelect }) {
               <div className="mr-4 hidden lg:block">{authenticated ? getUser : ghostUser}</div>
             </div>
           </div>
-
         </Navbar>
       </div>
     </div>

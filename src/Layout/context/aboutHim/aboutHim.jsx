@@ -109,25 +109,24 @@ const AboutHim = () => {
                             <div className="p-6 space-y-4">
                                 <h1 className="text-xl font-medium">Enter your information correctly</h1>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Your Address</label>
+                                    <label className="block text-sm font-medium text-gray-700">Location</label>
                                     <input
                                         type="text"
                                         className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-indigo-600"
-                                        placeholder="Enter your address"
+                                        placeholder="Location"
                                         id="address"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Your Site</label>
+                                    <label className="block text-sm font-medium text-gray-700">Website</label>
                                     <input
                                         type="text"
                                         className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-indigo-600"
-                                        placeholder="Enter your site. Ex: admrt.com"
+                                        placeholder="Enter Website. Ex: admrt.com"
                                         id="site"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 pb-1">Services</label>
                                     <ul className="grid gap-2 grid-cols-2">
                                         {servicesItems.map((item, idx) => (
                                             <li key={idx} className="flex items-center space-x-2 text-sm">
@@ -150,7 +149,7 @@ const AboutHim = () => {
                                     <input
                                         type="text"
                                         className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-indigo-600"
-                                        placeholder="Enter additional information"
+                                        placeholder="What should advertisers about you"
                                         id="additionalInfo"
                                     />
                                 </div>

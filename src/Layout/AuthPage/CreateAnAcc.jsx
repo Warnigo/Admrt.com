@@ -98,7 +98,7 @@ const CreateAnAcc = () => {
           <form onSubmit={handleConfimAuth}>
             <div>
               <label className="block mt-8">
-                <h3 className="text-lg font-normal">Full Name</h3>
+                <h3 className="text-lg font-normal">Full Name / Business Name</h3>
                 <input type="text" name="text" className="mt-2.5 px-3 py-3 md:py-4 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-blue-600 block w-full rounded-xl focus:ring-1" onChange={(e) => setFullName(e.target.value)} />
               </label>
             </div>
