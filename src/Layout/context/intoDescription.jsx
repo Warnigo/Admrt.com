@@ -42,12 +42,12 @@ const IntoDescription = () => {
         fetchUserData();
     }, [userId, userIdParam]);
 
-    const addNew = () => {
+    const addNew = async () => {
         try {
             if (!!dialogInput.trim()) {
                 const updatedUserData = { ...userData, introDescription: dialogInput };
                 setUserData(updatedUserData);
-                saveUserDataToFirebase(userId, updatedUserData);
+                await saveUserDataToFirebase(userId, updatedUserData);
             } else {
                 alert('Please try again');
             }
@@ -56,7 +56,7 @@ const IntoDescription = () => {
             console.error('Error updating user data:', error);
         }
     };
-
+    
     return (
         <div>
             {showModal && (

@@ -18,7 +18,8 @@ const EditeUser = () => {
   const [todoModal, setTodoModal] = useState(false);
   const [todoText, setTodoText] = useState("");
   const [todos, setTodos] = useState([]);
-  const [experitise, setExperitise] = useState()
+  const [experitise, setExperitise] = useState([]);
+  const [priceModal, setPriceModal] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -71,39 +72,58 @@ const EditeUser = () => {
   };
 
   const handleAddTodo = () => {
-    if (todos.length < 3) {
+    if (todos.length < 3 && todoText.trim() !== "") {
       const newTodo = {
         id: todos.length + 1,
         text: todoText
       };
       setTodos([...todos, newTodo]);
+      setExperitise([...experitise, newTodo.text]);
       setTodoText("");
     }
   };
 
-  const handleDeleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
-
-  const fetchExperitise = async (currentUser) => { 
+  const handleDeleteTodo = async (id) => {
     try {
-      const experitiseDoc = await getDoc(doc(usersCollection, currentUser.uid));
-      if (experitiseDoc.exists()) {
-        const experitiseData = experitiseDoc.data();
-        setExperitise(experitiseData.experitise); 
-      }
+      const updatedTodos = todos.filter(todo => todo.id !== id);
+      setTodos(updatedTodos);
+
+      const updatedExperitise = updatedTodos.map(todo => todo.text);
+      setExperitise(updatedExperitise);
+
+      const userDocRef = doc(usersCollection, currentUser.uid);
+      await updateDoc(userDocRef, { todos: updatedTodos });
     } catch (error) {
-      console.error("Error fetching experitise data:", error);
+      console.error("Error deleting todo:", error);
     }
   };
+
+  const fetchExperitise = async (userId) => {
+    try {
+      const userDoc = await getDoc(doc(usersCollection, userId));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setExperitise(userData.experitise || []);
+      }
+    } catch (error) {
+      console.error("Error fetching Experitise data:", error);
+    }
+  };
+
 
   const updateExperitise = async () => {
     try {
       const userDocRef = doc(usersCollection, currentUser.uid);
-      await setDoc(userDocRef, { experitise: todos }, { merge: true });
+      await setDoc(userDocRef, { experitise }, { merge: true });
+      setTodoModal(false)
     } catch (error) {
       console.error("Error updating experitise data:", error);
     }
+  };
+
+  const handleCloseTodoModal = () => {
+    setTodoModal(false);
+    fetchExperitise(currentUser.uid);
   };
 
   return (
@@ -112,7 +132,7 @@ const EditeUser = () => {
         <div className="flex justify-center items-center overflow-x-hidden bg-black bg-opacity-25 overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
           <div className="relative w-[80%]  md:w-1/3 mx-auto">
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-              <div className='px-3 pt-3 rounded-full flex justify-end' onClick={() => setTodoModal(false)}>
+              <div className='px-3 pt-3 rounded-full flex justify-end' onClick={() => handleCloseTodoModal()}>
                 <VscChromeClose className=' w-6 h-6 p-1 rounded-full text-red-500 bg-pink-200' />
               </div>
               <div className="relative p-2 md:p-6 justify-center items-start">
@@ -141,7 +161,9 @@ const EditeUser = () => {
                     </div>
                   </div>
                 </div>
-                <div id="expertiseContainer" className="mt-4"></div>
+                <div id="expertiseContainer" className="mt-4">
+                  <h1 className='text-sm w-full font-medium text-blue-800'><span className='text-sm text-gray-500'>Experitise: </span>{experitise.join(', ') || "none"}</h1>
+                </div>
               </div>
               <div className="flex items-center justify-center p-2 md:p-6 border-t border-solid gap-4 border-blue Gray-200 rounded-b">
                 <button className="bg-gray-700 text-white active:bg-gray-600 font-bold uppercase text-xs md:text-sm p-2 md:px-8 md:py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -154,6 +176,73 @@ const EditeUser = () => {
                 <button className="bg-blue-600 text-white active:bg-blue-700 font-bold uppercase text-xs md:text-sm p-2 md:px-8 md:py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                   type="button"
                   onClick={updateExperitise}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {priceModal && (
+        <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none bg-black bg-opacity-50 focus:outline-none">
+          <div className="relative w-[80%]  md:w-2/5 mx-auto">
+            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className='px-3 pt-3 rounded-full flex justify-end'
+                onClick={() => setPriceModal(false)}>
+                <button>
+                  <VscChromeClose className=' w-6 h-6 p-1 rounded-full text-white bg-gray-500 hover:bg-opacity-50' />
+                </button>
+              </div>
+              <div className="relative p-2 md:p-6 justify-center items-start">
+                <div>
+                  <h1 className='text-center mb-6 text-2xl md:text-3xl font-semibold'>Change advertising price?</h1>
+                  <h1 className='text-center my-3'>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</h1>
+                </div>
+                <div className="border-b">
+                  <span className="text-gray-600 text-sm font-semibold">Your profile rate: </span>
+                </div>
+                <div>
+                  <div className="border-b p-2 my-2 flex justify-between">
+                    <div>
+                      <h1>Hourly Rate</h1>
+                      <p className="text-gray-500 text-sm">Total amount the client will see</p>
+                    </div>
+                    <div className="">
+                      <input
+                        type="text"
+                        className="m-auto p-2 w-28 border rounded-lg text-end"
+                      />
+                      <span className="font-semibold text-xl ml-2 text-gray-800">/hr</span>
+                    </div>
+                  </div>
+                  <div className="border-b p-2 my-2 flex justify-between">
+                    <div>
+                      <h1>10% Admrt Service take</h1>
+                      <p className="text-gray-500 text-sm">Total amount the client will see</p>
+                    </div>
+                    <div className="text-gray-500 cursor-not-allowed">
+                      <input type="text" className="m-auto p-2 w-28 border rounded-lg cursor-not-allowed bg-gray-100 text-end" />
+                      <span className="font-semibold text-xl ml-2 text-gray-500">/hr</span>
+                    </div>
+                  </div>
+                  <div className="border-b p-2 mt-2 flex justify-between">
+                    <div>
+                      <h1>You'll Receive</h1>
+                      <p className="text-gray-500 text-sm">The estimated amount you'll receive after service fees</p>
+                    </div>
+                    <div className="">
+                      <input type="text" className="m-auto p-2 w-28 border rounded-lg cursor-not-allowed text-end" />
+                      <span className="font-semibold text-xl ml-2 text-gray-500 cursor-not-allowed">/hr</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center justify-center p-2 md:px-6 md:mb-4 border-solid border-blue Gray-200 rounded-b">
+                <button
+                  className="bg-blue-600 w-full text-white active:bg-blue-700 font-bold uppercase text-xs md:text-sm p-2 m-auto md:px-8 md:pb-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  type="button"
                 >
                   Save
                 </button>
@@ -177,15 +266,20 @@ const EditeUser = () => {
           <PencilIcon />
         </button>
       </div>
-      <div className="flex justify-center w-1/3 items-center">
+      <div className="flex justify-between ml-4 w-3/4 items-center">
         <div className=''>
           <h1 className='font-medium text-lg md:text-2xl'>{fullName}</h1>
           <div className="flex">
-            <h1 className='text-sm w-full font-medium text-blue-800'><span
-              className='text-sm text-gray-500'>Experitise: </span>Magician, Youtuber, Vlogs</h1>
+            <h1 className='text-sm w-full font-medium text-blue-800'><span className='text-sm text-gray-500'>Experitise: </span>{experitise.join(', ') || "none"}</h1>
             <div className='flex justify-center items-center cursor-pointer ml-2' onClick={() => setTodoModal(true)}>
               <img src={edit_svg_blue} alt="" />
             </div>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <h1 className="font-bold text-xl">$<span>5.00</span>/hr</h1>
+          <div onClick={() => setPriceModal(true)} className="m-auto">
+            <img src={edit_svg_blue} alt="" />
           </div>
         </div>
       </div>
