@@ -20,6 +20,12 @@ const EditeUser = () => {
   const [todos, setTodos] = useState([]);
   const [experitise, setExperitise] = useState([]);
   const [priceModal, setPriceModal] = useState(false);
+  const [hourlyRate, setHourlyRate] = useState("5.00");
+  const [tenPrisent, setTenPrisent] = useState("");
+  const [ninePrisent, setNinePrisent] = useState("");
+  const [priceLoading, setPriceLoading] = useState(false);
+  const [price, setPrice] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -41,6 +47,7 @@ const EditeUser = () => {
       if (userDoc.exists()) {
         const userData = userDoc.data();
         setFullName(userData.fullName);
+        setPrice(userData.hourlyRate)
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -126,6 +133,48 @@ const EditeUser = () => {
     fetchExperitise(currentUser.uid);
   };
 
+  useEffect(() => {
+    const handleTenPrisent = () => {
+      let priceTen = hourlyRate / 10 || price / 10;
+      let priceNine = price - priceTen || hourlyRate - priceTen;
+      setTenPrisent(`$${priceTen.toFixed(2)}`);
+      setNinePrisent(`$${priceNine.toFixed(2)}`);
+    }
+
+    handleTenPrisent();
+  }, [hourlyRate, price]);
+
+  const handlePriceSent = async () => {
+    try {
+      const priceRef = doc(usersCollection, currentUser.uid);
+      await updateDoc(priceRef, { hourlyRate });
+      setPriceLoading(true);
+      setPriceModal(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const input = e.target.value;
+    const filteredInput = input.replace(/[^0-9.]/g, "");
+    const decimalCount = filteredInput.split(".").length - 1;
+
+    if (decimalCount > 1) return;
+
+    if (price) {
+      setPrice(filteredInput);
+    } else {
+      setHourlyRate(filteredInput);
+    }
+
+    if (parseFloat(filteredInput) < 5) {
+      setErrorMessage("Value must be at least $5.00");
+    } else {
+      setErrorMessage("");
+    }
+  };
+
   return (
     <div className="flex -mt-10 ml-4">
       {todoModal && (
@@ -201,7 +250,7 @@ const EditeUser = () => {
                   <h1 className='text-center my-3'>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</h1>
                 </div>
                 <div className="border-b">
-                  <span className="text-gray-600 text-sm font-semibold">Your profile rate: </span>
+                  <span className="text-gray-600 text-sm font-semibold">Your profile rate: {hourlyRate}</span>
                 </div>
                 <div>
                   <div className="border-b p-2 my-2 flex justify-between">
@@ -213,6 +262,8 @@ const EditeUser = () => {
                       <input
                         type="text"
                         className="m-auto p-2 w-28 border rounded-lg text-end"
+                        value={price ? ('$' + price) : ('$' + hourlyRate)}
+                        onChange={handleInputChange}
                       />
                       <span className="font-semibold text-xl ml-2 text-gray-800">/hr</span>
                     </div>
@@ -223,7 +274,15 @@ const EditeUser = () => {
                       <p className="text-gray-500 text-sm">Total amount the client will see</p>
                     </div>
                     <div className="text-gray-500 cursor-not-allowed">
-                      <input type="text" className="m-auto p-2 w-28 border rounded-lg cursor-not-allowed bg-gray-100 text-end" />
+                      <input
+                        type="text"
+                        pattern="[0-9]*"
+                        inputmode="numeric"
+                        value={tenPrisent}
+                        onChange={(e) => setTenPrisent(e.target.value)}
+                        readOnly
+                        className="m-auto p-2 w-28 border rounded-lg cursor-not-allowed bg-gray-100 text-end"
+                      />
                       <span className="font-semibold text-xl ml-2 text-gray-500">/hr</span>
                     </div>
                   </div>
@@ -233,18 +292,28 @@ const EditeUser = () => {
                       <p className="text-gray-500 text-sm">The estimated amount you'll receive after service fees</p>
                     </div>
                     <div className="">
-                      <input type="text" className="m-auto p-2 w-28 border rounded-lg cursor-not-allowed text-end" />
+                      <input
+                        type="text"
+                        pattern="[0-9]*"
+                        inputmode="numeric"
+                        value={ninePrisent}
+                        onChange={(e) => setNinePrisent(e.target.value)}
+                        readOnly
+                        className="m-auto p-2 w-28 border rounded-lg cursor-not-allowed text-end"
+                      />
                       <span className="font-semibold text-xl ml-2 text-gray-500 cursor-not-allowed">/hr</span>
                     </div>
                   </div>
+                  {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                 </div>
               </div>
               <div className="flex items-center justify-center p-2 md:px-6 md:mb-4 border-solid border-blue Gray-200 rounded-b">
                 <button
                   className="bg-blue-600 w-full text-white active:bg-blue-700 font-bold uppercase text-xs md:text-sm p-2 m-auto md:px-8 md:pb-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                   type="button"
+                  onClick={handlePriceSent}
                 >
-                  Save
+                  {priceLoading ? "Loading..." : "Save"}
                 </button>
               </div>
             </div>
@@ -277,7 +346,7 @@ const EditeUser = () => {
           </div>
         </div>
         <div className="flex gap-3">
-          <h1 className="font-bold text-xl">$<span>5.00</span>/hr</h1>
+          <h1 className="font-bold text-xl">$<span>{price || hourlyRate}</span>/hr</h1>
           <div onClick={() => setPriceModal(true)} className="m-auto">
             <img src={edit_svg_blue} alt="" />
           </div>
