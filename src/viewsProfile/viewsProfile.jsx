@@ -1,14 +1,14 @@
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import star from '../Layout/AuthPage/star.svg';
-import profile_Aus from '../svgs/reviews/Profile-aus.svg';
-import profile_amer from '../svgs/reviews/Profile-amer.svg';
-import profile_china from '../svgs/reviews/Profile-china.svg';
-import flag_Aus from '../svgs/reviews/Rectangle 6596.svg';
-import reviews_img from '../svgs/reviews/Rectangle 6596 (1).svg';
-import reviews_img2 from '../svgs/reviews/Rectangle 6596 (2).svg';
-import reviews_img3 from '../svgs/reviews/Rectangle 6596 (3).svg';
-import reviews_img4 from '../svgs/reviews/Rectangle 6596 (4).svg';
+// import profile_Aus from '../svgs/reviews/Profile-aus.svg';
+// import profile_amer from '../svgs/reviews/Profile-amer.svg';
+// import profile_china from '../svgs/reviews/Profile-china.svg';
+// import flag_Aus from '../svgs/reviews/Rectangle 6596.svg';
+// import reviews_img from '../svgs/reviews/Rectangle 6596 (1).svg';
+// import reviews_img2 from '../svgs/reviews/Rectangle 6596 (2).svg';
+// import reviews_img3 from '../svgs/reviews/Rectangle 6596 (3).svg';
+// import reviews_img4 from '../svgs/reviews/Rectangle 6596 (4).svg';
 import EditBackground from "./others/editeBg";
 import EditeUser from "./others/user";
 import IntoDescription from "./others/description";
@@ -156,7 +156,7 @@ function ViewsProfile() {
                     </div>
                   </div>
                 </div>
-                <div>
+                {/* <div>
                   <div>
                     <div className='flex'>
                       <div className='w-32'>
@@ -376,7 +376,7 @@ function ViewsProfile() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             <div>

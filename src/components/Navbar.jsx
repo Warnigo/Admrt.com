@@ -6,11 +6,12 @@ import { Link, useNavigate } from "react-router-dom";
 import Notification from '../images/notification.svg'
 import down from '../svgs/down.svg'
 import { ref, getDownloadURL } from 'firebase/storage'
-import { auth, storage, usersCollection } from '../firebase/firebase'
+import { auth, db, storage, usersCollection } from '../firebase/firebase'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import Search from "./search/search";
 import Chek from '../svgs/chek.svg'
 import Close from '../svgs/close.svg'
+import RedNotification from '../images/redNotification.svg'
 
 function StickyNavbar({ authenticated, onUserSelect }) {
   const [openNav, setOpenNav] = React.useState(false);
@@ -24,6 +25,7 @@ function StickyNavbar({ authenticated, onUserSelect }) {
   const defaultAvate = "https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg";
   const [modal, setModal] = useState(false)
   const [comeRequest, setComeRequest] = useState(null)
+  const [hasFalseRequests, setHasFalseRequests] = useState(false);
 
   useEffect(() => {
     const unsebscribe = auth.onAuthStateChanged(async (user) => {
@@ -38,8 +40,9 @@ function StickyNavbar({ authenticated, onUserSelect }) {
             const splitCall = userData.split
             const comeRequestCall = userData.requests;
             setUserFullName(fullName);
-            setSplit(splitCall)
-            setComeRequest(comeRequestCall)
+            setSplit(splitCall);
+            setComeRequest(comeRequestCall);
+            setHasFalseRequests(Object.values(comeRequestCall).includes(false));
           }
         } catch (error) {
           console.error('Error getting user data:', error);
@@ -51,7 +54,6 @@ function StickyNavbar({ authenticated, onUserSelect }) {
 
     return () => unsebscribe();
   }, []);
-
 
   useEffect(() => {
     const handleDropDown = (e) => {
@@ -103,12 +105,33 @@ function StickyNavbar({ authenticated, onUserSelect }) {
       await updateDoc(userDocRef, {
         [`requests.${username}`]: true,
       });
-      setComeRequest((prevRequests) => ({
-        ...prevRequests,
+      setComeRequest((prevComeRequest) => ({
+        ...prevComeRequest,
         [username]: true,
       }));
     } catch (error) {
       console.error('Error updating request status:', error);
+    }
+  };
+
+  const handleRequestRemove = async (username) => {
+    try {
+      const userRef = doc(db, 'users', userId);
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const updatedRequests = { ...userData.requests };
+        delete updatedRequests[username];
+        await updateDoc(userRef, {
+          requests: updatedRequests
+        });
+      } else {
+        console.error('User document does not exist');
+      }
+    } catch (error) {
+      console.error('Error removing request:', error);
+    } finally {
+      window.location.reload();
     }
   };
 
@@ -160,7 +183,7 @@ function StickyNavbar({ authenticated, onUserSelect }) {
       </div>
       <IconButton
         variant="text"
-        className="ml-auto h-6 w-6 text-inherit text-black hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+        className={`ml-auto h-6 w-6 text-inherit text-black hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden ${hasFalseRequests ? 'bg-red-600' : ''}`}
         ripple={false}
         onClick={() => setOpenNav(!openNav)}
       >
@@ -197,7 +220,6 @@ function StickyNavbar({ authenticated, onUserSelect }) {
       </IconButton>
     </div>
   );
-
   const getUser = (
     <div className="flex items-center gap-2">
       <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center ml-8">
@@ -243,11 +265,16 @@ function StickyNavbar({ authenticated, onUserSelect }) {
           variant="small"
           className="p-1 text-black text-lg font-normal"
         >
-          <button className="pt-3 px-4"
-            onClick={() => setModal(true)}
+          <button
+            className="pt-3 px-4"
+            onClick={() => setModal(!modal)}
             onMouseLeave={() => setModal(false)}
           >
-            <img src={Notification} alt="" className="w-7" />
+            {comeRequest && Object.keys(comeRequest).some(username => !comeRequest[username]) ? (
+              <img src={RedNotification} alt="" className="w-7 " />
+            ) : (
+              <img src={Notification} alt="" className="w-7 " />
+            )}
             {modal && (
               <div className='absolute shadow-lg bg-gray-100 py-0 z-[1000] border rounded-lg w-[300px]'>
                 <div className="flex items-center justify-between my-2 px-4 border-b">
@@ -255,28 +282,35 @@ function StickyNavbar({ authenticated, onUserSelect }) {
                   <p className="text-xs text-blue-500 cursor-pointer hover:bg-gray-300 p-1 rounded-sm">Accept all</p>
                 </div>
                 <div>
-                  {comeRequest && (
+                  {comeRequest && Object.keys(comeRequest).length > 0 && (
                     <div className="py-3">
-                      {Object.entries(comeRequest)
-                        .filter(([value]) => value === false)
-                        .map(([key]) => (
-                          <ul className="flex">
-                            <li key={key}
-                              className="flex py-1 hover:bg-gray-200 border-b text-start px-2 w-full justify-between"
-                            >
-                              {key}
-                              <span className="text-sm text-gray-500">request sent you</span>
-                              <div className="flex">
-                                <li className="hover:bg-gray-300 rounded-sm p-1" onClick={() => handleChek(key)} >
-                                  <img src={Chek} alt="" />
-                                </li>
-                                <li className="hover:bg-gray-300 rounded-sm p-1">
-                                  <img src={Close} alt="" />
-                                </li>
-                              </div>
-                            </li>
-                          </ul>
-                        ))}
+                      {Object.entries(comeRequest).map(([username, requestStatus]) => {
+                        if (!requestStatus) {
+                          return (
+                            <ul className="flex" key={username}>
+                              <li className="flex py-1 hover:bg-gray-200 border-b text-sm text-start px-2 w-full justify-between">
+                                {username}
+                                <span className="text-sm text-gray-500"> sent you a request</span>
+                                <div className="flex">
+                                  <li className="hover:bg-gray-300 rounded-sm p-1 m-auto" onClick={() => handleChek(username)}>
+                                    <img src={Chek} alt="" />
+                                  </li>
+                                  <li className="hover:bg-gray-300 rounded-sm p-1 m-auto" onClick={() => handleRequestRemove(username)}>
+                                    <img src={Close} alt="" />
+                                  </li>
+                                </div>
+                              </li>
+                            </ul>
+                          );
+                        } else {
+                          return null;
+                        }
+                      })}
+                    </div>
+                  )}
+                  {(!comeRequest || Object.keys(comeRequest).length === 0) && (
+                    <div className="py-3">
+                      <p className="text-gray-500 text-center">No notifications</p>
                     </div>
                   )}
                 </div>

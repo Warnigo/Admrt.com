@@ -13,9 +13,9 @@ const EditBg = () => {
     const [userSplit, setUserSplit] = useState(null);
     const [userUsername, setUserUsername] = useState(null);
     const [profileUsername, setProfileUsername] = useState(null);
-    const [requestLoading, setRequestLoading] = useState(false);
-    const [dontVerificationRequest, setDontVerificationRequest] = useState(false);
-    const [removeRequest, setRemoveRequest] = useState()
+    const [requestLoading, setRequestLoading] = useState('Sent request');
+    const [, setDontVerificationRequest] = useState(false);
+    const [, setRemoveRequest] = useState()
     const [removeRequestLoading, setRemoveRequestLoading] = useState(false)
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const EditBg = () => {
                     if (callData.exists()) {
                         const userData = callData.data();
                         const splitCall = userData.split;
-                        const usernameCall = userData.username;
+                        const usernameCall = userData.fullName;
                         setUserSplit(splitCall);
                         setUserUsername(usernameCall);
                     }
@@ -35,7 +35,7 @@ const EditBg = () => {
                     const userProfileData = await getDoc(doc(usersCollection, userUID));
                     if (userProfileData.exists()) {
                         const profileData = userProfileData.data();
-                        const profileUsernameCall = profileData.username;
+                        const profileUsernameCall = profileData.fullName;
                         const requestCall = profileData.requests[userUsername];
                         setProfileUsername(profileUsernameCall);
                         setRequest(requestCall);
@@ -84,19 +84,43 @@ const EditBg = () => {
 
     const handleRequest = async () => {
         try {
-            setRequestLoading(true);
+            setRequestLoading("Loading...");
 
             const userRef = doc(db, 'users', userUID);
             await updateDoc(userRef, {
                 [`requests.${userUsername}`]: false,
             });
-
-            setRequestLoading(false);
+            setRequestLoading("The request was not approved");
         } catch (error) {
             console.error('Error sending request:', error);
-            setRequestLoading(false);
+            setRequestLoading("error");
         }
     };
+
+    useEffect(() => {
+        const handleApprovedView = async () => {
+            try {
+                const userRef = doc(db, 'users', userUID);
+
+                const userDoc = await getDoc(userRef);
+
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    const userRequestStatus = userData.requests[userUsername];
+                    if (userRequestStatus === false) {
+                        setRequestLoading("The request was not approved");
+                    } else if (userRequestStatus === true) {
+                        setRemoveRequestLoading(false);
+                    }
+                }
+            } catch (error) {
+                console.error('Error handling approved view:', error);
+            }
+        };
+
+        handleApprovedView();
+    }, [userUID, userId, profileUsername, userUsername]);
+
 
     useEffect(() => {
         const handleVerification = () => {
@@ -115,13 +139,12 @@ const EditBg = () => {
     
             const userRef = doc(db, 'users', userUID);
             const userDoc = await getDoc(userRef);
-    
             if (userDoc.exists()) {
                 const userData = userDoc.data();
                 const updatedRequests = { ...userData.requests };
-                delete updatedRequests[userUsername]; 
+                delete updatedRequests[userUsername];
                 await updateDoc(userRef, {
-                    requests: updatedRequests,
+                    requests: updatedRequests
                 });
             }
             setRemoveRequestLoading(false);
@@ -133,7 +156,6 @@ const EditBg = () => {
         }
     };
     
-
     return (
         <div className="relative h-72 bg-cover bg-center border rounded-lg bg-gray-100" style={{ backgroundImage: bgImage ? `url(${bgImage})` : `url(${emptyBg})` }}>
             {viewrRequest ?
@@ -145,8 +167,11 @@ const EditBg = () => {
                                     {removeRequestLoading ? "Loading..." : "Remove request"}
                                 </button>
                             ) : (
-                                <button onClick={handleRequest} className="text-white font-semibold bg-blue-700 bg-opacity-75 p-2 rounded-lg hover:bg-opacity-100">
-                                    {requestLoading ? "Loading..." : "Sent request"}
+                                <button onClick={handleRequest}
+                                    className={`text-white font-semibold bg-blue-700 bg-opacity-75 p-2 rounded-lg ${requestLoading === "The request was not approved" ? "cursor-not-allowed" : "hover:bg-opacity-100"}`}
+                                    disabled={requestLoading === "The request was not approved"}
+                                >
+                                    {requestLoading}
                                 </button>
                             )}
                         </div>
