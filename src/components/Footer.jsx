@@ -53,7 +53,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link to={"mailto:jacob@admrt.com"} className="text-neutral-500 text-base font-light transition hover:text-[#2B59FF]">
-                      Email: <span className="text-neutral-600">Jacob@admrt.com</span>
+                      Email: <span className="text-neutral-600">Contact@amdrt.com</span>
                     </Link>
                   </li>
                 </ul>

@@ -298,7 +298,7 @@ function SiplePages() {
                             </div>
                         </div>) : null}
 
-                        <div>
+                        {/* <div>
                             <div className='rounded-t-xl border px-3 md:px-7 py-4 mt-6'>
                                 <div className='md:flex justify-between '>
                                     <div className='flex justify-center items-center gap-4'>
@@ -432,7 +432,7 @@ function SiplePages() {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
 
