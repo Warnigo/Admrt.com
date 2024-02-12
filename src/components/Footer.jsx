@@ -48,7 +48,7 @@ const Footer = () => {
                 <ul class="mt-6 space-y-4 text-sm">
                   <li>
                     <Link to="" class="text-neutral-500 text-base font-light transition hover:text-[#2B59FF]">
-                      Phone Number: <span class="text-neutral-600">735-503-8255</span>
+                      Phone Number: <span class="text-neutral-600">732-503-8255</span>
                     </Link>
                   </li>
                   <li>
