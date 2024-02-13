@@ -136,7 +136,20 @@ function SiplePages() {
                         {open ? (<div className='border'>
                             <div className='px-2 md:px-8 mt-6'>
                                 <ul className="menu gap-5">
-                                    <li className="menu-item flex justify-between">
+                                <li className="menu-item flex justify-between">
+                                        <div
+                                            className="flex justify-center items-center text-xs md:text-sm md:font-semibold text-gray-400">
+                                            <img className='h-6 my-2 mr-1' src={targetSvg} alt='' />
+                                            <h1>Pricing and Media Kits:</h1>
+                                        </div>
+                                        <div
+                                            className='text-xs md:text-sm md:font-semibold text-[#2B59FF] flex justify-center items-center  gap-4'>
+                                            <h1>none</h1>
+                                            <div className='flex justify-center items-center cursor-pointer '><img
+                                                src={edit_svg_blue} alt='' /></div>
+                                        </div>
+                                    </li>
+                                    {/* <li className="menu-item flex justify-between">
                                         <div
                                             className="flex justify-center items-center text-xs md:text-sm md:font-semibold text-gray-400">
                                             <img className='h-6 my-2 mr-1' src={targetSvg} alt='' />
@@ -148,7 +161,7 @@ function SiplePages() {
                                             <div className='flex justify-center items-center cursor-pointer '><img
                                                 src={edit_svg_blue} alt='' /></div>
                                         </div>
-                                    </li>
+                                    </li> */}
                                     <li className="menu-item flex justify-between">
                                         <div
                                             class="flex justify-center items-center text-xs md:text-sm md:font-semibold text-gray-400">
@@ -483,9 +496,6 @@ function SiplePages() {
                                 <div className='flex justify-between my-3 mt-20'>
                                     <div>
                                         <h1 className='font-semibold'>Analytics</h1>
-                                    </div>
-                                    <div>
-                                        <img src={edit_svg_blue} alt='' />
                                     </div>
                                 </div>
                                 <div className='border'></div>

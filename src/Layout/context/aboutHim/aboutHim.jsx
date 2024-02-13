@@ -69,23 +69,13 @@ const AboutHim = () => {
 
                 const address = document.getElementById('address').value || currentData.address;
                 const site = document.getElementById('site').value || currentData.site;
-                const services = {
-                    fullTime,
-                    partTime,
-                };
-                const additionalInfo = document.getElementById('additionalInfo').value || currentData.additionalInfo;
-
                 const userData = {
                     address,
                     site,
-                    services,
-                    additionalInfo,
                 };
 
                 const updatedUserData = { ...currentData, ...userData };
-
                 await setDoc(userRef, updatedUserData);
-
                 setaboutHimShow(false);
                 window.location.reload();
             } else {
@@ -125,33 +115,6 @@ const AboutHim = () => {
                                         className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-indigo-600"
                                         placeholder="Enter Website. Ex: admrt.com"
                                         id="site"
-                                    />
-                                </div>
-                                <div>
-                                    <ul className="grid gap-2 grid-cols-2">
-                                        {servicesItems.map((item, idx) => (
-                                            <li key={idx} className="flex items-center space-x-2 text-sm">
-                                                <input
-                                                    id={`service-${idx}`}
-                                                    type="checkbox"
-                                                    className="form-checkbox h-5 w-5 text-indigo-600 accent-blue-600"
-                                                    checked={idx === 0 ? fullTime : partTime}
-                                                    onChange={() => handleCheckboxChange(idx)}
-                                                />
-                                                <label htmlFor={`service-${idx}`} className="text-gray-700">
-                                                    {item}
-                                                </label>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">Additional Information</label>
-                                    <input
-                                        type="text"
-                                        className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-indigo-600"
-                                        placeholder="What should advertisers about you"
-                                        id="additionalInfo"
                                     />
                                 </div>
                             </div>
@@ -234,40 +197,6 @@ const AboutHim = () => {
                             </div>
                             <div>
                             <h1>Joined {userData.registrationDate ? new Date(userData.registrationDate.seconds * 1000).toLocaleDateString('en-GB') : 'Unknown'}</h1>
-                            </div>
-                        </div>
-                        <div className='flex justify-center items-center cursor-pointer'>
-                            <button onClick={() => {
-                                setaboutHimShow(true)
-                            }}>
-                                <img src={edit_svg_blue} alt='' />
-                            </button>
-                        </div>
-                    </div>
-                    <div className='flex justify-between my-4'>
-                        <div className='flex gap-5'>
-                            <div className=''>
-                                <img src={shape4} alt='' />
-                            </div>
-                            <div>
-                                <h1>Working at Youtube ({userData.services ? (userData.services.fullTime ? 'Full Time' : userData.services.partTime ? 'Part Time' : 'none') : 'none'})</h1>
-                            </div>
-                        </div>
-                        <div className='flex justify-center items-center cursor-pointer'>
-                            <button onClick={() => {
-                                setaboutHimShow(true)
-                            }}>
-                                <img src={edit_svg_blue} alt='' />
-                            </button>
-                        </div>
-                    </div>
-                    <div className='flex justify-between my-4'>
-                        <div className='flex gap-5'>
-                            <div className=''>
-                                <img src={shape5} alt='' />
-                            </div>
-                            <div>
-                                <h1>{userData.additionalInfo || "Have Channel with Nova Bee"}</h1>
                             </div>
                         </div>
                         <div className='flex justify-center items-center cursor-pointer'>

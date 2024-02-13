@@ -345,12 +345,12 @@ const EditeUser = () => {
             </div>
           </div>
         </div>
-        <div className="flex gap-3">
+        {/* <div className="flex gap-3">
           <h1 className="font-bold text-xl">$<span>{price || hourlyRate}</span>/hr</h1>
           <div onClick={() => setPriceModal(true)} className="m-auto">
             <img src={edit_svg_blue} alt="" />
           </div>
-        </div>
+        </div> */}
       </div>
       {modalOpen && (
         <ImageCropper
