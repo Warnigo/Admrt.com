@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import 'flowbite';
 import openSvg from '../../image/chevron-down (1) 2.svg'
 import closed from '../../image/chevron-down (1) 1.svg'
-import targetSvg from '../../svgs/specification/target.svg'
+// import targetSvg from '../../svgs/specification/target.svg'
 import contentSvg from '../../svgs/specification/content.svg'
 import subscribersSvg from '../../svgs/specification/subscribers.svg'
 import typesSvg from '../../svgs/specification/types.svg'
@@ -14,9 +14,9 @@ import wiseSvg from '../../svgs/payment/wise.svg'
 import zelleSvg from '../../svgs/payment/zille.svg'
 import venmoSvg from '../../svgs/payment/venmo.svg'
 import payoneerSvg from '../../svgs/payment/payoneer.svg'
-import star from '../../Layout/AuthPage/star.svg'
+// import star from '../../Layout/AuthPage/star.svg'
 import edit_svg_blue from '../../image/edit_svg_blue.svg'
-import ModalFeedbackCard from '../../Modals/ModalFeedbackCard';
+// import ModalFeedbackCard from '../../Modals/ModalFeedbackCard';
 import ModalDelete from '../../Modals/ModalDelete';
 import EditBackground from "../../Layout/context/editeBackground";
 import EditeUser from "../../Layout/context/user";
@@ -29,6 +29,7 @@ import view_eye from '../../image/eye 1.svg';
 import view_search from '../../image/search 1.svg';
 import shape from '../../svgs/about/Shape.svg';
 import { } from 'firebase/firestore';
+import Portfolio from '../../Layout/context/portfolio/portfolio';
 
 function SiplePages() {
     const [userId, setUserId] = useState(null);
@@ -37,7 +38,7 @@ function SiplePages() {
     const [requests, setRequests] = useState('')
     const [open, setOpen] = useState(false);
     const [openPayment, setOpenPayment] = useState(false);
-    const [userData, setUsersData] = useState('')
+    // const [userData, setUsersData] = useState('')
     const profile_amer = 'https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg'
 
     useEffect(() => {
@@ -119,7 +120,7 @@ function SiplePages() {
 
                         {advertiserProfile ? null :
                             <div onClick={handleOpen}
-                                className='flex justify-between border mt-8 py-2 px-3 md:py-4 md:px-7 rounded-t-xl'>
+                                className={`flex justify-between border mt-8 py-2 px-3 md:py-4 md:px-7 ${open ? `rounded-t-xl` : `rounded-xl`}`}>
                                 <div className=''>
                                     <button><h1 className='text-base md:text-2xl font-semibold'>Specification</h1></button>
                                 </div>
@@ -133,7 +134,7 @@ function SiplePages() {
                             </div>
                         }
 
-                        {open ? (<div className='border'>
+                        {open ? (<div className='border rounded-b-xl'>
                             <div className='px-2 md:px-8 mt-6'>
                                 <ul className="menu gap-5">
                                     {/* <li className="menu-item flex justify-between">
@@ -224,11 +225,14 @@ function SiplePages() {
                             </div>
                         </div>) : null}
 
+                        <Portfolio />
 
                         {advertiserProfile ? null :
-                            <div className='md:flex justify-between border mt-8 py-2 px-3 md:py-4 md:px-7 rounded-t-xl'>
+                            <div className={`md:flex justify-between border py-2 px-3 md:py-4 md:px-7 ${openPayment ? "rounded-t-xl" : "rounded-xl"}`}>
                                 <div className=''>
-                                    <button><h1 className='md:text-2xl font-semibold'>Payment Methods</h1></button>
+                                    <button>
+                                        <h1 className='md:text-2xl font-semibold'>Payment Methods</h1>
+                                    </button>
                                 </div>
 
                                 <div className='flex justify-between mt-3 md:mt-0 md:justify-center gap-5'>
@@ -252,7 +256,7 @@ function SiplePages() {
                             </div>
                         }
 
-                        {openPayment ? (<div className='border'>
+                        {openPayment ? (<div className='border rounded-b-xl'>
                             <div className='py-2 px-3 md:py-4 md:px-7'>
                                 <div className="App">
 
