@@ -23,7 +23,7 @@ const User = () => {
                     setFullName(userFullName);
                     setUserImg(imageUrl);
                     setPrice(userData.hourlyRate)
-                    setExperitise(userData.experitise || []); // Ensure experitise is an array
+                    setExperitise(userData.experitise || []);
                 } else {
                     console.log('User not found');
                 }
@@ -55,9 +55,9 @@ const User = () => {
                     </div>
 
                 </div>
-                <div className="flex gap-3">
+                {/* <div className="flex gap-3">
                     <h1 className="font-bold text-xl">$<span>{price || "0.00"}</span>/hr</h1>
-                </div>
+                </div> */}
             </div>
         </div>
     );
