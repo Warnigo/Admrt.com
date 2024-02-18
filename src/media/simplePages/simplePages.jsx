@@ -24,11 +24,11 @@ import IntoDescription from "../../Layout/context/intoDescription";
 import { auth, usersCollection } from "../../firebase/firebase";
 import AboutHim from '../../Layout/context/aboutHim/aboutHim';
 import SocialMedia from '../../Layout/context/socialMedia/socialMedia';
-import { doc, getDoc, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import view_eye from '../../image/eye 1.svg';
 import view_search from '../../image/search 1.svg';
 import shape from '../../svgs/about/Shape.svg';
-import { } from 'firebase/firestore';
+import Loading from '../../loading/loading'
 import Portfolio from '../../Layout/context/portfolio/portfolio';
 
 function SiplePages() {
@@ -38,6 +38,7 @@ function SiplePages() {
     const [requests, setRequests] = useState('')
     const [open, setOpen] = useState(false);
     const [openPayment, setOpenPayment] = useState(false);
+    const [loading, setLoading] = useState(true)
     // const [userData, setUsersData] = useState('')
     const profile_amer = 'https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg'
 
@@ -52,8 +53,9 @@ function SiplePages() {
                         const splitCall = userData.split;
                         const comeRequestCall = userData.requests;
                         setSplit(splitCall);
-                        const filteredRequests = Object.fromEntries(Object.entries(comeRequestCall).filter(([username, value]) => value === true));
+                        const filteredRequests = Object.fromEntries(Object.entries(comeRequestCall).filter(([value]) => value === true));
                         setRequests(filteredRequests);
+                        setLoading(false)
                     }
                 } catch (error) {
                     console.error(error);
@@ -65,32 +67,13 @@ function SiplePages() {
         return () => unsubscribe();
     }, []);
 
-    const handleFetchUserData = async (username) => {
-        try {
-            const usersQuery = query(usersCollection, where("userId", "!=", null));
-            const querySnapshot = await getDocs(usersQuery);
-
-            querySnapshot.forEach((doc) => {
-                const userData = doc.data();
-                if (userData.fullName === username) {
-                    console.log("User found:", userData);
-                }
-            });
-
-        } catch (error) {
-            console.error("Error fetching user data:", error);
-        }
-    }
-
     // useEffect(() => {
     //     handleFetchUserData()
     // }, [userId])
 
-
     const handleOpen = () => {
         setOpen(!open);
     };
-
 
     const handleOpenPayment = () => {
         setOpenPayment(!openPayment);
@@ -107,6 +90,10 @@ function SiplePages() {
         handleProfilAdvertiser()
     }, [split])
 
+    if(loading) {
+        return <Loading />
+    }
+
     return (
         <div className="App">
             <div className="max-w-screen-2xl mx-auto">
@@ -117,7 +104,6 @@ function SiplePages() {
                             <EditeUser />
                             <IntoDescription />
                         </div>
-
                         {advertiserProfile ? null :
                             <div onClick={handleOpen}
                                 className={`flex justify-between border mt-8 py-2 px-3 md:py-4 md:px-7 ${open ? `rounded-t-xl` : `rounded-xl`}`}>
@@ -456,8 +442,8 @@ function SiplePages() {
                                 <div className='border'></div>
                                 {requests && Object.keys(requests).length > 0 && (
                                     <div>
-                                        {Object.entries(requests).map(([username, isRequested]) => (
-                                            <div key={username} className='flex justify-between my-5' onChange={() => handleFetchUserData(username)}>
+                                        {Object.entries(requests).map(([username]) => (
+                                            <div key={username} className='flex justify-between my-5'>
                                                 <div className='flex gap-3'>
                                                     <div className=''>
                                                         <img className='w-8 h-8 cursor-pointer rounded-full' src={profile_amer} alt='userImg' />

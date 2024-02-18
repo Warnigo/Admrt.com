@@ -47,7 +47,7 @@ function App() {
     }, [handleSuccess, setUserId, userId]);
 
     const handleUserSelect = (selectedUserUID) => {
-        console.log("Selected User UID:", selectedUserUID);
+        console.log(selectedUserUID);
     };
 
     const AuthUserRoutes = [

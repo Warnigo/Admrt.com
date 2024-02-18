@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { IoIosAddCircleOutline } from 'react-icons/io';
 import { IoVideocam } from 'react-icons/io5';
+import { MdDelete } from "react-icons/md";
 import { VscChromeClose } from 'react-icons/vsc';
+import { Link } from 'react-router-dom';
 
 const AddPortfolio = () => {
     const [steps] = useState({ stepsItems: ['Added portfolio', 'Add details'], currentStep: 2 });
@@ -8,20 +11,52 @@ const AddPortfolio = () => {
     const [modal, setModal] = useState(false);
     const [link, setLink] = useState('');
     const [linkValid, setLinkValid] = useState(false);
+    const [uploadFile, setUploadFile] = useState();
+    const [description, setDescroption] = useState();
+    const [addUploadFile, setAddUploadFile] = useState();
+    const [addModal, setAddModal] = useState(false);
+    const [addFileError, setAddFileError] = useState();
+
+    const allowedExtensions = ['.jpg', '.gif', '.png', '.pdf'];
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         const maxSizeInBytes = 5 * 1024 * 1024;
+        if (!file) return;
 
-        if (file && file.size > maxSizeInBytes) {
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        const isValidExtension = allowedExtensions.includes(`.${fileExtension}`);
+
+        if (!isValidExtension || file.size > maxSizeInBytes) {
             event.target.value = '';
-            setFileError('File size exceeds the maximum limit (5MB).');
+            setFileError('Invalid file format or size exceeds the maximum limit (5MB).');
+        } else {
+            setUploadFile(file);
+            setFileError('');
         }
     };
+
+    const handleAddFile = (e) => {
+        const file = e.target.files[0];
+        const maxSizeInBytes = 5 * 1024 * 1024;
+        const allowedExtensions = ['.jpg', '.gif', '.png', '.pdf'];
+
+        const fileExtension = file.name.split(".").pop().toLowerCase();
+        const isValid = allowedExtensions.includes(`.${fileExtension}`);
+        if (!isValid || file.size > maxSizeInBytes) {
+            e.target.value = ''
+            setAddFileError('Invalid file format or size exceeds the maximum limit (5MB).')
+        } else {
+            setAddUploadFile(file);
+            setAddFileError('');
+            setAddModal(false);
+        }
+    }
 
     useEffect(() => {
         const timeout = setTimeout(() => {
             setFileError('');
+            setAddFileError('')
         }, 5000);
 
         return () => clearTimeout(timeout);
@@ -63,6 +98,35 @@ const AddPortfolio = () => {
                                 >
                                     Added
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {addModal && (
+                <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto bg-black bg-opacity-25 fixed inset-0 z-50 outline-none focus:outline-none">
+                    <div className="relative w-[80%] md:w-1/3 mx-auto">
+                        <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                            <div className='px-3 pt-3 rounded-full flex justify-end' onClick={() => setAddModal(false)}>
+                                <VscChromeClose className='w-6 h-6 p-1 rounded-full text-white bg-gray-600 hover:bg-gray-700' />
+                            </div>
+                            <div className="relative p-2 md:p-2 border-b flex-auto flex justify-center items-start">
+                                <div>
+                                    <h1 className='text-center text-2xl md:text-3xl font-semibold'>Add Image portfolio</h1>
+                                </div>
+                            </div>
+                            <div className='md:p-6 p-2'>
+                                <p className='text-gray-700 text-center mb-2'>.jpg, .gif, .png, .pdf, up to 5 MB, no more than 3000 px</p>
+                                <div className={`max-w-md h-40 rounded-2xl border-2 border-dashed border-blue-600 flex items-center justify-center ${addFileError && 'border-red-600'}`}>
+                                    <label htmlFor="file" className="cursor-pointer text-center p-4 md:p-8">
+                                        <svg className={`w-10 h-10 mx-auto ${addFileError ? 'stroke-red-600' : 'stroke-blue-600'} `} viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12.1667 26.6667C8.48477 26.6667 5.5 23.6819 5.5 20C5.5 16.8216 7.72428 14.1627 10.7012 13.4949C10.5695 12.9066 10.5 12.2947 10.5 11.6667C10.5 7.0643 14.231 3.33334 18.8333 3.33334C22.8655 3.33334 26.2288 6.19709 27.0003 10.0016C27.0556 10.0006 27.1111 10 27.1667 10C31.769 10 35.5 13.731 35.5 18.3333C35.5 22.3649 32.6371 25.7279 28.8333 26.5M25.5 21.6667L20.5 16.6667M20.5 16.6667L15.5 21.6667M20.5 16.6667L20.5 36.6667" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                        <p className="mt-3 text-gray-700 max-w-xs mx-auto">Click to <span className={`font-medium ${addFileError ? 'text-red-600' : 'text-blue-600'}`}>Upload your file</span> or drag and drop your file here</p>
+                                    </label>
+                                    <input id="file" type="file" className="hidden" onChange={handleAddFile} />
+                                </div>
+                                {addFileError && <div className='text-red-600 font-semibold text-center'>Invalid file format or size exceeds the maximum limit (5MB).</div>}
                             </div>
                         </div>
                     </div>
@@ -123,39 +187,84 @@ const AddPortfolio = () => {
                             <p className='text-gray-700 text-center'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore deserunt eum error maiores quibusdam reprehenderit nobis culpa animi, recusandae et iste, cum nemo.</p>
                         </div>
                         <div className='pt-6'>
-                            <div className='text-gray-700 text-center pb-4'>
-                                <p>Images and document (.jpg, .gif, .png, .pdf, up to 5 MB, no more than 3000 px in any dimension)</p>
-                            </div>
-                            <div className='flex justify-evenly'>
-                                <div className={`max-w-md h-40 rounded-2xl border-2 border-dashed border-blue-600 flex items-center justify-center ${fileError && 'border-red-600'}`}>
-                                    <label htmlFor="file" className="cursor-pointer text-center p-4 md:p-8">
-                                        <svg className={`w-10 h-10 mx-auto ${fileError ? 'stroke-red-600' : 'stroke-blue-600'} `} viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12.1667 26.6667C8.48477 26.6667 5.5 23.6819 5.5 20C5.5 16.8216 7.72428 14.1627 10.7012 13.4949C10.5695 12.9066 10.5 12.2947 10.5 11.6667C10.5 7.0643 14.231 3.33334 18.8333 3.33334C22.8655 3.33334 26.2288 6.19709 27.0003 10.0016C27.0556 10.0006 27.1111 10 27.1667 10C31.769 10 35.5 13.731 35.5 18.3333C35.5 22.3649 32.6371 25.7279 28.8333 26.5M25.5 21.6667L20.5 16.6667M20.5 16.6667L15.5 21.6667M20.5 16.6667L20.5 36.6667" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                        <p className="mt-3 text-gray-700 max-w-xs mx-auto">Click to <span className={`font-medium ${fileError ? 'text-red-600' : 'text-blue-600'}`}>Upload your file</span> or drag and drop your file here</p>
-                                    </label>
-                                    <input id="file" type="file" className="hidden" onChange={handleFileChange} />
-                                </div>
-                                <div className='my-auto'>
-                                    <p className='text-gray-700 '>Or, embed a video from YouTube.</p>
-                                    <button className='flex m-auto border-2 border-blue-600 rounded-lg p-4 w-44 mt-5' onClick={() => setModal(true)}>
-                                        <IoVideocam className='text-blue-600 m-auto mt-1.5' />
-                                        <p className='text-blue-600 m-auto'>add video link</p>
-                                    </button>
-                                </div>
-                            </div>
-                            <div className='text-center pt-5'>
-                                <h1 className='font-bold text-gray-700 p-1'>Description</h1>
-                                <textarea id="message" rows="4"
-                                    class="block p-2.5 mx-auto w-1/2 text-sm text-gray-900 bg-gray-50 rounded-lg border focus:border-blue-500"
-                                    placeholder="Write your description here..."
-                                />
+                            <div>
+                                {uploadFile ? (
+                                    <div className='my-6 ml-20'>
+                                        {uploadFile.type && uploadFile.type.startsWith('image/') ? (
+                                            <div className='flex justify-start'>
+                                                <div className='border p-2 bg-gray-100 flex rounded-lg'>
+                                                    <img src={URL.createObjectURL(uploadFile)}
+                                                        alt="Uploaded File"
+                                                        className='w-44 h-44 object-cover rounded-sm'
+                                                    />
+                                                    {addUploadFile ? (
+                                                        <div>
+                                                            <div>
+                                                                <img src={URL.createObjectURL(addUploadFile)}
+                                                                    alt="Uploaded File"
+                                                                    className='w-44 h-44 object-cover rounded-sm'
+                                                                />
+                                                                <MdDelete className='absolute ' />
+                                                            </div>
+
+                                                        </div>
+                                                    ) : (
+                                                        <div className='my-auto ml-5'>
+                                                            <IoIosAddCircleOutline className='w-12 h-12 text-blue-600 hover:text-blue-700 active:text-blue-800 cursor-pointer' onClick={() => setAddModal(true)} />
+                                                        </div>
+                                                    )}
+
+                                                </div>
+                                            </div>
+
+                                        ) : (
+                                            <div className=''>
+                                                <Link to={URL.createObjectURL(uploadFile)} download={uploadFile.name}>{uploadFile.name}</Link>
+                                            </div>
+                                        )}
+                                        <div className='pt-5'>
+                                            <h1 className='font-bold text-gray-700 p-1'>Description</h1>
+                                            <textarea id="message" rows="4"
+                                                class="block p-2.5 w-1/2 text-gray-900 bg-gray-50 rounded-lg border focus:border-blue-500"
+                                                placeholder="Write your description here..."
+                                                value={description}
+                                                onChange={(e) => setDescroption(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <div className='text-gray-700 text-center pb-4'>
+                                            <p>Images and document (.jpg, .gif, .png, .pdf, up to 5 MB, no more than 3000 px in any dimension)</p>
+                                        </div>
+                                        <div className='flex justify-evenly'>
+                                            <div className={`max-w-md h-40 rounded-2xl border-2 border-dashed border-blue-600 flex items-center justify-center ${fileError && 'border-red-600'}`}>
+                                                <label htmlFor="file" className="cursor-pointer text-center p-4 md:p-8">
+                                                    <svg className={`w-10 h-10 mx-auto ${fileError ? 'stroke-red-600' : 'stroke-blue-600'} `} viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12.1667 26.6667C8.48477 26.6667 5.5 23.6819 5.5 20C5.5 16.8216 7.72428 14.1627 10.7012 13.4949C10.5695 12.9066 10.5 12.2947 10.5 11.6667C10.5 7.0643 14.231 3.33334 18.8333 3.33334C22.8655 3.33334 26.2288 6.19709 27.0003 10.0016C27.0556 10.0006 27.1111 10 27.1667 10C31.769 10 35.5 13.731 35.5 18.3333C35.5 22.3649 32.6371 25.7279 28.8333 26.5M25.5 21.6667L20.5 16.6667M20.5 16.6667L15.5 21.6667M20.5 16.6667L20.5 36.6667" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                                                    </svg>
+                                                    <p className="mt-3 text-gray-700 max-w-xs mx-auto">Click to <span className={`font-medium ${fileError ? 'text-red-600' : 'text-blue-600'}`}>Upload your file</span> or drag and drop your file here</p>
+                                                </label>
+                                                <input id="file" type="file" className="hidden" onChange={handleFileChange} />
+                                            </div>
+                                            <div className='my-auto'>
+                                                <p className='text-gray-700 '>Or, embed a video from YouTube.</p>
+                                                <button className='flex m-auto border-2 border-blue-600 rounded-lg p-4 w-44 mt-5' onClick={() => setModal(true)}>
+                                                    <IoVideocam className='text-blue-600 m-auto mt-1.5' />
+                                                    <p className='text-blue-600 m-auto'>add video link</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                             <div className='flex justify-end gap-4 mt-10'>
                                 <butto className={"cursor-pointer border-blue-600 border-2 rounded-lg p-2 w-44 text-center text-blue-600 active:bg-blue-50"}>
                                     Cancel
                                 </butto>
-                                <button className='cursor-pointer bg-blue-600 text-white p-2 w-44 text-center rounded-lg active:bg-blue-700'>
+                                <button className={`cursor-pointer bg-blue-600 text-white p-2 w-44 text-center rounded-lg ${uploadFile ? "active:bg-blue-700" : "cursor-not-allowed opacity-50"}`}
+                                    disabled={!uploadFile}
+                                >
                                     Save
                                 </button>
                             </div>

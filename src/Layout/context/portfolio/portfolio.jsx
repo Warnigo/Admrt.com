@@ -11,7 +11,6 @@ const Portfolio = () => {
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('')
-  const [date, setDate] = useState();
   const [errorMessageTitle, setErrorMessageTitle] = useState(false);
 
   const navigate = useNavigate();
@@ -29,7 +28,7 @@ const Portfolio = () => {
   }, [userId])
 
   const handleNextButton = async () => {
-    if (title.length === 0 || !date) {
+    if (title.length === 0) {
       setErrorMessageTitle(true);
       setLoading(false);
       return;
@@ -38,9 +37,9 @@ const Portfolio = () => {
     setLoading(true);
     const datas = {
       portfolioTitle: title,
-      startDate: date,
       portfolioId: Id,
       userId: userId,
+      startDate: new Date(),
     };
     try {
       await savePortfolioFirebase(userId, Id, datas);
@@ -78,14 +77,6 @@ const Portfolio = () => {
                         onChange={(e) => setTitle(e.target.value)}
                       />
                       {errorMessageTitle && <p className='text-red-600'>Please enter title</p>}
-                    </div>
-                    <div className='mt-4'>
-                      <p>Completion Date <span className='text-sm text-gray-500'>(optional)</span></p>
-                      <input type="date"
-                        className='w-full p-2 border rounded-lg mt-1'
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                      />
                     </div>
                   </div>
                 </div>

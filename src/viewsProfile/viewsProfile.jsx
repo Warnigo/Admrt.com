@@ -14,10 +14,22 @@ import EditeUser from "./others/user";
 import IntoDescription from "./others/description";
 import AboutHim from './others/abouthim';
 import SocialMedia from './others/socialMedia';
+import { useEffect, useState } from 'react';
+import Loading from '../loading/loading'
 
 function ViewsProfile() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadingTime = setTimeout(() => {
+      setLoading(false)
+    }, 1200);
+
+    return () => clearTimeout(loadingTime)
+  })
   return (
     <div className="App">
+      {loading && <Loading />}
       <div className="max-w-screen-2xl mx-auto">
         <div className="md:flex">
           <div className="w-full order-2 md:w-2/3">
