@@ -13,7 +13,7 @@ import Chek from '../svgs/chek.svg'
 import Close from '../svgs/close.svg'
 import RedNotification from '../images/redNotification.svg'
 
-function StickyNavbar({ authenticated, onUserSelect }) {
+function StickyNavbar({ authenticated }) {
   const [openNav, setOpenNav] = React.useState(false);
   const [userImage, setUserImage] = useState(null);
   const [state, setState] = useState(false);
@@ -89,8 +89,8 @@ function StickyNavbar({ authenticated, onUserSelect }) {
   }, [userId]);
 
   const navigation = [
-    { title: "Profile", path: `/t=split${split}/${userId}` },
-    { title: "Settings", path: `/t=split${split}/${userId}/settings` },
+    { title: "Profile", path: `/${split}/${userId}` },
+    { title: "Settings", path: `/${split}/${userId}/settings` },
   ];
 
   const handleLogout = () => {
@@ -256,7 +256,7 @@ function StickyNavbar({ authenticated, onUserSelect }) {
           variant="small"
           className="p-1 text-black text-lg font-normal"
         >
-          <Link to={`/m=split${split}/message`} className="flex items-center hover:text-blue-700 hover:shadow-sm">
+          <Link to={`/${split}/message`} className="flex items-center hover:text-blue-700 hover:shadow-sm">
             <h1>Message</h1>
           </Link>
         </Typography>

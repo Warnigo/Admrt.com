@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "./Layout/AuthPage/Login";
 import Register from "./Layout/AuthPage/Register";
@@ -12,62 +12,39 @@ import './App.css'
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Profile from "./Layout/AuthPage/Profile";
-import { auth, usersCollection } from "./firebase/firebase";
+import { auth } from "./firebase/firebase";
 import { NotFound } from "./404/404";
 import Settings from "./components/Settings/DateBirthday/Settings";
 import Home from "./components/Home";
 import ViewsProfile from "./viewsProfile/viewsProfile";
-import Loading from "./loading/loading";
-import { doc, getDoc } from "firebase/firestore";
 import MessageIndex from "./message";
 import EmptyMessage from "./message/layout/empty";
+import AddPortfolio from "./Layout/context/portfolio/next/addPortfolio";
 
 function App() {
     const [userId, setUserId] = useState(null);
     const [authenticated, setAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [split, setSplit] = useState();
+
+    const handleRegister = useCallback(() => {
+        setAuthenticated(true);
+    }, []);
+
+    const handleSuccess = useCallback(() => {
+        handleRegister();
+    }, [handleRegister]);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
                 setUserId(user.uid);
                 handleSuccess();
-                try {
-                    const userDoc = await getDoc(doc(usersCollection, user.uid));
-                    if (userDoc.exists()) {
-                      const userData = userDoc.data();
-                      const splitCall = userData.split
-                      setSplit(splitCall)
-                    }
-                  } catch (error) {
-                    console.error('Error getting user data:', error);
-                  }
             } else {
                 setUserId(null);
             }
         });
 
         return () => unsubscribe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const handleRegister = () => {
-        setAuthenticated(true);
-    };
-
-    const handleSuccess = () => {
-        handleRegister();
-    };
-
-    useEffect(() => {
-        const delay = 1500;
-        const timeoutId = setTimeout(() => {
-            setLoading(false);
-        }, delay);
-
-        return () => clearTimeout(timeoutId);
-    }, [loading]);
+    }, [handleSuccess, setUserId, userId]);
 
     const handleUserSelect = (selectedUserUID) => {
         console.log("Selected User UID:", selectedUserUID);
@@ -76,10 +53,10 @@ function App() {
     const AuthUserRoutes = [
         { id: 1, path: "/about", element: <About /> },
         { id: 2, path: "/contact", element: <Contact /> },
-        { id: 3, path: `/t=split${split}/${userId}`, element: <Profile /> },
-        { id: 4, path: `/t=split${split}/${userId}/settings`, element: <Settings /> },
-        // { id: 5, path: `/t=split${split}/${userId}/qwerty`, element: <Billings /> },
-        { id: 6, path: `/p=profileut/:split/:userUID`, element: <ViewsProfile onUserUID={handleUserSelect} /> },
+        { id: 3, path: `/:split/:userId`, element: <Profile /> },
+        { id: 4, path: `/:split/:userId/settings`, element: <Settings /> },
+        { id: 6, path: `/profile/:split/:userUID`, element: <ViewsProfile onUserUID={handleUserSelect} /> },
+        { id: 7, path: `/:title/portfolio/:userId/:Id`, element: <AddPortfolio /> },
         { id: 0, path: "*", element: <NotFound /> },
     ];
 
@@ -94,17 +71,8 @@ function App() {
         { id: 8, path: "/congratulation", element: <CreateAnAcc /> },
         { id: 9, path: "*", element: <NotFound /> },
     ];
-
-    const currentPath = window.location.pathname;
-    useEffect(() => {
-        if (currentPath !== "/") {
-            setLoading(true);
-        }
-    }, [currentPath]);
-
     return (
         <div>
-            {loading && <Loading />}
             <Routes>
                 <Route
                     path="/"
@@ -114,7 +82,7 @@ function App() {
                     {AuthUserRoutes.map((route) => (
                         <Route key={route.id} path={route.path} element={route.element} />
                     ))}
-                    <Route path={`/m=split${split}/message`} element={<MessageIndex />}>
+                    <Route path={`/:split/message`} element={<MessageIndex />}>
                         <Route index element={<EmptyMessage />} />
                     </Route>
                 </Route>

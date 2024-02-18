@@ -64,7 +64,7 @@ const Search = () => {
         <div className="absolute mt-2 w-full bg-white border rounded-md shadow-lg">
           <ul className='m-1 border border-gray-300 rounded-sm'>
             {filteredUsers.map((user, index) => (
-              <Link to={`/p=profileut/${user.split}/${user.userId}`} key={index}>
+              <Link to={`/profile/${user.split}/${user.userId}`} key={index}>
                 <div className='flex px-3 py-2 hover:bg-gray-100 border-b'>
                   <li key={index} className=''>
                     <img src={user.imageUrl || avatar} alt="" className='w-10 rounded-full border border-blue-700 p-0.5' />
