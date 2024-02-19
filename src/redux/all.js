@@ -1,3 +1,8 @@
+import { auth } from "../firebase/firebase";
+
+let setUserId = '';
+const userId = setUserId;
+
 const generateID = () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%#!)_=+-';
     let id = '';
@@ -7,7 +12,17 @@ const generateID = () => {
     return id;
   };
 
+  const unsubscripbe = auth.onAuthStateChanged(user => {
+    if(user){
+      setUserId = user.uid;
+    }else{
+      setUserId = ''
+    }
+  })
+
+  unsubscripbe()
 const Id = generateID()
 export {
     Id,
+    userId,
 }

@@ -3,7 +3,9 @@ import { IoIosAddCircleOutline } from 'react-icons/io';
 import { IoVideocam } from 'react-icons/io5';
 import { MdDelete } from "react-icons/md";
 import { VscChromeClose } from 'react-icons/vsc';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { auth, savePortfolioFirebase, storage,  } from '../../../../firebase/firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const AddPortfolio = () => {
     const [steps] = useState({ stepsItems: ['Added portfolio', 'Add details'], currentStep: 2 });
@@ -16,9 +18,12 @@ const AddPortfolio = () => {
     const [addUploadFile, setAddUploadFile] = useState();
     const [addModal, setAddModal] = useState(false);
     const [addFileError, setAddFileError] = useState();
+    const [userId, setUserId] = useState(null)
+    const [saveLoading, setSaveLoading] = useState(false);
 
+    const {Id} = useParams();
+    const navigate = useNavigate()
     const allowedExtensions = ['.jpg', '.gif', '.png', '.pdf'];
-
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         const maxSizeInBytes = 5 * 1024 * 1024;
@@ -34,6 +39,13 @@ const AddPortfolio = () => {
             setUploadFile(file);
             setFileError('');
         }
+    };
+
+    const uploadFileToStorage = async (file) => {
+        const storageRef = ref(storage, `portfolio/${userId}/${Id}/${file.name}`);
+        await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(storageRef);
+        return downloadURL;
     };
 
     const handleAddFile = (e) => {
@@ -66,6 +78,39 @@ const AddPortfolio = () => {
         setLinkValid(link.startsWith('https://you'));
     }, [link]);
 
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if(user){
+                setUserId(user.uid);
+            }else{
+                setUserId(null)
+            }
+        })
+
+        return() => unsubscribe()
+    }, [userId])
+
+    const handleCreate = async () => {
+        setSaveLoading(true);
+    
+        try {
+            const url = await uploadFileToStorage(uploadFile);
+            const url1 = await uploadFileToStorage(addUploadFile);
+            await savePortfolioFirebase(userId, Id, {
+                image: url,
+                image1: url1 || null,
+                description: description,
+                startDate: new Date(),
+            });
+    
+            setSaveLoading(false);
+            navigate("/");
+        } catch (error) {
+            console.error(error);
+            setSaveLoading(false);
+        }
+    };
+    
     return (
         <div>
             {modal && (
@@ -193,18 +238,21 @@ const AddPortfolio = () => {
                                         {uploadFile.type && uploadFile.type.startsWith('image/') ? (
                                             <div className='flex justify-start'>
                                                 <div className='border p-2 bg-gray-100 flex rounded-lg'>
-                                                    <img src={URL.createObjectURL(uploadFile)}
-                                                        alt="Uploaded File"
-                                                        className='w-44 h-44 object-cover rounded-sm'
-                                                    />
+                                                    <div>
+                                                        <img src={URL.createObjectURL(uploadFile)}
+                                                            alt="Uploaded File"
+                                                            className='w-44 h-44 object-cover rounded-sm'
+                                                        />
+                                                        <MdDelete className='cursor-pointer absolute ml-36 -mt-7 w-7 h-7 text-red-600' />
+                                                    </div>
                                                     {addUploadFile ? (
                                                         <div>
-                                                            <div>
+                                                            <div className=''>
                                                                 <img src={URL.createObjectURL(addUploadFile)}
                                                                     alt="Uploaded File"
                                                                     className='w-44 h-44 object-cover rounded-sm'
                                                                 />
-                                                                <MdDelete className='absolute ' />
+                                                                <MdDelete className='cursor-pointer absolute ml-36 -mt-7 w-7 h-7 text-red-600' />
                                                             </div>
 
                                                         </div>
@@ -213,7 +261,6 @@ const AddPortfolio = () => {
                                                             <IoIosAddCircleOutline className='w-12 h-12 text-blue-600 hover:text-blue-700 active:text-blue-800 cursor-pointer' onClick={() => setAddModal(true)} />
                                                         </div>
                                                     )}
-
                                                 </div>
                                             </div>
 
@@ -264,8 +311,9 @@ const AddPortfolio = () => {
                                 </butto>
                                 <button className={`cursor-pointer bg-blue-600 text-white p-2 w-44 text-center rounded-lg ${uploadFile ? "active:bg-blue-700" : "cursor-not-allowed opacity-50"}`}
                                     disabled={!uploadFile}
+                                    onClick={handleCreate}
                                 >
-                                    Save
+                                    {saveLoading ? "Loading..." : "Save"}
                                 </button>
                             </div>
                         </div>
