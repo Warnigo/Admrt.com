@@ -28,7 +28,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import view_eye from '../../image/eye 1.svg';
 import view_search from '../../image/search 1.svg';
 import shape from '../../svgs/about/Shape.svg';
-import Loading from '../../loading/loading'
 import Portfolio from '../../Layout/context/portfolio/portfolio';
 
 function SiplePages() {
@@ -38,7 +37,6 @@ function SiplePages() {
     const [requests, setRequests] = useState('')
     const [open, setOpen] = useState(false);
     const [openPayment, setOpenPayment] = useState(false);
-    const [loading, setLoading] = useState(true)
     // const [userData, setUsersData] = useState('')
     const profile_amer = 'https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg'
 
@@ -55,7 +53,6 @@ function SiplePages() {
                         setSplit(splitCall);
                         const filteredRequests = Object.fromEntries(Object.entries(comeRequestCall).filter(([value]) => value === true));
                         setRequests(filteredRequests);
-                        setLoading(false)
                     }
                 } catch (error) {
                     console.error(error);
@@ -89,10 +86,6 @@ function SiplePages() {
         }
         handleProfilAdvertiser()
     }, [split])
-
-    if(loading) {
-        return <Loading />
-    }
 
     return (
         <div className="App">
