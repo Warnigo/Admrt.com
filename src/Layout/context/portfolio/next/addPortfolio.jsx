@@ -4,8 +4,9 @@ import { IoVideocam } from 'react-icons/io5';
 import { MdDelete } from "react-icons/md";
 import { VscChromeClose } from 'react-icons/vsc';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { auth, savePortfolioFirebase, storage,  } from '../../../../firebase/firebase';
+import { auth, savePortfolioFirebase, storage, usersCollection, } from '../../../../firebase/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { doc, getDoc } from 'firebase/firestore';
 
 const AddPortfolio = () => {
     const [steps] = useState({ stepsItems: ['Added portfolio', 'Add details'], currentStep: 2 });
@@ -20,8 +21,9 @@ const AddPortfolio = () => {
     const [addFileError, setAddFileError] = useState();
     const [userId, setUserId] = useState(null)
     const [saveLoading, setSaveLoading] = useState(false);
+    const [userSplit, setUserSplit] = useState()
 
-    const {Id} = useParams();
+    const { Id } = useParams();
     const navigate = useNavigate()
     const allowedExtensions = ['.jpg', '.gif', '.png', '.pdf'];
     const handleFileChange = (event) => {
@@ -79,38 +81,62 @@ const AddPortfolio = () => {
     }, [link]);
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            if(user){
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            if (user) {
                 setUserId(user.uid);
-            }else{
+
+                try {
+                    const userRef = doc(usersCollection, userId);
+                    const userDoc = await getDoc(userRef);
+                    if (userDoc.exists()) {
+                        const data = userDoc.data()
+                        setUserSplit(data.split)
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            } else {
                 setUserId(null)
             }
         })
 
-        return() => unsubscribe()
+        return () => unsubscribe()
     }, [userId])
 
     const handleCreate = async () => {
         setSaveLoading(true);
-    
+
         try {
             const url = await uploadFileToStorage(uploadFile);
-            const url1 = await uploadFileToStorage(addUploadFile);
+            let url1 = null;
+            try {
+                url1 = await uploadFileToStorage(addUploadFile);
+            } catch (error) {
+                console.warn(error);
+            }
             await savePortfolioFirebase(userId, Id, {
                 image: url,
-                image1: url1 || null,
+                image1: url1,
                 description: description,
                 startDate: new Date(),
             });
-    
+
             setSaveLoading(false);
-            navigate("/");
+            navigate(`/${userSplit}/${userId}`);
         } catch (error) {
             console.error(error);
             setSaveLoading(false);
         }
     };
-    
+
+    const handelRemoveAddUpload = (e) => {
+        setAddUploadFile(null)
+    }
+
+    const handleRemoveuploadFile = (e) => {
+        setUploadFile(null)
+    }
+
     return (
         <div>
             {modal && (
@@ -243,7 +269,7 @@ const AddPortfolio = () => {
                                                             alt="Uploaded File"
                                                             className='w-44 h-44 object-cover rounded-sm'
                                                         />
-                                                        <MdDelete className='cursor-pointer absolute ml-36 -mt-7 w-7 h-7 text-red-600' />
+                                                        <MdDelete onClick={handleRemoveuploadFile} className='cursor-pointer absolute ml-36 -mt-7 w-7 h-7 text-red-600' />
                                                     </div>
                                                     {addUploadFile ? (
                                                         <div>
@@ -252,7 +278,7 @@ const AddPortfolio = () => {
                                                                     alt="Uploaded File"
                                                                     className='w-44 h-44 object-cover rounded-sm'
                                                                 />
-                                                                <MdDelete className='cursor-pointer absolute ml-36 -mt-7 w-7 h-7 text-red-600' />
+                                                                <MdDelete onClick={handelRemoveAddUpload} className='cursor-pointer absolute ml-36 -mt-7 w-7 h-7 text-red-600' />
                                                             </div>
 
                                                         </div>
