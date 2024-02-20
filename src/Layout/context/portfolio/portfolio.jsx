@@ -3,7 +3,6 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { VscChromeClose, VscEmptyWindow } from "react-icons/vsc";
 import { auth, db, savePortfolioFirebase } from '../../../firebase/firebase'
 import { useNavigate } from 'react-router-dom'
-import { Id } from '../../../redux/all';
 import { collection, getDocs } from 'firebase/firestore';
 
 const Portfolio = () => {
@@ -16,6 +15,7 @@ const Portfolio = () => {
   const [portfolios, setPortfolios] = useState([]);
   const [viewModal, setViewModal] = useState();
   const [selectPortfolio, setSeletPortfolio] = useState();
+  const [Id, setId] = useState()
 
   const navigate = useNavigate();
 
@@ -74,6 +74,19 @@ const Portfolio = () => {
     }
   };
 
+  useEffect(() => {
+    const generateID = () => {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%#!)_=+-';
+      let id = '';
+      for (let i = 0; i < 12; i++) {
+        id += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      setId(id)
+    };
+
+    generateID()
+  }, [])
+
   const handleViewModalOpen = (selectId) => {
     const selectedPortfolio = portfolios.find(portfolio => portfolio.id === selectId);
     if (selectedPortfolio) {
@@ -81,7 +94,6 @@ const Portfolio = () => {
       setViewModal(true);
     }
   }
-
 
   return (
     <div>
