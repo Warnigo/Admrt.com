@@ -25,8 +25,6 @@ import { auth, usersCollection } from "../../firebase/firebase";
 import AboutHim from '../../Layout/context/aboutHim/aboutHim';
 import SocialMedia from '../../Layout/context/socialMedia/socialMedia';
 import { doc, getDoc } from 'firebase/firestore';
-import view_eye from '../../image/eye 1.svg';
-import view_search from '../../image/search 1.svg';
 import shape from '../../svgs/about/Shape.svg';
 import Portfolio from '../../Layout/context/portfolio/portfolio';
 
@@ -463,27 +461,6 @@ function SiplePages() {
                         <AboutHim />
                         {advertiserProfile ? null :
                             <>
-                                <div className='flex justify-between my-3 mt-20'>
-                                    <div>
-                                        <h1 className='font-semibold'>Analytics</h1>
-                                    </div>
-                                </div>
-                                <div className='border'></div>
-
-                                <div className='flex justify-between my-4'>
-                                    <div className='flex gap-5'>
-                                        <img src={view_eye} alt='' />
-                                        <h1>Viewed Hosting Space</h1>
-                                    </div>
-                                    <div>4,521</div>
-                                </div>
-                                <div className='flex justify-between my-4'>
-                                    <div className='flex gap-5'>
-                                        <img src={view_search} alt='' />
-                                        <h1>Search appearances</h1>
-                                    </div>
-                                    <div>761</div>
-                                </div>
                                 <SocialMedia />
                             </>
                         }
