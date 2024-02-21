@@ -20,6 +20,7 @@ import ViewsProfile from "./viewsProfile/viewsProfile";
 import MessageIndex from "./message";
 import EmptyMessage from "./message/layout/empty";
 import AddPortfolio from "./Layout/context/portfolio/next/addPortfolio";
+import MainFilter from "./filter/main";
 
 function App() {
     const [userId, setUserId] = useState(null);
@@ -57,6 +58,7 @@ function App() {
         { id: 4, path: `/:split/:userId/settings`, element: <Settings /> },
         { id: 6, path: `/profile/:split/:userUID`, element: <ViewsProfile onUserUID={handleUserSelect} /> },
         { id: 7, path: `/:title/portfolio/:userId/:Id`, element: <AddPortfolio /> },
+        { id: 8, path: `/filter`, element: <MainFilter /> },
         { id: 0, path: "*", element: <NotFound /> },
     ];
 

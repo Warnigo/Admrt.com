@@ -165,7 +165,7 @@ const Portfolio = () => {
                       <div>
                         <img src={portfolio.image} alt="" className='h-96 w-full object-cover' />
                       </div>
-                        {portfolio.image1 && <img src={portfolio.image1} alt="" className='h-96 w-full object-cover' />}
+                      {portfolio.image1 && <img src={portfolio.image1} alt="" className='h-96 w-full object-cover' />}
                       <div>
                         <p className='text-center p-1'>{portfolio.description}</p>
                       </div>
@@ -185,11 +185,13 @@ const Portfolio = () => {
           </div>
           <div className=''>
             <p className={`absolute text-sm bg-gray-50 border rounded-ls shadow p-2 -mt-11 -ml-9 ${isHovered ? '' : 'hidden'}`}>Add Portfolio</p>
-            <IoIosAddCircleOutline className='w-8 h-8 mr-1.5 cursor-pointer hover:'
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-              onClick={() => setModal(true)}
-            />
+            {portfolios.length === 6 ? null : (
+              <IoIosAddCircleOutline className='w-8 h-8 mr-1.5 cursor-pointer hover:'
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                onClick={() => setModal(true)}
+              />
+            )}
           </div>
         </div>
         <div className='flex'>
@@ -201,7 +203,10 @@ const Portfolio = () => {
                 <div key={portfolio.id}>
                   <h1 className='font-semibold text-sm text-center'>{portfolio.portfolioTitle}</h1>
                   <img src={portfolio.image} alt="" className='w-44 h-56 object-cover rounded-lg' />
-                  <p className={`text-gray-500 text-sm text-center ${portfolio.description.length > 24 ? "cursor-pointer" : ""}`}>{portfolio.description.slice(0, 24)}{portfolio.description.length > 24 ? '...' : ''}</p>
+                  <p className={`text-gray-500 text-sm text-center ${portfolio.description?.length > 24 ? "cursor-pointer" : ""}`}>
+                    {portfolio.description?.slice(0, 24)}{portfolio.description?.length > 24 ? '...' : ''}
+                  </p>
+
                 </div>
               </div>
             ))
