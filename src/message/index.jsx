@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { auth, usersCollection } from '../firebase/firebase'
 import { doc, getDoc } from "firebase/firestore";
 
@@ -12,7 +12,6 @@ const MessageIndex = () => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
                 setUserId(user.uid);
-
                 try {
                     const userRef = doc(usersCollection, user.uid);
                     const userDoc = await getDoc(userRef);
@@ -30,6 +29,14 @@ const MessageIndex = () => {
 
         return () => unsubscribe()
     }, [userId])
+
+    // const handleFetch = useCallback(() => {
+    //     const 
+    // }, [])
+
+    useEffect(() => {
+
+    })
 
     return (
         <div className="max-w-96 border-r px-6" >
@@ -58,7 +65,7 @@ const MessageIndex = () => {
                     <div className="flex gap-3">
                         <img src={avatar} className="flex-none w-12 h-12 rounded-full" alt="" />
                         <div>
-                            <span className="block text-sm text-gray-700 font-semibold">{ }</span>
+                            <span className="block text-sm text-gray-700 font-semibold">{username}</span>
                         </div>
                     </div>
                 </li>

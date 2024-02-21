@@ -1,19 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import copy from '../../../svgs/social-media/Group 1000005712.svg';
 import { VscChromeClose } from 'react-icons/vsc';
-import { saveUserDataToFirebase } from '../../../firebase/firebase';
-import { serverTimestamp } from 'firebase/firestore';
+import { auth, saveUserDataToFirebase, usersCollection } from '../../../firebase/firebase';
+import { doc, getDoc, serverTimestamp } from 'firebase/firestore';
 
 const CheckMedia = ({ selectedSocialMedia, userId }) => {
   const [showModal, setShowModal] = useState(false);
   const [inputValues, setInputValues] = useState({});
   const [isValid, setIsValid] = useState(true);
+  const [userLinks, setUserLinks] = useState({});
 
+  useEffect(() => {
+    const handleVerify = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const userId = user.uid;
+        try {
+          const userRef = doc(usersCollection, userId);
+          const userDoc = await getDoc(userRef);
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            const socialMediaData = data.socialMedia || {};
+            setUserLinks(socialMediaData);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    });
+
+    return () => handleVerify();
+  }, []);
+
+  useEffect(() => {
+    const areAllLinksPresent = selectedSocialMedia.every(media => userLinks.hasOwnProperty(media.name));
+    setIsValid(areAllLinksPresent);
+  }, [selectedSocialMedia, userLinks]);
 
   const handleInputChange = (socialMediaName, value) => {
     const isValidLink = validateLink(value);
     setIsValid(isValidLink);
-
     setInputValues((prevInputValues) => ({
       ...prevInputValues,
       [socialMediaName]: value,
@@ -29,16 +54,16 @@ const CheckMedia = ({ selectedSocialMedia, userId }) => {
       timestamp: serverTimestamp(),
       ...inputValues,
     };
-  
+
     saveUserDataToFirebase(userId, { socialMedia: socialMediaData })
       .then(() => {
-        console.log('Data saved successfully!');
         setShowModal(false);
       })
       .catch((error) => {
         console.error('Error saving data:', error);
       });
   };
+
   return (
     <div>
       {showModal ? (
@@ -70,7 +95,7 @@ const CheckMedia = ({ selectedSocialMedia, userId }) => {
                           type="text"
                           className="py-3 mb-2 px-4 block w-full border border-blue-400 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-50 dark:border-blue-700 dark:text-gray-600 dark:focus:ring-gray-600"
                           placeholder={`${socialMedia.name} link`}
-                          value={inputValues[socialMedia.name] || ''}
+                          value={inputValues[socialMedia.name] || userLinks[socialMedia.name] || ''}
                           onChange={(e) =>
                             handleInputChange(socialMedia.name, e.target.value)
                           }
@@ -88,11 +113,10 @@ const CheckMedia = ({ selectedSocialMedia, userId }) => {
                     <h1 className="text-xs md:text-sm">Cancel</h1>
                   </button>
                   <button
-                    className={`${
-                      isValid
-                        ? 'bg-blue-700 text-white active:bg-blue-600'
-                        : 'bg-gray-300 text-gray-700 cursor-not-allowed'
-                    } font-bold uppercase text-xs md:text-sm p-2 md:px-8 md:py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
+                    className={`${isValid
+                      ? 'bg-blue-700 text-white active:bg-blue-600'
+                      : 'bg-gray-300 text-gray-700 cursor-not-allowed'
+                      } font-bold uppercase text-xs md:text-sm p-2 md:px-8 md:py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
                     type="button"
                     onClick={handleSave}
                     disabled={!isValid}

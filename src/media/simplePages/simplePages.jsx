@@ -27,6 +27,7 @@ import SocialMedia from '../../Layout/context/socialMedia/socialMedia';
 import { doc, getDoc } from 'firebase/firestore';
 import shape from '../../svgs/about/Shape.svg';
 import Portfolio from '../../Layout/context/portfolio/portfolio';
+import { VscEmptyWindow } from "react-icons/vsc";
 
 function SiplePages() {
     const [userId, setUserId] = useState(null);
@@ -49,7 +50,7 @@ function SiplePages() {
                         const splitCall = userData.split;
                         const comeRequestCall = userData.requests;
                         setSplit(splitCall);
-                        const filteredRequests = Object.fromEntries(Object.entries(comeRequestCall).filter(([value]) => value === true));
+                        const filteredRequests = Object.fromEntries(Object.entries(comeRequestCall));
                         setRequests(filteredRequests);
                     }
                 } catch (error) {
@@ -278,8 +279,8 @@ function SiplePages() {
                                 </div>
                             </div>
                         </div>) : null}
-
-                        {/* <div>
+                        <div>
+                            {/* <div>
                             <div className='rounded-t-xl border px-3 md:px-7 py-4 mt-6'>
                                 <div className='md:flex justify-between '>
                                     <div className='flex justify-center items-center gap-4'>
@@ -414,6 +415,8 @@ function SiplePages() {
                                 </div>
                             </div>
                         </div> */}
+                        </div>
+
                     </div>
 
 
@@ -431,33 +434,48 @@ function SiplePages() {
                                     <h1>These are the connection which you have got from other users.</h1>
                                 </div>
                                 <div className='border'></div>
-                                {requests && Object.keys(requests).length > 0 && (
+                                {requests && Object.keys(requests).length > 0 ? (
                                     <div>
-                                        {Object.entries(requests).map(([username]) => (
-                                            <div key={username} className='flex justify-between my-5'>
-                                                <div className='flex gap-3'>
-                                                    <div className=''>
-                                                        <img className='w-8 h-8 cursor-pointer rounded-full' src={profile_amer} alt='userImg' />
+                                        {Object.entries(requests).map(([username, value]) => {
+                                            if (value === true) {
+                                                return (
+                                                    <div key={username} className='flex justify-between my-5'>
+                                                        <div className='flex gap-3'>
+                                                            <div className=''>
+                                                                <img className='w-8 h-8 cursor-pointer rounded-full' src={profile_amer} alt='userImg' />
+                                                            </div>
+                                                            <div className='flex justify-center items-center'>
+                                                                <h1>{username}</h1>
+                                                            </div>
+                                                        </div>
+                                                        <div className='flex gap-2 h-[32px]'>
+                                                            <button className='bg-gray-300 text-gray-700 px-2 py-1 rounded-lg hover:bg-gray-400'>
+                                                                <h1>Decline</h1>
+                                                            </button>
+                                                            <button className='bg-blue-600 text-white px-2 py-1 rounded-lg hover:bg-blue-700'>
+                                                                <h1>Accept</h1>
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                    <div className='flex justify-center items-center'>
-                                                        <h1>{username}</h1>
-                                                    </div>
-                                                </div>
-                                                <div className='flex gap-2 h-[32px]'>
-                                                    <button className='bg-gray-300 text-gray-700 px-2 py-1 rounded-lg hover:bg-gray-400'>
-                                                        <h1>Decline</h1>
-                                                    </button>
-                                                    <button className='bg-blue-600 text-white px-2 py-1 rounded-lg hover:bg-blue-700'>
-                                                        <h1>Accept</h1>
-                                                    </button>
-                                                </div>
+                                                );
+                                            }
+                                            return null;
+                                        })}
+                                        {!Object.values(requests).includes(true) &&
+                                            <div>
+                                                <VscEmptyWindow className='m-auto w-16 h-16 text-gray-300' />
+                                                <p className='text-center font-semibold text-gray-400'>Empty</p>
                                             </div>
-                                        ))}
+                                        }
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <VscEmptyWindow className='m-auto w-16 h-16 text-gray-300' />
+                                        <p className='text-center font-semibold text-gray-400'>Empty</p>
                                     </div>
                                 )}
                             </div>
                         }
-
                         <AboutHim />
                         {advertiserProfile ? null :
                             <>

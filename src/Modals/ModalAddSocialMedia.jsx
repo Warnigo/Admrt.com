@@ -48,7 +48,7 @@ const ModalAddSocialMedia = ({ onSelectSocialMedia }) => {
                     <div
                         className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
                     >
-                        <div className="relative w-[80%]  md:w-1/3 mx-auto">
+                        <div className="relative w-[80%]  w-1/3 mx-auto">
 
                             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                                 <div className='px-3 pt-3 rounded-full flex justify-end'

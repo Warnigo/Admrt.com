@@ -56,16 +56,6 @@ const MainFilter = () => {
                 <div>
                   <div className='flex -mt-7'>
                     <div className=''>
-                      <label for="countries" class="block text-sm font-medium text-gray-900 dark:text-white"><h1>Platform</h1></label>
-                      <select id="countries" class="select border rounded-lg w-44 p-2 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block">
-                        <option selected>Select Social media</option>
-                        <option value="US">United States</option>
-                        <option value="CA">Canada</option>
-                        <option value="FR">France</option>
-                        <option value="DE">Germany</option>
-                      </select>
-                    </div>
-                    <div className=''>
                       <label for="countries" class="block text-sm font-medium text-gray-900 dark:text-white">Target Audience</label>
                       <select id="countries" class="select border rounded-lg p-2 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block">
                         <option selected>Select Audience Type</option>

@@ -6,15 +6,15 @@ import shape from '../../../svgs/about/Shape.svg';
 import shape1 from '../../../svgs/about/ic_Place.svg';
 import shape2 from '../../../svgs/about/ic_website.svg';
 import shape3 from '../../../svgs/about/ic_date.svg';
-import shape4 from '../../../svgs/about/ic_Working.svg';
-import shape5 from '../../../svgs/about/ic_relationship.svg';
+// import shape4 from '../../../svgs/about/ic_Working.svg';
+// import shape5 from '../../../svgs/about/ic_relationship.svg';
 import edit_svg_blue from '../../../image/edit_svg_blue.svg';
 import { useParams } from 'react-router-dom'
 
 const AboutHim = () => {
     const [aboutHimShow, setaboutHimShow] = useState("");
-    const [fullTime, setFullTime] = useState(false);
-    const [partTime, setPartTime] = useState(false);
+    // const [fullTime, setFullTime] = useState(false);
+    // const [partTime, setPartTime] = useState(false);
     const [userData, setUserDate] = useState(null)
     const [userId, setUserId] = useState(null)
     const { userId: userIdParam } = useParams();
@@ -45,17 +45,17 @@ const AboutHim = () => {
         fetchUserData();
     }, [userId, userIdParam]);
 
-    const servicesItems = ["Full Time", "Part time"];
+    // const servicesItems = ["Full Time", "Part time"];
 
-    const handleCheckboxChange = (index) => {
-        if (index === 0) {
-            setFullTime(!fullTime);
-            setPartTime(false);
-        } else if (index === 1) {
-            setPartTime(!partTime);
-            setFullTime(false);
-        }
-    };
+    // const handleCheckboxChange = (index) => {
+    //     if (index === 0) {
+    //         setFullTime(!fullTime);
+    //         setPartTime(false);
+    //     } else if (index === 1) {
+    //         setPartTime(!partTime);
+    //         setFullTime(false);
+    //     }
+    // };
 
     const handleSaveChanges = async () => {
         try {
