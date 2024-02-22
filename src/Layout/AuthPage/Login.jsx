@@ -20,6 +20,7 @@ function Login() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [icon, setIcon] = useState(eyeOff);
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate();
 
@@ -35,7 +36,7 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    setLoading(true)
     setEmailError("");
     setPasswordError("");
     setErrorMessage("");
@@ -53,6 +54,7 @@ function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       // const userId = userCredential.user.uid;
+      setLoading(false)
       navigate(`/`);
     } catch (error) {
       console.error(error);
@@ -79,6 +81,7 @@ function Login() {
     } catch (error) {
       console.error(error);
       setErrorMessage("There was an error logging in with Facebook. Please try again.");
+      setLoading(false)
     }
   };
 
@@ -143,7 +146,7 @@ function Login() {
                 </div>
                 <button type="submit" className="mt-5 w-full md:mt-8 social-card bg-blue-500 text-white border rounded-xl  py-2 text-center hover:border-blue-600  hover:shadow-md md:px-16">
                   <div className=" text-center text-gray-800 font-normal py-1 md:py-2 px-4 rounded inline-flex items-center">
-                    <span className="ml-1 md:ml-2 text-white">Sign In</span>
+                    <span className="ml-1 md:ml-2 text-white">{loading ? "Loading..." : "Sign in"}</span>
                   </div>
                 </button>
               </form>

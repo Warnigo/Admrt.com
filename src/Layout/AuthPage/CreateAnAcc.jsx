@@ -19,6 +19,7 @@ const CreateAnAcc = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [type, setType] = useState('password');
   const [icon, setIcon] = useState(eyeOff);
+  const [loading, setLoading] = useState(false);
   const { split } = useParams();
   const navigate = useNavigate();
 
@@ -34,7 +35,7 @@ const CreateAnAcc = () => {
 
   const handleConfimAuth = async (e) => {
     e.preventDefault();
-
+    setLoading(true)
     setErrorMessage('');
 
     if (!fullName.trim() || !email.trim() || !phoneNumber.trim() || !password.trim() || !country.trim()) {
@@ -74,11 +75,12 @@ const CreateAnAcc = () => {
         userId,
         split,
       })
-
+      setLoading(false)
       navigate(`/`);
     } catch (err) {
       console.error(err);
       setErrorMessage('Registration failed. Please try again.');
+      setLoading(false)
     }
   };
 
@@ -155,7 +157,7 @@ const CreateAnAcc = () => {
             {errorMessage && <p className="p-2 rounded-lg error-message text-white bg-red-400 border-2 border-red-800 text-center">{errorMessage}</p>}
             <button type='submit' className="w-full mt-2 social-card bg-blue-500 text-white google border rounded-xl  py-2 text-center hover:border-blue-600  hover:shadow-md md:px-16">
               <div className="text-center text-gray-800 font-normal py-2 px-4 rounded inline-flex items-center">
-                <span className="ml-1 md:ml-2 text-white">Sign Up</span>
+                <span className="ml-1 md:ml-2 text-white">{loading ? "Loading..." : "Sign Up"}</span>
               </div>
             </button>
           </form>
