@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { auth, usersCollection } from '../firebase/firebase'
+import { auth, db, usersCollection } from '../firebase/firebase'
 import { doc, getDoc } from "firebase/firestore";
 
 const MessageIndex = () => {
-    const avatar = "https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg"
+    const ghostAvatar = 'https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg'
     const [userId, setUserId] = useState('');
-    const [username, setUsername] = useState('');
-    const [usernames, setUsernames] = useState('');
+    const [verifyRequest, setVerifyRequest] = useState({});
+    const [avatars, setAvatars] = useState({});
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -17,29 +17,46 @@ const MessageIndex = () => {
                     const userDoc = await getDoc(userRef);
                     if (userDoc.exists()) {
                         const data = userDoc.data();
-                        setUsername(data.fullName);
+                        const requestCall = Object.fromEntries(Object.entries(data.requests)
+                            .filter(([key, value]) => value === true)
+                        );
+                        setVerifyRequest(requestCall);
                     }
                 } catch (error) {
                     console.error(error);
                 }
             } else {
-                setUserId('')
+                setUserId('');
             }
-        })
+        });
 
-        return () => unsubscribe()
-    }, [userId])
+        return () => unsubscribe();
+    }, []);
 
-    // const handleFetch = useCallback(() => {
-    //     const 
-    // }, [])
+    const handleFetch = useCallback(async () => {
+        try {
+            const fetchedAvatars = {};
+            await Promise.all(Object.keys(verifyRequest).map(async (key) => {
+                const userRef = doc(db, "search", key);
+                const userDoc = await getDoc(userRef);
+                if(userDoc.exists()){
+                    const data = userDoc.data();
+                    fetchedAvatars[key] = data.imageUrl; // Assuming 'imageUrl' is the key for avatar URLs
+                }
+            }));
+            setAvatars(fetchedAvatars);
+        } catch(err) {
+            console.error(err);
+        }
+    }, [verifyRequest]);
+    
 
     useEffect(() => {
-
-    })
+        handleFetch();
+    }, [handleFetch]);
 
     return (
-        <div className="max-w-96 border-r px-6" >
+        <div className="max-w-96 border-r px-6">
             <div className="items-start border-b justify-between sm:flex">
                 <div>
                     <h4 className="text-gray-800 text-2xl font-semibold">Message</h4>
@@ -61,17 +78,19 @@ const MessageIndex = () => {
                 </div>
             </div>
             <ul className="divide-y">
-                <li className="py-5 flex items-start justify-between">
-                    <div className="flex gap-3">
-                        <img src={avatar} className="flex-none w-12 h-12 rounded-full" alt="" />
-                        <div>
-                            <span className="block text-sm text-gray-700 font-semibold">{username}</span>
+                {Object.entries(verifyRequest).map(([key]) => (
+                    <li key={key} className="py-5 flex items-start justify-between">
+                        <div className="flex gap-3">
+                            <img src={avatars[key] || ghostAvatar} className="flex-none w-12 h-12 rounded-full" alt="" />
+                            <div>
+                                <span className="block text-sm text-gray-700 font-semibold">{key}</span>
+                            </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
+                ))}
             </ul>
-        </div >
-    )
+        </div>
+    );
 }
 
 export default MessageIndex;

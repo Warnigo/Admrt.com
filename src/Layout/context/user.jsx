@@ -59,13 +59,12 @@ const EditeUser = () => {
       const imageRef = ref(storage, `users/${userId}/images/user_image.png`);
       const imageUrl = await getDownloadURL(imageRef);
       setCroppedImage(imageUrl + `?key=${Date.now()}`);
-
+  
       const userDocRef = doc(usersCollection, userId);
       await updateDoc(userDocRef, { imageUrl });
-
+  
       const usernameRef = doc(db, 'search', fullName);
       await updateDoc(usernameRef, { imageUrl });
-
     } catch (error) {
       console.error("Error fetching user image:", error);
     }

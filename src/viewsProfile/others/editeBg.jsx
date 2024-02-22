@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { auth, db, usersCollection } from "../../firebase/firebase";
-import emptyBg from '../../image/Image (2).svg'
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
 
@@ -14,7 +13,7 @@ const EditBg = () => {
     const [userUsername, setUserUsername] = useState(null);
     const [profileUsername, setProfileUsername] = useState(null);
     const [requestLoading, setRequestLoading] = useState('Sent request');
-    const [, setDontVerificationRequest] = useState(false);
+    // const [dontVerificationRequest, setDontVerificationRequest] = useState(false);
     const [, setRemoveRequest] = useState()
     const [removeRequestLoading, setRemoveRequestLoading] = useState(false)
 
@@ -73,9 +72,9 @@ const EditBg = () => {
     useEffect(() => {
         const handleSplitCleaning = () => {
             if (split !== userSplit) {
-                setViewRequest(true);
-            } else {
                 setViewRequest(false);
+            } else {
+                setViewRequest(true);
             }
         };
 
@@ -122,21 +121,21 @@ const EditBg = () => {
     }, [userUID, userId, profileUsername, userUsername]);
 
 
-    useEffect(() => {
-        const handleVerification = () => {
-            if (request === false) {
-                setDontVerificationRequest(false);
-            } else {
-                setDontVerificationRequest(true);
-            }
-        }
-        handleVerification()
-    })
+    // useEffect(() => {
+    //     const handleVerification = () => {
+    //         if (request === false) {
+    //             setDontVerificationRequest(false);
+    //         } else {
+    //             setDontVerificationRequest(true);
+    //         }
+    //     }
+    //     handleVerification()
+    // })
 
     const handleRequestRemove = async () => {
         try {
             setRemoveRequestLoading(true);
-    
+
             const userRef = doc(db, 'users', userUID);
             const userDoc = await getDoc(userRef);
             if (userDoc.exists()) {
@@ -155,10 +154,10 @@ const EditBg = () => {
             setRemoveRequestLoading(false);
         }
     };
-    
+
     return (
-        <div className="relative h-72 bg-cover bg-center border rounded-lg bg-gray-100" style={{ backgroundImage: bgImage ? `url(${bgImage})` : `url(${emptyBg})` }}>
-            {viewrRequest ?
+        <div className="relative h-72 bg-cover bg-center border rounded-lg bg-gray-100" style={{ backgroundImage: bgImage && `url(${bgImage})` }}>
+            {viewrRequest &&
                 <>
                     <div className="flex justify-between items-center p-6">
                         <div className="flex items-center">
@@ -177,7 +176,7 @@ const EditBg = () => {
                         </div>
                     </div>
                 </>
-                : null}
+            }
         </div>
     );
 };
