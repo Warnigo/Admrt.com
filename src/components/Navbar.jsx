@@ -256,7 +256,7 @@ function StickyNavbar({ authenticated }) {
           variant="small"
           className="p-1 text-black text-lg font-normal"
         >
-          <Link to={`/${split}/message`} className="flex items-center hover:text-blue-700 hover:shadow-sm">
+          <Link to={`/message`} className="flex items-center hover:text-blue-700 hover:shadow-sm">
             <h1>Message</h1>
           </Link>
         </Typography>

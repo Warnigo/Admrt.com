@@ -84,7 +84,7 @@ function App() {
                     {AuthUserRoutes.map((route) => (
                         <Route key={route.id} path={route.path} element={route.element} />
                     ))}
-                    <Route path={`/:split/message`} element={<MessageIndex />}>
+                    <Route path={`/message`} element={<MessageIndex />}>
                         <Route index element={<EmptyMessage />} />
                     </Route>
                 </Route>
