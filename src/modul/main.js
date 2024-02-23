@@ -10,3 +10,4 @@ const generatedId = () => {
 }
 
 export default generatedId;
+export const avatar = "https://as2.ftcdn.net/v2/jpg/04/10/43/77/1000_F_410437733_hdq4Q3QOH9uwh0mcqAhRFzOKfrCR24Ta.jpg"

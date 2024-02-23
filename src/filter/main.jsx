@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Cards from './Cards'
 
 const MainFilter = () => {
+  const [nameOrExperitise, setNameOrExperitise] = useState();
   return (
     <div className=''>
       <div className=' mx-auto px-5'>
@@ -11,17 +12,14 @@ const MainFilter = () => {
             <div className='text-base md:text-xl text-red-500'><h1>Clear Filter</h1></div>
           </div>
           <div className='p-2 mt-4'>
-            <h1 className='text-base font-semibold'>Location</h1>
+            <h1 className='text-base font-semibold'>Name or Experitise</h1>
             <form>
               <div>
               </div>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 </div>
-                <input class="block w-full py-3 mt-2 text-gray-900 input text-base " placeholder='Enter or Set Current Location' />
-                <button class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 ">
-                  <h1 className='text-xs md:text-base'>Detect Current location</h1>
-                </button>
+                <input class="block w-full py-3 mt-2 text-gray-900 input text-base " placeholder='Enter Name or Experitise' />
               </div>
             </form>
           </div>
@@ -31,26 +29,28 @@ const MainFilter = () => {
               <div className='flex justify-between'>
                 <div className='flex gap-5'>
                   <div class="flex font-medium text-gray-700 ">
-                    <input class="accent-blue-600 peer" type="radio" name="framework" id="applePay" value="applePay" />
+                    <input class="accent-blue-600 peer" type="checkbox" name="framework" id="applePay" value="applePay" />
                     <label class="text-gray-900 cursor-pointer peer-checked:border-blue-700 peer-checked:text-black" for="applePay">
-                      <h1 class="text-sm md:text-base md:text-start pl-1 md:pl-3 mt-1 md:mt-0.5">Social Media</h1>
+                      <h1 class="text-sm md:text-base md:text-start pl-1 md:pl-3 mt-1 md:mt-0.5">You Tube</h1>
                     </label>
                   </div>
-                  <div class="">
-                    <div class="flex font-medium text-gray-700 ">
-                      <input class="accent-blue-600 peer" type="radio" name="framework" id="applePay2" value="applePay2" />
-                      <label class="text-gray-900 cursor-pointer peer-checked:border-blue-700 peer-checked:text-black" for="applePay2">
-                        <h1 class="text-sm md:text-base md:text-start pl-1 md:pl-3 mt-1 md:mt-0.5">Social Media</h1>
-                      </label>
-                    </div>
+                  <div class="flex font-medium text-gray-700 ">
+                    <input class="accent-blue-600 peer" type="checkbox" name="framework" id="applePay2" value="applePay2" />
+                    <label class="text-gray-900 cursor-pointer peer-checked:border-blue-700 peer-checked:text-black" for="applePay2">
+                      <h1 class="text-sm md:text-base md:text-start pl-1 md:pl-3 mt-1 md:mt-0.5">X</h1>
+                    </label>
                   </div>
-                  <div class="">
-                    <div class="flex font-medium text-gray-700 ">
-                      <input class="accent-blue-600 peer" type="radio" name="framework" id="applePay3" value="applePay3" />
-                      <label class="text-gray-900 cursor-pointer peer-checked:border-blue-700 peer-checked:text-black" for="applePay3">
-                        <h1 class="text-sm md:text-base md:text-start pl-1 md:pl-3 mt-1 md:mt-0.5">Social Media</h1>
-                      </label>
-                    </div>
+                  <div class="flex font-medium text-gray-700 ">
+                    <input class="accent-blue-600 peer" type="checkbox" name="framework" id="applePay3" value="applePay3" />
+                    <label class="text-gray-900 cursor-pointer peer-checked:border-blue-700 peer-checked:text-black" for="applePay3">
+                      <h1 class="text-sm md:text-base md:text-start pl-1 md:pl-3 mt-1 md:mt-0.5">Instagram</h1>
+                    </label>
+                  </div>
+                  <div class="flex font-medium text-gray-700 ">
+                    <input class="accent-blue-600 peer" type="checkbox" name="framework" id="applePay3" value="applePay3" />
+                    <label class="text-gray-900 cursor-pointer peer-checked:border-blue-700 peer-checked:text-black" for="applePay3">
+                      <h1 class="text-sm md:text-base md:text-start pl-1 md:pl-3 mt-1 md:mt-0.5">Facebook</h1>
+                    </label>
                   </div>
                 </div>
                 <div>

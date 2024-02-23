@@ -1,101 +1,96 @@
-import React from 'react'
-import primary from './Primary/With Icon.svg'
-import fire from './Primary/fire.svg'
-import group from './Primary/group.svg'
-import category from './Primary/category.svg'
-import ratings from './Primary/ratings.svg'
-import star from './Primary/star 1.svg'
-import platforms from './Primary/platforms.svg'
-import youtube from './Primary/youtube.svg'
-import twitter from './Primary/twitter.svg'
-import facebook from './Primary/facebook.svg'
-import instagram from './Primary/instagram.svg'
-import save from './Primary/Vector (1).svg'
+import React, { useCallback, useEffect, useState } from 'react';
+import { getDocs } from 'firebase/firestore';
+import { usersCollection } from '../firebase/firebase';
+import { avatar } from '../modul/main';
+import youtube from './Primary/youtube.svg';
+import twitter from '../svgs/social-media/Twitter X.svg';
+import facebook from './Primary/facebook.svg';
+import instagram from './Primary/instagram.svg';
+import tiktok from '../svgs/social-media/tiktok-svgrepo-com.svg'
+import whatsapp from '../svgs/social-media/whatsapp-icon-logo-svgrepo-com.svg';
+import Linkedin from '../svgs/social-media/Rectangle 6594.svg'
+import { Link } from 'react-router-dom';
 
 const Cards = () => {
+    const [userData, setUserData] = useState([]);
+
+    const fetchData = useCallback(async () => {
+        try {
+            const querySnapshot = await getDocs(usersCollection);
+            const data = querySnapshot.docs.map(doc => doc.data());
+            setUserData(data);
+        } catch (err) {
+            console.error(err);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
+    const platformIcons = (platform) => {
+        switch (platform) {
+            case 'Youtube':
+                return youtube;
+            case 'X':
+                return twitter;
+            case 'Facebook':
+                return facebook;
+            case 'Instagram':
+                return instagram;
+            case 'Tik Tok':
+                return tiktok;
+            case 'WhatsApp':
+                return whatsapp;
+            case 'Linkedin':
+                return Linkedin;
+            default:
+                return null;
+        }
+    };
+
     return (
         <div className='p-3'>
             <div className='max-w-screen-2xl mx-auto px-3 md:px-0'>
-                <div class=" grid grid-cols-1  md:grid-cols-3 gap-4">
-                    <div className='border rounded-lg p-3'>
-                        <div className='flex mt-5'>
-                            <div className='w-1/3 '>
-                                <img className='iconYoutuber' src={primary} alt="iconYoutuber" />
-                            </div>
-                            <div className='w-2/3'>
-                                <h1 className='userPhoto font-semibold'>Mr Beast</h1>
-                                <h1 className='text-gray-500 text-sm'>American Youtuber</h1>
-                            </div>
-                        </div>
-                        <div className='flex justify-between py-2 md:py-2.5'>
-                            <div className='flex '>
-                                <img src={fire} alt="fire" />
-                                <h1 className='text-gray-500 text-sm ml-2'>Popularity:</h1>
-                            </div>
-                            <div>
-                                <h1 className='text-sm'>100M+ Subscriber</h1>
-                            </div>
-                        </div>
-                        <div className='flex justify-between py-2 md:py-2.5'>
-                            <div className='flex '>
-                                <img src={group} alt="group" />
-                                <h1 className='text-gray-500 text-sm ml-2'>Target Audience:</h1>
-                            </div>
-                            <div>
-                                <h1 className='text-sm'>Younger & Kids</h1>
-                            </div>
-                        </div>
-                        <div className='flex justify-between py-2 md:py-2.5'>
-                            <div className='flex '>
-                                <img src={category} alt="category" />
-                                <h1 className='text-gray-500 text-sm ml-2'>Category:</h1>
-                            </div>
-                            <div>
-                                <h1 className='text-sm'>Entertainment</h1>
-                            </div>
-                        </div>
-                        <div className='flex justify-between py-2 md:py-2.5'>
-                            <div className='flex '>
-                                <img src={ratings} alt="category" />
-                                <h1 className='text-gray-500 text-sm ml-2'>Ratings:</h1>
-                            </div>
-                            <div className='flex  justify-center items-center'>
-                                <img src={star} alt="star" />
-                                <h1 className='text-sm mr-2'>5</h1>
-                                <div className='border border-green-400 rounded-xl text-center bg-green-200 text-green-400'>
-                                    <button className='text-sm p-1'>Accepts: Any Advertiser</button>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {userData.map(user => (
+                        <div key={user.uid} className='border rounded-lg p-3'>
+                            <div className='flex mt-5'>
+                                <div className='w-1/3'>
+                                    <img className='w-12 h-12 rounded-full' src={user.imageUrl || avatar} alt="iconYoutuber" />
+                                </div>
+                                <div className='w-2/3'>
+                                    <h1 className='userPhoto font-semibold'>{user.fullName}</h1>
+                                    <h1 className='text-gray-500 text-sm'>{user.experitise && user.experitise.length > 0 ? user.experitise.join(', ') : 'none'}</h1>
                                 </div>
                             </div>
-                        </div>
-                        <div className='flex justify-between pb-2'>
-                            <div className='flex '>
-                                <img src={platforms} alt="platforms" />
-                                <h1 className='text-gray-500 text-sm ml-2'>Platforms:</h1>
+                            <div className='flex flex-coll gap-3 justify-end'>
+                                {user.socialMedia ? Object.entries(user.socialMedia).map(([platform, value]) => (
+                                    platform !== "timestamp" && (
+                                        <Link to={`${value}`}>
+                                            <div key={platform} >
+                                                <img src={platformIcons(platform)} alt={platform} className='h-7' />
+                                            </div>
+                                        </Link>
+                                    )
+                                )) : (
+                                    <div className='flex cursor-not-allowed opacity-50 gap-3'>
+                                        <img src={youtube} alt="YouTube" className='h-7' />
+                                        <img src={facebook} alt="Facebook" className='h-7' />
+                                        <img src={instagram} alt="Instagram" className='h-7' />
+                                        <img src={twitter} alt="Twitter" className='h-7' />
+                                    </div>
+                                )}
                             </div>
-                            <div className='flex  gap-3 mt-2 w-auto h-6'>
-                                <img src={youtube} alt="youtube" />
-                                <img src={twitter} alt="twitter" />
-                                <img src={facebook} alt="facebook" />
-                                <img src={instagram} alt='instagram' />
-                            </div>
-                        </div>
-                        <div className='flex justify-center items-center mt-1 bg-gray-100 px-2 py-1 rounded-xl'>
-                            <div className='w-1/4'>
-                                <img src={save} alt="save" />
-                            </div>
-                            <div className='w-1/3'>
-                                <h1 className='text-sm font-bold'>$1,500</h1>
-                                <h1 className='text-gray-500 text-xs'>Starting at</h1>
-                            </div>
-                            <div className='w-1/3 bg-blue-600 text-white text-center py-2 px-1 rounded-xl'>
-                                <button className='text-sm'>View Profile</button>
+                            <div>
+
                             </div>
                         </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Cards
+export default Cards;

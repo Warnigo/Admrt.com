@@ -6,33 +6,48 @@ import svg_tiktok from '../../svgs/social-media/tiktok-svgrepo-com.svg';
 import svg_whatsapp from '../../svgs/social-media/whatsapp-icon-logo-svgrepo-com.svg';
 import svg_youtube from '../../svgs/social-media/Rectangle 6593.svg';
 import svg_linkedin from '../../svgs/social-media/Rectangle 6594.svg';
+import eye from '../../image/eye 1.svg'
 import AboutHim from './Aboutothers';
-import { auth } from '../../firebase/firebase'
+import { auth, usersCollection } from '../../firebase/firebase'
+import { doc, getDoc } from 'firebase/firestore';
+import { useParams } from 'react-router-dom'
 
 const SocialMedia = () => {
-      const [userId, setUserId] = useState(null);
+      const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+      const { userUID } = useParams()
 
-        useEffect(() => {
-            const unsubscribe = auth.onAuthStateChanged((user) => {
+      useEffect(() => {
+            const unsubscribe = auth.onAuthStateChanged(async (user) => {
                   if (user) {
-                        setUserId(user.uid);
+                        try {
+                              const userRef = doc(usersCollection, userUID);
+                              const userDoc = await getDoc(userRef);
+                              if (userDoc.exists()) {
+                                    const data = userDoc.data();
+                                    const media = data.socialMedia;
+                                    const matchedMedia = Object.keys(media).filter(mediaName => socialMediaPages.some(page => page.name.toLowerCase() === mediaName.toLowerCase()));
+                                    const selectedMedia = matchedMedia.map(mediaName => socialMediaPages.find(page => page.name.toLowerCase() === mediaName.toLowerCase()));
+                                    setSelectedSocialMedia(selectedMedia);
+                              }
+                        } catch (err) {
+                              console.error(err);
+                        }
                   } else {
-                        setUserId(null);
                   }
             });
 
             return () => unsubscribe();
+            // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
 
-
       const socialMediaPages = [
-            { name: 'Facebook', icon: <img src={svg_facebook} alt="" />, text: 'Facebook' },
-            { name: 'Youtube', icon: <img src={svg_youtube} alt="" />, text: 'Youtube' },
-            { name: 'Linkedin', icon: <img src={svg_linkedin} alt="" />, text: 'Linkedin' },
-            { name: 'Instagram', icon: <img src={svg_instagram} alt="" />, text: 'Instagram' },
-            { name: 'X', icon: <img src={svg_x} alt="" />, text: 'X' },
-            { name: 'Tik Tok', icon: <img src={svg_tiktok} alt="" />, text: 'Tik Tok' },
-            { name: 'WhatsApp', icon: <img src={svg_whatsapp} alt="" />, text: 'WhatsApp' },
+            { name: 'Facebook', icon: svg_facebook, text: 'Facebook' },
+            { name: 'Youtube', icon: svg_youtube, text: 'Youtube' },
+            { name: 'Linkedin', icon: svg_linkedin, text: 'Linkedin' },
+            { name: 'Instagram', icon: svg_instagram, text: 'Instagram' },
+            { name: 'X', icon: svg_x, text: 'X' },
+            { name: 'Tik Tok', icon: svg_tiktok, text: 'Tik Tok' },
+            { name: 'WhatsApp', icon: svg_whatsapp, text: 'WhatsApp' },
       ];
 
       return (
@@ -49,10 +64,17 @@ const SocialMedia = () => {
                         </div>
                         <div className='border'></div>
                         <div>
-                              {socialMediaPages.map((idx) => (
-                                    <div className='flex gap-4 my-4'>
-                                          <div className='w-1/6'>{idx.icon}</div>
-                                          <p className='w-5/6 flex justify-between'>{idx.name}</p>
+                              {selectedSocialMedia.map((socialMedia, index) => (
+                                    <div key={index} className='flex gap-4 my-4'>
+                                          <div className='w-1/6'>{socialMedia.icon && <img src={socialMedia.icon} alt={socialMedia.name} />}</div>
+                                          <div className='w-5/6 flex justify-between'>
+                                                <div>{socialMedia.name && <h1>{socialMedia.name}</h1>}</div>
+                                                {socialMedia.name && (
+                                                      <div className='flex gap-5'>
+                                                            <img src={eye} alt="eye" className='w-6 cursor-pointer' />
+                                                      </div>
+                                                )}
+                                          </div>
                                     </div>
                               ))}
                         </div>
