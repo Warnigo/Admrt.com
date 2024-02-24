@@ -56,11 +56,11 @@ const Cards = () => {
                     {userData.map(user => (
                         <div key={user.uid} className='border rounded-lg p-3'>
                             <div className='flex mt-5'>
-                                <div className='w-1/3'>
+                                <div className='w-1/5'>
                                     <img className='w-12 h-12 rounded-full' src={user.imageUrl || avatar} alt="iconYoutuber" />
                                 </div>
-                                <div className='w-2/3'>
-                                    <h1 className='userPhoto font-semibold'>{user.fullName}</h1>
+                                <div className=''>
+                                    <h1 className='font-semibold'>{user.fullName}</h1>
                                     <h1 className='text-gray-500 text-sm'>{user.experitise && user.experitise.length > 0 ? user.experitise.join(', ') : 'none'}</h1>
                                 </div>
                             </div>
@@ -83,7 +83,20 @@ const Cards = () => {
                                 )}
                             </div>
                             <div>
+                                <div className='text-center pt-3'>
+                                    {user.introDescription && user.introDescription.split(' ').slice(0, 9).join(' ')}
+                                    {user.introDescription && user.introDescription.split(' ').length > 5 && ' ...'}
+                                </div>
+                            </div>
 
+                            <div className='m-3 border bg-gray-100 rounded-xl'>
+                                <div className='p-1 flex justify-end'>
+                                    <Link to={`/profile/${user.split}/${user.userId}`} className='bg-blue-600 hover:bg-opacity-75 p-2 rounded-lg'>
+                                        <button className='w-44 text-white'>
+                                            View profile
+                                        </button>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     ))}
