@@ -105,6 +105,8 @@ function StickyNavbar({ authenticated }) {
       await updateDoc(userDocRef, {
         [`requests.${username}`]: true,
       });
+
+      
       setComeRequest((prevComeRequest) => ({
         ...prevComeRequest,
         [username]: true,

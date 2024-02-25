@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
-import { getFirestore, collection, doc, addDoc, setDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, addDoc, setDoc, query, getDocs, orderBy } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getDatabase } from 'firebase/database';
 
@@ -52,6 +52,28 @@ export async function savePortfolioFirebase(userId, portfolioId, userData) {
   } catch (error) {
     console.error("Error saving portfolio data:", error);
     throw error;
+  }
+}
+
+export async function saveMessageToFirebase(userId, message) {
+  try {
+      const messagesCollectionRef = collection(db, `messages/${userId}/messages`);
+      await addDoc(messagesCollectionRef, { message, timestamp: new Date() });
+  } catch (error) {
+      console.error('Error sending message:', error);
+      throw error;
+  }
+}
+
+export async function getMessagesFromFirebase(userId) {
+  try {
+      const messagesCollectionRef = collection(db, `messages/${userId}/messages`);
+      const q = query(messagesCollectionRef, orderBy('timestamp'));
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+      console.error('Error getting messages:', error);
+      throw error;
   }
 }
 

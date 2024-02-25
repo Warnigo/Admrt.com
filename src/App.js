@@ -17,14 +17,28 @@ import { NotFound } from "./404/404";
 import Settings from "./components/Settings/DateBirthday/Settings";
 import Home from "./components/Home";
 import ViewsProfile from "./viewsProfile/viewsProfile";
-import MessageIndex from "./message";
-import EmptyMessage from "./message/layout/empty";
+import MessageIndex from "./message/layout/index";
+import EmptyMessage from "./message/layout/context/empty";
 import AddPortfolio from "./Layout/context/portfolio/next/addPortfolio";
 import MainFilter from "./filter/main";
+import DirectIndexPage from "./message/layout/context/direct/index";
 
 function App() {
     const [userId, setUserId] = useState(null);
     const [authenticated, setAuthenticated] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const handleRegister = useCallback(() => {
         setAuthenticated(true);
@@ -84,9 +98,19 @@ function App() {
                     {AuthUserRoutes.map((route) => (
                         <Route key={route.id} path={route.path} element={route.element} />
                     ))}
-                    <Route path={`/message`} element={<MessageIndex />}>
-                        <Route index element={<EmptyMessage />} />
-                    </Route>
+                    {
+                        isMobile ? (
+                            <>
+                                <Route path="/message" element={<MessageIndex />} />
+                                <Route path="/message/direct/:userId" element={<DirectIndexPage />} />
+                            </>
+                        ) : (
+                            <Route path="/message" element={<MessageIndex />}>
+                                <Route index element={<EmptyMessage />} />
+                                <Route path="/message/direct/:userId" element={<DirectIndexPage />} />
+                            </Route>
+                        )
+                    }
                 </Route>
                 {GhostUser.map((route) => (
                     <Route key={route.id} path={route.path} element={route.element} />
@@ -96,7 +120,7 @@ function App() {
                     element={<NotFound />}
                 />
             </Routes>
-        </div>
+        </div >
     );
 }
 

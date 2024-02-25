@@ -37,6 +37,7 @@ const MainFilter = () => {
           selectedMediaFilters.some(filter => user.socialMedia && user.socialMedia[filter.toLowerCase()])
         );
       }
+      console.log(selectedMediaFilters);
 
       if (filterOptions.country.trim() !== '') {
         filteredResult = filteredResult.filter(user =>
