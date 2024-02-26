@@ -55,19 +55,19 @@ export async function savePortfolioFirebase(userId, portfolioId, userData) {
   }
 }
 
-export async function saveMessageToFirebase(userId, message) {
+export async function saveMessageToFirebase(senderId, receiverId, message) {
   try {
-      const messagesCollectionRef = collection(db, `messages/${userId}/messages`);
-      await addDoc(messagesCollectionRef, { message, timestamp: new Date() });
+      const messagesCollectionRef = collection(db, `messages/${senderId}/${receiverId}`);
+      await addDoc(messagesCollectionRef, { senderId, receiverId, message, timestamp: new Date() });
   } catch (error) {
       console.error('Error sending message:', error);
       throw error;
   }
 }
 
-export async function getMessagesFromFirebase(userId) {
+export async function getMessagesFromFirebase(senderId, receiverId) {
   try {
-      const messagesCollectionRef = collection(db, `messages/${userId}/messages`);
+      const messagesCollectionRef = collection(db, `messages/${senderId}/${receiverId}`);
       const q = query(messagesCollectionRef, orderBy('timestamp'));
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));

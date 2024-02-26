@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { auth, getMessagesFromFirebase, saveMessageToFirebase, usersCollection } from '../../../../firebase/firebase';
+import { auth, saveMessageToFirebase, getMessagesFromFirebase, usersCollection } from '../../../../firebase/firebase';
 import { collection, doc, getDoc, query, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../../../../firebase/firebase';
 
@@ -11,7 +11,8 @@ const DirectIndexPage = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [meId, setMeId] = useState(null);
-    const [meUsername, setMeUsername] = useState(null)
+    const [meUsername, setMeUsername] = useState(null);
+    const [messagesSend, setMessagesSend] = useState(null)
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -34,29 +35,39 @@ const DirectIndexPage = () => {
         return () => unsubscribe();
     }, []);
 
-    const fetchData = useCallback(async () => {
-        try {
-            const fetchRef = doc(db, 'users', userId);
-            const fetchDoc = await getDoc(fetchRef);
-            if (fetchDoc.exists()) {
-                const data = fetchDoc.data();
-                setUsername(data.fullName);
-                setUserAvatar(data.imageUrl);
-            }
-    
-            const messages = await getMessagesFromFirebase(userId);
-            setMessages(messages);
-        } catch (err) {
-            console.error(err);
-        }
-    }, [userId]);
-
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const fetchRef = doc(db, 'users', userId);
+                const fetchDoc = await getDoc(fetchRef);
+                if (fetchDoc.exists()) {
+                    const data = fetchDoc.data();
+                    setUsername(data.fullName);
+                    setUserAvatar(data.imageUrl);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
         fetchData();
 
-        const messagesRef = collection(db, `messages/${userId}/messages`);
-        const q = query(messagesRef, orderBy('timestamp'));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
+        const fetchMessages = async () => {
+            try {
+                const messagesFromMe = await getMessagesFromFirebase(meId, userId);
+                setMessages(messagesFromMe);
+                const messagesToMe = await getMessagesFromFirebase(userId, meId);
+                setMessagesSend(messagesToMe);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchMessages();
+
+        const messagesRef = collection(db, `messages/${meId}/${userId}`);
+        const messagesQuery = query(messagesRef, orderBy('timestamp'));
+        const unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
             const data = [];
             snapshot.forEach((doc) => {
                 data.push({ id: doc.id, ...doc.data() });
@@ -64,25 +75,44 @@ const DirectIndexPage = () => {
             setMessages(data);
         });
 
-        return () => unsubscribe();
-    }, [fetchData, userId]);
+        const messagesSendRef = collection(db, `messages/${userId}/${meId}`);
+        const messagesSendQuery = query(messagesSendRef, orderBy('timestamp'));
+        const unsubscribeMessagesSend = onSnapshot(messagesSendQuery, (snapshot) => {
+            const data = [];
+            snapshot.forEach((doc) => {
+                data.push({ id: doc.id, ...doc.data() });
+            });
+            setMessagesSend(data);
+        });
 
-    console.log(message);
+        return () => {
+            unsubscribeMessages();
+            unsubscribeMessagesSend();
+        };
+    }, [userId, meId]);
+
+    const isYesterday = (dateString) => {
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+        const formattedYesterday = yesterday.toISOString().split('T')[0];
+        return dateString === formattedYesterday;
+    };
 
     const renderMessages = () => {
         const today = new Date().toDateString();
         let lastDate = null;
-
-        return messages.map((msg) => {
+        let renderedMessages = [];
+    
+        messages.concat(messagesSend).sort((a, b) => a.timestamp - b.timestamp).forEach((msg) => {
             const messageDate = msg.timestamp.toDate();
             const messageDateString = messageDate.toDateString();
             const formattedTime = messageDate.toLocaleTimeString();
-            const senderCall = msg.message.sender ? msg.message.sender : "Unknown";
-            const sender = senderCall === meUsername ? "you" : meUsername
+            const sender = msg.message.sender === meUsername ? 'You' : username;
             const formattedMessage = `${sender}: ${msg.message.message} ${formattedTime}`;
-
+    
             let dateComponent = null;
-
+    
             if (messageDateString !== lastDate) {
                 if (messageDateString === today) {
                     dateComponent = <p key={messageDateString} className="font-bold text-gray-500">Today</p>;
@@ -93,57 +123,44 @@ const DirectIndexPage = () => {
                 }
                 lastDate = messageDateString;
             }
-            
-            function isYesterday(dateString) {
-                const today = new Date();
-                const yesterday = new Date(today);
-                yesterday.setDate(today.getDate() - 1);
-                const formattedYesterday = yesterday.toISOString().split('T')[0];
-                return dateString === formattedYesterday;
-            }
-
-            return (
-                <div key={msg.id} className=''>
-                    <div className='text-center'>
+    
+            renderedMessages.push(
+                <div key={msg.id} className={msg.position === 'top' ? 'top-message' : 'bottom-message'}>
+                    <div className="text-center">
                         {dateComponent}
                     </div>
                     <p>{formattedMessage}</p>
                 </div>
             );
         });
+    
+        return renderedMessages;
     };
+    
 
     const handleMessageSubmit = async (e) => {
         e.preventDefault();
         try {
-            await saveMessageToFirebase(userId, { message: message, sender: meUsername });
+            await saveMessageToFirebase(meId, userId, { message, sender: meUsername });
             setMessage('');
-            fetchData(); 
         } catch (error) {
             console.error('Error sending message:', error);
         }
     };
-    
 
     return (
-        <div className='w-full m-4 p-6 border rounded-lg '>
-            <div className='flex gap-5 py-4 border-b'>
+        <div className="w-full m-4 p-6 border rounded-lg">
+            <div className="flex gap-5 py-4 border-b">
                 <div>
-                    <img src={userAvatar} alt={username} className='w-12 h-12 border p-0.5 rounded-full border-blue-600' />
+                    <img src={userAvatar} alt={username} className="w-12 h-12 border p-0.5 rounded-full border-blue-600" />
                 </div>
                 <div>
-                    <h1 className='text-2xl font-semibold'>{username}</h1>
+                    <h1 className="text-2xl font-semibold">{username}</h1>
                 </div>
             </div>
             <div>{renderMessages()}</div>
             <form onSubmit={handleMessageSubmit}>
                 <div className="flex items-center px-3 py-2 rounded-lg bg-gray-100 border">
-                    <button type="button" className="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100">
-                        <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.408 7.5h.01m-6.876 0h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM4.6 11a5.5 5.5 0 0 0 10.81 0H4.6Z" />
-                        </svg>
-                        <span className="sr-only">Add emoji</span>
-                    </button>
                     <input
                         id="chat"
                         rows="1"
