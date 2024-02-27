@@ -26,6 +26,7 @@ function StickyNavbar({ authenticated }) {
   const [modal, setModal] = useState(false)
   const [comeRequest, setComeRequest] = useState(null)
   const [hasFalseRequests, setHasFalseRequests] = useState(false);
+  const [lookingUserId, setLookingUserId] = useState(null);
 
   useEffect(() => {
     const unsebscribe = auth.onAuthStateChanged(async (user) => {
@@ -99,14 +100,33 @@ function StickyNavbar({ authenticated }) {
     window.location.reload();
   }
 
+  const handleLookForUserId = async(username) => {
+    try{
+      const lookForRef = await getDoc(doc(db, 'search', username));
+      if(lookForRef.exists()){
+        const data = lookForRef.data();
+        setLookingUserId(data.userId);
+      }
+    }catch(err){
+      console.error(err);
+    }
+  } 
+
+  console.log(lookingUserId);
+
   const handleChek = async (username) => {
+    handleLookForUserId(username);
     try {
       const userDocRef = doc(usersCollection, userId);
       await updateDoc(userDocRef, {
         [`requests.${username}`]: true,
       });
 
-      
+      const userRef = doc(usersCollection, lookingUserId);
+      await updateDoc(userRef, {
+        [`requests.${userFullName}`]: true,
+      });
+
       setComeRequest((prevComeRequest) => ({
         ...prevComeRequest,
         [username]: true,
@@ -133,7 +153,7 @@ function StickyNavbar({ authenticated }) {
     } catch (error) {
       console.error('Error removing request:', error);
     } finally {
-      window.location.reload();
+      window.location.reload()
     }
   };
 
