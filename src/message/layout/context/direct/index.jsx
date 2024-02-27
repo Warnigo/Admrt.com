@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { auth, getMessagesFromFirebase, usersCollection } from '../../../../firebase/firebase';
 import { collection, doc, getDoc, query, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../../../../firebase/firebase';
+import { BsThreeDotsVertical } from 'react-icons/bs'
+import { avatar } from '../../../../modul/main';
 
 const DirectIndexPage = () => {
     const { userId } = useParams();
@@ -112,7 +114,8 @@ const DirectIndexPage = () => {
                     const messageDateString = messageDate.toDateString();
                     const formattedTime = messageDate.toLocaleTimeString();
                     const sender = msg.message.sender === meUsername ? 'You' : username;
-                    const formattedMessage = `${sender}: ${msg.message.message} ${formattedTime}`;
+                    const formattedMessage = `${msg.message.message}`;
+                    const timeMessage = formattedTime;
 
                     let dateComponent = null;
 
@@ -128,11 +131,25 @@ const DirectIndexPage = () => {
                     }
 
                     renderedMessages.push(
-                        <div key={msg.id} className={msg.position === 'top' ? 'top-message' : 'bottom-message'}>
+                        <div key={msg.id} className={`${msg.position === 'top' ? 'top-message' : 'bottom-message'}`}>
                             <div className="text-center">
                                 {dateComponent}
                             </div>
-                            <p>{formattedMessage}</p>
+                            <div class="col-start-1 col-end-8 p-3 rounded-lg">
+                                <div class="flex flex-row items-center">
+                                    <div
+                                        class="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
+                                    >
+                                        <img src={userAvatar || avatar} className='rounded-full' alt="" />
+                                    </div>
+                                    <div
+                                        class="relative ml-3 flex text-sm bg-white py-2 px-4 shadow border rounded-xl"
+                                    >
+                                        <div>{formattedMessage}</div>
+                                        <div className='text-[10px] text-gray-500 flex justify-end items-end pl-3'>{timeMessage}</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     );
                 }
@@ -142,16 +159,30 @@ const DirectIndexPage = () => {
     };
 
     return (
-        <div className="w-full p-6 border rounded-lg">
-            <div className="flex gap-5 py-4 border-b">
-                <div>
-                    <img src={userAvatar} alt={username} className="w-12 h-12 border p-0.5 rounded-full border-blue-600" />
-                </div>
-                <div>
-                    <h1 className="text-2xl font-semibold">{username}</h1>
+        <div className='mb-5'>
+            <div class="border relative px-5 rounded-xl mb-3">
+                <div class="flex py-3">
+                    <div class="w-18 flex justify-content items-center">
+                        <img class="w-16 rounded-full" src={userAvatar || avatar} alt="" />
+                    </div>
+                    <div className="w-full m-auto">
+                        <div className='flex justify-between'>
+                            <div className='my-auto ml-4'>
+                                <h1 class="font-semibold">{username}</h1>
+                                <h1 class="text-xs text-green-600 font-semibold">Online</h1>
+                            </div>
+                            <button className='p-4 my-auto bg-gray-100 rounded-full'>
+                                <BsThreeDotsVertical />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div>{renderMessages()}</div>
+            <div class="flex flex-col h-dvh w-full border rounded-xl overflow-x-auto mb-3 p-4">
+                    <div class="gap-y-2 ">
+                        {renderMessages()}
+                    </div>
+            </div>
         </div>
     );
 };
