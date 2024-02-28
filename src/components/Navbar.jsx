@@ -112,8 +112,6 @@ function StickyNavbar({ authenticated }) {
     }
   } 
 
-  console.log(lookingUserId);
-
   const handleChek = async (username) => {
     handleLookForUserId(username);
     try {

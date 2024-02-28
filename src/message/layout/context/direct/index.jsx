@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { auth, getMessagesFromFirebase, usersCollection } from '../../../../firebase/firebase';
 import { collection, doc, getDoc, query, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../../../../firebase/firebase';
-import { BsThreeDotsVertical } from 'react-icons/bs'
 import { avatar } from '../../../../modul/main';
 
-const DirectIndexPage = () => {
+const DirectIndexPage = ({ isMobile }) => {
     const { userId } = useParams();
     const [username, setUsername] = useState(null);
     const [userAvatar, setUserAvatar] = useState(null);
     const [messages, setMessages] = useState([]);
     const [meId, setMeId] = useState(null);
     const [meUsername, setMeUsername] = useState(null);
-    const [messagesSend, setMessagesSend] = useState(null)
+    const [messagesSend, setMessagesSend] = useState(null);
+    const [meAvatar, setMeAvatar] = useState(null);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -24,6 +24,7 @@ const DirectIndexPage = () => {
                     if (userRef.exists()) {
                         const data = userRef.data();
                         setMeUsername(data.fullName);
+                        setMeAvatar(data.imageUrl);
                     }
                 } catch (err) {
                     console.error(err);
@@ -135,18 +136,22 @@ const DirectIndexPage = () => {
                             <div className="text-center">
                                 {dateComponent}
                             </div>
-                            <div class="col-start-1 col-end-8 p-3 rounded-lg">
-                                <div class="flex flex-row items-center">
+                            <div className={`col-start-1 col-end-8 p-3 rounded-lg ${sender === 'You' ? 'justify-end' : 'justify-start'}`}>
+                                <div className={`flex flex-row items-center ${sender === 'You' ? 'flex-row-reverse' : ''}`}>
                                     <div
-                                        class="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
+                                        className={`flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0 ${sender === 'You' ? 'ml-3' : 'mr-3'}`}
                                     >
-                                        <img src={userAvatar || avatar} className='rounded-full' alt="" />
+                                        {sender === "You" ? (
+                                            <img src={meAvatar || avatar} className='rounded-full' alt="" />
+                                        ) : (
+                                            <img src={userAvatar || avatar} className='rounded-full' alt="" />
+                                        )}
                                     </div>
                                     <div
-                                        class="relative ml-3 flex text-sm bg-white py-2 px-4 shadow border rounded-xl"
+                                        className={`relative flex text-sm bg-white py-2 px-4 shadow border rounded-xl ${sender === 'You' ? 'bg-blue-100 flex-row-reverse' : ''}`}
                                     >
                                         <div>{formattedMessage}</div>
-                                        <div className='text-[10px] text-gray-500 flex justify-end items-end pl-3'>{timeMessage}</div>
+                                        <div className={`text-[10px] text-gray-500 flex justify-end items-end ${sender === 'You' ? 'pr-3' : 'pl-3'}`}>{timeMessage}</div>
                                     </div>
                                 </div>
                             </div>
@@ -157,6 +162,7 @@ const DirectIndexPage = () => {
 
         return renderedMessages;
     };
+
 
     return (
         <div className='mb-5'>
@@ -169,19 +175,26 @@ const DirectIndexPage = () => {
                         <div className='flex justify-between'>
                             <div className='my-auto ml-4'>
                                 <h1 class="font-semibold">{username}</h1>
-                                <h1 class="text-xs text-green-600 font-semibold">Online</h1>
+
+                                {/* <h1 class="text-xs text-green-600 font-semibold">Online</h1> */}
                             </div>
-                            <button className='p-4 my-auto bg-gray-100 rounded-full'>
-                                <BsThreeDotsVertical />
-                            </button>
+                            {isMobile ? (
+                                <button className='p-4 my-auto bg-gray-100 rounded-full'>
+                                    <Link to={"/message"}>Back</Link>
+                                </button>
+                            ) : (
+                                <div>
+
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="flex flex-col h-dvh w-full border rounded-xl overflow-x-auto mb-3 p-4">
-                    <div class="gap-y-2 ">
-                        {renderMessages()}
-                    </div>
+                <div class="gap-y-2 ">
+                    {renderMessages()}
+                </div>
             </div>
         </div>
     );

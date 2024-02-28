@@ -101,8 +101,8 @@ function App() {
                     {
                         isMobile ? (
                             <>
-                                <Route path="/message" element={<MessageIndex />} />
-                                <Route path="/message/direct/:userId" element={<DirectIndexPage />} />
+                                <Route path="/message" element={<MessageIndex isMobile={isMobile} />} />
+                                <Route path="/message/direct/:userId" element={<DirectIndexPage isMobile={isMobile} />} />
                             </>
                         ) : (
                             <Route path="/message" element={<MessageIndex />}>

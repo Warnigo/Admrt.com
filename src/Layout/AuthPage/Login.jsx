@@ -59,6 +59,7 @@ function Login() {
     } catch (error) {
       console.error(error);
       setErrorMessage("There was an error logging in. Please check your information and try again.");
+      setLoading(false)
     }
   }
 
