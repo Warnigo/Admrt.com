@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { VscChromeClose, VscEmptyWindow } from "react-icons/vsc";
-import { auth, db, savePortfolioFirebase } from '../../../firebase/firebase'
+import { auth, db, deletePortfolioFirebase, savePortfolioFirebase } from '../../../firebase/firebase'
 import { useNavigate } from 'react-router-dom'
 import { collection, getDocs } from 'firebase/firestore';
+import { MdDelete } from "react-icons/md";
 
 const Portfolio = () => {
   const [modal, setModal] = useState(false)
@@ -95,6 +96,17 @@ const Portfolio = () => {
     }
   }
 
+  const handleDeletePortfolio = async (portfolioId) => {
+    try {
+      await deletePortfolioFirebase(userId, portfolioId);
+      const updatedPortfolios = portfolios.filter(portfolio => portfolio.id !== portfolioId);
+      setPortfolios(updatedPortfolios);
+      setViewModal(false);
+    } catch (error) {
+      console.error('Error deleting portfolio:', error);
+    }
+  }
+
   return (
     <div>
       {modal && (
@@ -151,9 +163,15 @@ const Portfolio = () => {
         <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none bg-black bg-opacity-25 focus:outline-none">
           <div className="relative w-[80%]  md:w-1/3 mx-auto">
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-              <div className='px-3 pt-3 rounded-full flex justify-end'
-                onClick={() => setViewModal(false)}>
-                <VscChromeClose className=' w-6 h-6 p-1 rounded-full text-white bg-gray-700 hover:bg-opacity-75 cursor-pointer' />
+              <div className='flex justify-between flex-row-reverse p-3'>
+                <div onClick={() => setViewModal(false)}>
+                  <VscChromeClose className='w-6 h-6 bg-gray-500 cursor-pointer hover:opacity-75 text-white rounded-full p-1' />
+                </div>
+                <div>
+                  <MdDelete className='w-6 h-6 hover:opacity-75 text-red-600 cursor-pointer'
+                    onClick={() => handleDeletePortfolio(selectPortfolio[0].id)}
+                  />
+                </div>
               </div>
               <div className="relative p-2 md:p-6 justify-center items-start">
                 {selectPortfolio.map((portfolio) => (

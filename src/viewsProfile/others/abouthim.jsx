@@ -4,8 +4,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import shape1 from '../../svgs/about/ic_Place.svg';
 import shape2 from '../../svgs/about/ic_website.svg';
 import shape3 from '../../svgs/about/ic_date.svg';
-import shape4 from '../../svgs/about/ic_Working.svg';
-import shape5 from '../../svgs/about/ic_relationship.svg';
 import { useParams } from 'react-router-dom'
 
 const AboutHim = () => {
@@ -15,7 +13,7 @@ const AboutHim = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const userDoc = await getDoc(doc(db, 'users',  userUID));
+                const userDoc = await getDoc(doc(db, 'users', userUID));
                 const userData = userDoc.data();
                 setUserDate(userData || {});
             } catch (error) {
@@ -71,26 +69,6 @@ const AboutHim = () => {
                             </div>
                             <div>
                                 <h1>Joined {userData.registrationDate ? new Date(userData.registrationDate.seconds * 1000).toLocaleDateString('en-GB') : 'Unknown'}</h1>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='flex justify-between my-4'>
-                        <div className='flex gap-5'>
-                            <div className=''>
-                                <img src={shape4} alt='' />
-                            </div>
-                            <div>
-                                <h1>Working at Youtube ({userData.services ? (userData.services.fullTime ? 'Full Time' : userData.services.partTime ? 'Part Time' : 'none') : 'none'})</h1>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='flex justify-between my-4'>
-                        <div className='flex gap-5'>
-                            <div className=''>
-                                <img src={shape5} alt='' />
-                            </div>
-                            <div>
-                                <h1>{userData.additionalInfo || "Have Channel with Nova Bee"}</h1>
                             </div>
                         </div>
                     </div>

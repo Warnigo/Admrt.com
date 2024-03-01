@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
-import { getFirestore, collection, doc, addDoc, setDoc, query, getDocs, orderBy } from 'firebase/firestore';
+import { getFirestore, collection, doc, addDoc, setDoc, query, getDocs, orderBy, deleteDoc } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getDatabase } from 'firebase/database';
 
@@ -94,6 +94,16 @@ export async function saveFeedbackToFirebase(userId, feedbackData) {
     console.log('Feedback added with ID: ', docRef.id);
   } catch (error) {
     console.error('Error saving feedback data:', error);
+    throw error;
+  }
+}
+
+export async function deletePortfolioFirebase(userId, portfolioId) {
+  try {
+    const portfolioRef = doc(portfolioCollection, userId, 'portfolios', portfolioId);
+    await deleteDoc(portfolioRef);
+  } catch (error) {
+    console.error("Error deleting portfolio:", error);
     throw error;
   }
 }

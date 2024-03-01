@@ -1,6 +1,3 @@
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-import star from '../Layout/AuthPage/star.svg';
 // import profile_Aus from '../svgs/reviews/Profile-aus.svg';
 // import profile_amer from '../svgs/reviews/Profile-amer.svg';
 // import profile_china from '../svgs/reviews/Profile-china.svg';
@@ -16,6 +13,7 @@ import AboutHim from './others/abouthim';
 import SocialMedia from './others/socialMedia';
 import { useEffect, useState } from 'react';
 import Loading from '../loading/loading'
+import Portfolio from './others/portfolio'
 
 function ViewsProfile() {
   const [loading, setLoading] = useState(true);
@@ -27,6 +25,7 @@ function ViewsProfile() {
 
     return () => clearTimeout(loadingTime)
   })
+  
   return (
     <div className="App">
       {loading && <Loading />}
@@ -37,6 +36,7 @@ function ViewsProfile() {
               <EditBackground />
               <EditeUser />
               <IntoDescription />
+              <Portfolio />
             </div>
             <div>
             </div>
