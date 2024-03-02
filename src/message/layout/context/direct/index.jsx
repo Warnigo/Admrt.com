@@ -4,6 +4,7 @@ import { auth, getMessagesFromFirebase, usersCollection } from '../../../../fire
 import { collection, doc, getDoc, query, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../../../../firebase/firebase';
 import { avatar } from '../../../../modul/main';
+import { SlArrowRight } from "react-icons/sl";
 
 const DirectIndexPage = ({ isMobile }) => {
     const { userId } = useParams();
@@ -179,8 +180,10 @@ const DirectIndexPage = ({ isMobile }) => {
                                 {/* <h1 class="text-xs text-green-600 font-semibold">Online</h1> */}
                             </div>
                             {isMobile ? (
-                                <button className='p-4 my-auto bg-gray-100 rounded-full'>
-                                    <Link to={"/message"}>Back</Link>
+                                <button className='p-4 my-auto  rounded-full'>
+                                    <Link to={"/message"}>
+                                        <SlArrowRight/>
+                                    </Link>
                                 </button>
                             ) : (
                                 <div>
@@ -191,7 +194,7 @@ const DirectIndexPage = ({ isMobile }) => {
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col h-dvh w-full border rounded-xl overflow-x-auto mb-3 p-4">
+            <div class="flex flex-col h-full w-full rounded-xl overflow-x-auto mb-3 p-4">
                 <div class="gap-y-2 ">
                     {renderMessages()}
                 </div>

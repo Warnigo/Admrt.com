@@ -165,7 +165,7 @@ function StickyNavbar({ authenticated }) {
           variant="small"
           className="p-1 text-black text-lg font-normal"
         >
-          <Link to="/" className="flex items-center hover:text-blue-700 hover:shadow-sm">
+          <Link to="/" className="flex items-center hover:text-blue-700  hover:duration-700">
             <h1>Home</h1>
           </Link>
         </Typography>
@@ -174,7 +174,7 @@ function StickyNavbar({ authenticated }) {
           variant="small"
           className="p-1 text-black text-lg font-normal"
         >
-          <Link to="/about" className="flex items-center hover:text-blue-700 hover:shadow-sm">
+          <Link to="/about" className="flex items-center hover:text-blue-700 hover:box-shadow: -1px 1px 10px 0px rgba(0,122,255,0.75);">
             <h1>About</h1>
           </Link>
         </Typography>
@@ -183,7 +183,7 @@ function StickyNavbar({ authenticated }) {
           variant="small"
           className="p-1 text-black text-lg font-normal"
         >
-          <a href="/contact" className="flex items-center hover:text-blue-700 hover:shadow-sm">
+          <a href="/contact" className="flex items-center hover:text-blue-700 ">
             <h1>Contact</h1>
           </a>
         </Typography>
@@ -249,7 +249,7 @@ function StickyNavbar({ authenticated }) {
           variant="small"
           className="p-1 text-black text-lg font-normal mr-3"
         >
-          <Link to="/" className="flex items-center hover:text-blue-700 hover:shadow-sm">
+          <Link to="/" className="flex items-center hover:text-blue-700 hover:duration-500 ">
             <h1>Home</h1>
           </Link>
         </Typography>
@@ -258,7 +258,7 @@ function StickyNavbar({ authenticated }) {
           variant="small"
           className="p-1 text-black text-lg font-normal  mr-3"
         >
-          <Link to="/about" className="flex items-center hover:text-blue-700 hover:shadow-sm">
+          <Link to="/about" className="flex items-center hover:text-blue-700 ">
             <h1>About</h1>
           </Link>
         </Typography>
@@ -267,7 +267,7 @@ function StickyNavbar({ authenticated }) {
           variant="small"
           className="p-1 text-black text-lg font-normal  mr-3"
         >
-          <a href="/contact" className="flex items-center hover:text-blue-700 hover:shadow-sm">
+          <a href="/contact" className="flex items-center hover:text-blue-700 ">
             <h1>Contact</h1>
           </a>
         </Typography>
@@ -276,7 +276,7 @@ function StickyNavbar({ authenticated }) {
           variant="small"
           className="p-1 text-black text-lg font-normal"
         >
-          <Link to={`/message`} className="flex items-center hover:text-blue-700 hover:shadow-sm">
+          <Link to={`/message`} className="flex items-center hover:text-blue-700 ">
             <h1>Message</h1>
           </Link>
         </Typography>
