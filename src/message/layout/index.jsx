@@ -129,31 +129,9 @@ const MessageIndex = ({ isMobile }) => {
                     </div>
                 </div>
                 <div className="flex flex-col flex-auto h-full w-2/3  flex-shrink-0">
-                    <div
-                        className="flex flex-col flex-auto rounded-2xl w-full h-full p-4"
-                    >
-                        <div className="border relative px-5 rounded-xl mb-3">
-                            <div className="flex py-3">
-                                <div className="w-18 flex justify-content items-center">
-                                    {Object.entries(verifyRequest).map(([key]) => (
-                                        <Link to={`/message/direct/${userUid[key]}`}>
-                                            <button key={key} className="py-4 flex border-b w-full items-start justify-between cursor-pointer hover:bg-gray-50 hover:text-black">
-                                                <div className="flex gap-3">
-                                                    <img src={avatars[key] || avatar} className="flex-none w-12 h-12 rounded-full" alt="" />
-                                                    <div className="m-auto">
-                                                        <span className="block text-sm text-gray-700 font-semibold">{key}</span>
-                                                    </div>
-                                                </div>
-                                            </button>
-                                        </Link>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
+                    <div className="flex flex-col flex-auto rounded-2xl w-full h-full p-2">
                         <div class="flex flex-col h-full w-full border rounded-xl overflow-x-auto mb-4">
-                            <div class="">
-                                <Outlet />
-                            </div>
+                            <Outlet />
                         </div>
                         {verifyPath ? null : (
                             <form onSubmit={handleMessageSubmit} className="flex flex-row items-center h-16 border rounded-xl bg-white w-full px-2">

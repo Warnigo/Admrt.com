@@ -13,7 +13,7 @@ const DirectIndexPage = ({ isMobile }) => {
     const [messages, setMessages] = useState([]);
     const [meId, setMeId] = useState(null);
     const [meUsername, setMeUsername] = useState(null);
-    const [messagesSend, setMessagesSend] = useState(null);
+    const [messagesSend, setMessagesSend] = useState([]);
     const [meAvatar, setMeAvatar] = useState(null);
 
     useEffect(() => {
@@ -57,10 +57,12 @@ const DirectIndexPage = ({ isMobile }) => {
 
         const fetchMessages = async () => {
             try {
-                const messagesFromMe = await getMessagesFromFirebase(meId, userId);
-                setMessages(messagesFromMe);
-                const messagesToMe = await getMessagesFromFirebase(userId, meId);
-                setMessagesSend(messagesToMe);
+                if (meId) {
+                    const messagesFromMe = await getMessagesFromFirebase(meId, userId);
+                    setMessages(messagesFromMe);
+                    const messagesToMe = await getMessagesFromFirebase(userId, meId);
+                    setMessagesSend(messagesToMe);
+                }
             } catch (err) {
                 console.error(err);
             }
@@ -164,25 +166,22 @@ const DirectIndexPage = ({ isMobile }) => {
         return renderedMessages;
     };
 
-
     return (
         <div className='mb-5'>
-            <div class="border relative px-5 rounded-xl mb-3">
-                <div class="flex py-3">
-                    <div class="w-18 flex justify-content items-center">
-                        <img class="w-16 rounded-full" src={userAvatar || avatar} alt="" />
+            <div className="border-b relative px-5 mb-3">
+                <div className="flex py-3">
+                    <div className="w-18 flex justify-content items-center">
+                        <img className="w-16 rounded-full" src={userAvatar || avatar} alt="" />
                     </div>
                     <div className="w-full m-auto">
                         <div className='flex justify-between'>
                             <div className='my-auto ml-4'>
-                                <h1 class="font-semibold">{username}</h1>
-
-                                {/* <h1 class="text-xs text-green-600 font-semibold">Online</h1> */}
+                                <h1 className="font-semibold">{username}</h1>
                             </div>
                             {isMobile ? (
                                 <button className='p-4 my-auto  rounded-full'>
                                     <Link to={"/message"}>
-                                        <SlArrowRight/>
+                                        <SlArrowRight />
                                     </Link>
                                 </button>
                             ) : (
@@ -194,8 +193,8 @@ const DirectIndexPage = ({ isMobile }) => {
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col h-full w-full rounded-xl overflow-x-auto mb-3 p-4">
-                <div class="gap-y-2 ">
+            <div className="flex flex-col h-full w-full rounded-xl overflow-x-auto mb-3 p-4">
+                <div className="gap-y-2 ">
                     {renderMessages()}
                 </div>
             </div>
