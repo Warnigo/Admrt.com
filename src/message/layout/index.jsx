@@ -8,7 +8,6 @@ import { VscEmptyWindow } from "react-icons/vsc"
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import EmojiPicker from 'emoji-picker-react';
 
-
 const MessageIndex = ({ isMobile }) => {
     const [userUid, setUserId] = useState('');
     const [verifyRequest, setVerifyRequest] = useState({});
@@ -18,7 +17,8 @@ const MessageIndex = ({ isMobile }) => {
     const [meId, setMeId] = useState(null);
     const [modalUser, setModalUser] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState(null);
-    const [emojiModal, setEmojiModal] = useState(false)
+    const [emojiModal, setEmojiModal] = useState(false);
+    const [findData, setFindData] = useState(null)
     const { userId } = useParams();
     const location = useLocation();
     const verifyPath = location.pathname === '/message';
@@ -83,18 +83,32 @@ const MessageIndex = ({ isMobile }) => {
     };
     const handleDeleteMessage = async () => {
         try {
-          await deleteMessageFromFirebase(meId, userId);
-          setModalUser(false);
+            await deleteMessageFromFirebase(meId, userId);
+            setModalUser(false);
         } catch (error) {
-          console.error("Error deleting message:", error);
-          setModalUser(false);
+            console.error("Error deleting message:", error);
+            setModalUser(false);
         }
-      };
+    };
 
     const openModal = (userId) => {
         setSelectedUserId(userId);
         setModalUser(true);
     };
+
+    useEffect(() => {
+        const handleFindUsername = async () => {
+            if (userId) {
+                const findRef = await getDoc(doc(usersCollection, userId));
+                if (findRef.exists()) {
+                    const data = findRef.data();
+                    setFindData(data);
+                }
+            }
+        };
+        handleFindUsername();
+    }, [userId]);
+
 
     return (
         <div className="flex h-[88vh]  max-w-screen-2xl mx-auto antialiased text-gray-800">
@@ -165,10 +179,31 @@ const MessageIndex = ({ isMobile }) => {
                 </div>
                 <div className="flex flex-col flex-auto h-full w-2/3  flex-shrink-0">
                     <div className="flex flex-col flex-auto rounded-2xl w-full h-full p-2">
+                        {isMobile ? null : (
+                            <div>
+                                {verifyPath ? null : (
+                                    <div className="border rounded-xl fixed relative px-5 mb-3">
+                                        {findData && (
+                                            <div className="flex py-3">
+                                                <div className="w-18 flex justify-content items-center">
+                                                    <img className="w-16 rounded-full" src={findData.imageUrl || avatar} alt="" />
+                                                </div>
+                                                <div className="w-full m-auto">
+                                                    <div className='flex justify-between'>
+                                                        <div className='my-auto ml-4'>
+                                                            <h1 className="font-semibold">{findData.fullName}</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                         <div class="flex flex-col h-full w-full border rounded-xl overflow-x-auto mb-4">
                             <Outlet />
                         </div>
-
                         {!verifyPath && (
                             <form onSubmit={handleMessageSubmit} className="flex flex-row items-center h-16 border rounded-xl bg-white w-full px-2">
                                 <div class="flex-grow">

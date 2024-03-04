@@ -168,32 +168,28 @@ const DirectIndexPage = ({ isMobile }) => {
 
     return (
         <div className='mb-5'>
-            <div className="border-b fixed relative px-5 mb-3">
-                <div className="flex py-3">
-                    <div className="w-18 flex justify-content items-center">
-                        <img className="w-16 rounded-full" src={userAvatar || avatar} alt="" />
-                    </div>
-                    <div className="w-full m-auto">
-                        <div className='flex justify-between'>
-                            <div className='my-auto ml-4'>
-                                <h1 className="font-semibold">{username}</h1>
-                            </div>
-                            {isMobile ? (
+            {isMobile ? (
+                <div className="border-b relative px-5 mb-3">
+                    <div className="flex py-3">
+                        <div className="w-18 flex justify-content items-center">
+                            <img className="w-16 rounded-full" src={userAvatar || avatar} alt="" />
+                        </div>
+                        <div className="w-full m-auto">
+                            <div className='flex justify-between'>
+                                <div className='my-auto ml-4'>
+                                    <h1 className="font-semibold">{username}</h1>
+                                </div>
                                 <button className='p-4 my-auto  rounded-full'>
                                     <Link to={"/message"}>
                                         <SlArrowRight />
                                     </Link>
                                 </button>
-                            ) : (
-                                <div>
-
-                                </div>
-                            )}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="flex flex-col h-full w-full rounded-xl overflow-x-auto mb-3 p-4">
+            ) : null}
+            <div className={`flex flex-col h-full w-full rounded-xl overflow-x-auto mb-3 p-4 ${isMobile ? 'border ' : ""}`}>
                 <div className="gap-y-2 ">
                     {renderMessages()}
                 </div>
