@@ -168,7 +168,7 @@ const DirectIndexPage = ({ isMobile }) => {
 
     return (
         <div className='mb-5'>
-            <div className="border-b relative px-5 mb-3">
+            <div className="border-b fixed relative px-5 mb-3">
                 <div className="flex py-3">
                     <div className="w-18 flex justify-content items-center">
                         <img className="w-16 rounded-full" src={userAvatar || avatar} alt="" />

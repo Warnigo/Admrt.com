@@ -71,10 +71,10 @@ const EditBg = () => {
 
     useEffect(() => {
         const handleSplitCleaning = () => {
-            if (split !== userSplit) {
-                setViewRequest(false);
-            } else {
+            if (split === 'advertiser') {
                 setViewRequest(true);
+            } else {
+                setViewRequest(false);
             }
         };
 
@@ -119,18 +119,6 @@ const EditBg = () => {
 
         handleApprovedView();
     }, [userUID, userId, profileUsername, userUsername]);
-
-
-    // useEffect(() => {
-    //     const handleVerification = () => {
-    //         if (request === false) {
-    //             setDontVerificationRequest(false);
-    //         } else {
-    //             setDontVerificationRequest(true);
-    //         }
-    //     }
-    //     handleVerification()
-    // })
 
     const handleRequestRemove = async () => {
         try {

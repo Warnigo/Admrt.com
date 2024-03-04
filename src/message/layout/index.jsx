@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { auth, db, saveMessageToFirebase, usersCollection } from '../../firebase/firebase'
+import { auth, db, deleteMessageFromFirebase, saveMessageToFirebase, usersCollection } from '../../firebase/firebase'
 import { doc, getDoc } from "firebase/firestore";
 import { Link, Outlet, useParams, useLocation } from "react-router-dom";
 import { avatar } from '../../modul/main'
 import svg2 from '../../image/search 1.svg'
 import { VscEmptyWindow } from "react-icons/vsc"
+import { PiDotsThreeOutlineFill } from "react-icons/pi";
+import EmojiPicker from 'emoji-picker-react';
+
 
 const MessageIndex = ({ isMobile }) => {
     const [userUid, setUserId] = useState('');
@@ -13,6 +16,9 @@ const MessageIndex = ({ isMobile }) => {
     const [message, setMessage] = useState('');
     const [username, setUsername] = useState(null)
     const [meId, setMeId] = useState(null);
+    const [modalUser, setModalUser] = useState(false);
+    const [selectedUserId, setSelectedUserId] = useState(null);
+    const [emojiModal, setEmojiModal] = useState(false)
     const { userId } = useParams();
     const location = useLocation();
     const verifyPath = location.pathname === '/message';
@@ -75,6 +81,20 @@ const MessageIndex = ({ isMobile }) => {
             console.error('Error sending message:', error);
         }
     };
+    const handleDeleteMessage = async () => {
+        try {
+          await deleteMessageFromFirebase(meId, userId);
+          setModalUser(false);
+        } catch (error) {
+          console.error("Error deleting message:", error);
+          setModalUser(false);
+        }
+      };
+
+    const openModal = (userId) => {
+        setSelectedUserId(userId);
+        setModalUser(true);
+    };
 
     return (
         <div className="flex h-[88vh]  max-w-screen-2xl mx-auto antialiased text-gray-800">
@@ -109,17 +129,32 @@ const MessageIndex = ({ isMobile }) => {
                                                     </div>
                                                 </div>
                                             )}
-                                            {Object.entries(verifyRequest).map(([key]) => (
-                                                <Link to={`/message/direct/${userUid[key]}`}>
-                                                    <button key={key} className="py-4 flex border-b w-full items-start justify-between cursor-pointer hover:bg-gray-50 hover:text-black">
-                                                        <div className="flex gap-3">
-                                                            <img src={avatars[key] || avatar} className="flex-none w-12 h-12 rounded-full" alt="" />
-                                                            <div className="m-auto">
-                                                                <span className="block text-sm text-gray-700 font-semibold">{key}</span>
+                                            {Object.entries(verifyRequest).map(([key, index]) => (
+                                                <div key={key}>
+                                                    <Link to={`/message/direct/${userUid[key]}`} className="flex justify-between border-b hover:bg-gray-50">
+                                                        <button key={key} className="py-4 flex w-full items-start justify-between cursor-pointer  hover:text-black">
+                                                            <div className="flex gap-3">
+                                                                <img src={avatars[key] || avatar} className="flex-none w-12 h-12 rounded-full" alt="" />
+                                                                <div className="m-auto">
+                                                                    <span className="block text-sm text-gray-700 font-semibold">{key}</span>
+                                                                </div>
                                                             </div>
+                                                        </button>
+                                                        <button className="m-auto" onClick={() => openModal(key)}>
+                                                            <PiDotsThreeOutlineFill className="text-gray-500 w-6 h-6 p-0.5 mr-2 hover:bg-gray-100 rounded-sm" />
+                                                        </button>
+                                                    </Link>
+                                                    {modalUser && selectedUserId === key && (
+                                                        <div className="bg-white border absolute p-2 -m-7 ml-80 rounded-lg shadow-lg w-32 flex justify-center"
+                                                            onMouseLeave={() => setModalUser(false)}
+                                                        >
+                                                            {selectedUserId && (
+                                                                <button className="cursor-pointer w-full hover:bg-gray-50" onClick={() => handleDeleteMessage(selectedUserId)}>Delete</button>
+                                                            )}
                                                         </div>
-                                                    </button>
-                                                </Link>
+                                                    )}
+
+                                                </div>
                                             ))}
                                         </div>
                                     </div>
@@ -133,7 +168,8 @@ const MessageIndex = ({ isMobile }) => {
                         <div class="flex flex-col h-full w-full border rounded-xl overflow-x-auto mb-4">
                             <Outlet />
                         </div>
-                        {verifyPath ? null : (
+
+                        {!verifyPath && (
                             <form onSubmit={handleMessageSubmit} className="flex flex-row items-center h-16 border rounded-xl bg-white w-full px-2">
                                 <div class="flex-grow">
                                     <div class="relative w-full">
@@ -146,10 +182,22 @@ const MessageIndex = ({ isMobile }) => {
                                     </div>
                                 </div>
                                 <div class="ml-4 flex gap-3 px-6">
-                                    <button
-                                        class="flex items-center justify-center rounded-xl text-white py-1 flex-shrink-0"
+                                    <div
+                                        class="items-center justify-center rounded-xl text-white py-1 flex-shrink-0"
                                     >
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        {emojiModal && (
+                                            <div onMouseLeave={() => setEmojiModal(false)}
+                                                className="absolute top-64 right-5"
+                                            >
+                                                <EmojiPicker onEmojiClick={(event) => setMessage(message + event.emoji)}
+                                                    className="shadow-lg"
+                                                />
+                                            </div>
+                                        )}
+                                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                            onClick={() => setEmojiModal(true)}
+                                            className="cursor-pointer m-auto"
+                                        >
                                             <g opacity="0.5">
                                                 <path d="M8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15Z" stroke="#171725" stroke-linecap="round" stroke-linejoin="round" />
                                                 <path d="M5.2002 9.40009C5.2002 9.40009 6.2502 10.8001 8.0002 10.8001C9.7502 10.8001 10.8002 9.40009 10.8002 9.40009" stroke="#171725" stroke-linecap="round" stroke-linejoin="round" />
@@ -157,12 +205,12 @@ const MessageIndex = ({ isMobile }) => {
                                                 <path d="M10.0996 5.90015H10.1066" stroke="#171725" stroke-linecap="round" stroke-linejoin="round" />
                                             </g>
                                         </svg>
-                                    </button>
+                                    </div>
                                     <button
-                                        class="flex items-center justify-center rounded-xl text-white py-1 flex-shrink-0"
+                                        class="flex items-center justify-center rounded-xl text-white flex-shrink-0"
                                         type="submit"
                                     >
-                                        <svg width="24" height="23" viewBox="0 0 24 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg width="24" height="23" viewBox="0 0 24 23" fill="none" xmlns="http://www.w3.org/2000/svg" className="m-auto">
                                             <path d="M23 5.51055L12.1931 21.3588L10.8042 12.5518L3.87163 6.94548L23 5.51055Z" fill="#2B59FF" stroke="#2B59FF" stroke-linecap="round" stroke-linejoin="round" />
                                             <path d="M22.9987 5.50982L10.8394 12.6755" stroke="#2B59FF" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>

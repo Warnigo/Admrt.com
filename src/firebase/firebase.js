@@ -25,6 +25,7 @@ const usersCollection = collection(db, 'users');
 const usernameCollection = collection(db, 'username');
 const requestCollection = collection(db, 'request');
 const portfolioCollection = collection(db, "portfolio");
+const messageCollection = collection(db, 'messages');
 
 export {
   auth,
@@ -38,6 +39,7 @@ export {
   database,
   requestCollection,
   portfolioCollection,
+  messageCollection,
 };
 
 export async function savePortfolioFirebase(userId, portfolioId, userData) {
@@ -51,6 +53,16 @@ export async function savePortfolioFirebase(userId, portfolioId, userData) {
     console.log("Portfolio data saved successfully");
   } catch (error) {
     console.error("Error saving portfolio data:", error);
+    throw error;
+  }
+}
+
+export async function deleteMessageFromFirebase(senderId, receiverId) {
+  try {
+    const documentPath = `messages/${senderId}/${receiverId}`;
+    await deleteDoc(doc(db, documentPath));
+  } catch (error) {
+    console.error("Error deleting message:", error);
     throw error;
   }
 }

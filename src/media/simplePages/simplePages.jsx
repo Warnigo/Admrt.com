@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'flowbite';
 import openSvg from '../../image/chevron-down (1) 2.svg'
 import closed from '../../image/chevron-down (1) 1.svg'
@@ -63,9 +63,14 @@ function SiplePages() {
         return () => unsubscribe();
     }, []);
 
-    // useEffect(() => {
-    //     handleFetchUserData()
-    // }, [userId])
+    const handleUserAvater = useCallback(async (username) => {
+        console.log();
+    }, []);
+
+    useEffect(() => {
+        Object.keys(requests).map(username => handleUserAvater(username));
+    }, [handleUserAvater, requests]);
+    
 
     const handleOpen = () => {
         setOpen(!open);
