@@ -809,57 +809,6 @@ function SiplePage() {
               </div>
             </div>
           </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           {/* <div class="w-full py-5 px-10 order-1 md:order-2 md:w-1/3">
        <div className='flex justify-between my-3'>
               <div>
@@ -1229,7 +1178,3 @@ function SiplePage() {
 }
 
 export default SiplePage;
-
-
-
-

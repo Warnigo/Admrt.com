@@ -14,9 +14,12 @@ import SocialMedia from './others/socialMedia';
 import { useEffect, useState } from 'react';
 import Loading from '../loading/loading'
 import Portfolio from './others/portfolio'
+import { useParams } from 'react-router-dom'
+import { Specification } from "../Layout/context/specification";
 
 function ViewsProfile() {
   const [loading, setLoading] = useState(true);
+  const { split } = useParams();
 
   useEffect(() => {
     const loadingTime = setTimeout(() => {
@@ -25,7 +28,7 @@ function ViewsProfile() {
 
     return () => clearTimeout(loadingTime)
   })
-  
+
   return (
     <div className="App">
       {loading && <Loading />}
@@ -36,9 +39,10 @@ function ViewsProfile() {
               <EditBackground />
               <EditeUser />
               <IntoDescription />
-              <Portfolio />
-            </div>
-            <div>
+              <div>
+                <Specification />
+              </div>
+              {split === 'adSpaceHost' && <Portfolio />}
             </div>
           </div>
           <div class="w-full py-0 max-[1200px]:px-4 px-10 order-1 md:order-2 md:w-1/3">
