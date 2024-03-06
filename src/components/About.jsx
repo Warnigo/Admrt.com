@@ -4,7 +4,8 @@ import img2 from '../images/Buying a dog.png'
 import img4 from '../images/Colleagues discussing financial report 1.svg'
 import img5 from '../images/Graphics.svg'
 import img6 from '../images/Group 1000005650.svg'
-import img7 from '../images/Group 35027.png'
+import img7 from '../images/IMG_2339.JPG'
+import img0 from '../images/Group 350273.png'
 import img8 from '../images/Group 35028.png'
 import img9 from '../images/Group 35029.png'
 
@@ -110,8 +111,8 @@ const About = () => {
                         <div class="flex items-center justify-center flex-wrap gap-4 p-4">
                             <div class="card flex items-center justify-center flex-col w-full sm:w-72 h-full rounded-2xl">
                                 <img src={img7} class="w-24 h-24 rounded-full object-cover transition duration-200 hover:scale-110" alt='' />
-                                <div class="text-gray-900 text-lg font-medium">Jorge Doe</div>
-                                <div class="text-neutral-500 text-base font-light">Creator</div>
+                                <div class="text-gray-900 text-lg font-medium">Jacob Birn</div>
+                                <div class="text-neutral-500 text-base font-light">CEO/Founder</div>
                             </div>
                             <div class="card flex items-center justify-center flex-col w-full sm:w-72 h-full rounded-2xl">
                                 <img src={img8} class="w-24 h-24 rounded-full object-cover transition duration-200 hover:scale-110" alt='' />
@@ -119,7 +120,7 @@ const About = () => {
                                 <div class="text-neutral-500 text-base font-light">Founder</div>
                             </div>
                             <div class="card flex items-center justify-center flex-col w-full sm:w-72 h-full rounded-2xl">
-                                <img src={img7} class="w-24 h-24 rounded-full object-cover transition duration-200 hover:scale-110" alt='' />
+                                <img src={img0} class="w-24 h-24 rounded-full object-cover transition duration-200 hover:scale-110" alt='' />
                                 <div class="text-gray-900 text-lg font-medium">Kelaksha</div>
                                 <div class="text-neutral-500 text-base font-light">Chief-Technicians</div>
                             </div>
