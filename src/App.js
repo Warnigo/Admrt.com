@@ -68,7 +68,7 @@ function App() {
     const AuthUserRoutes = [
         { id: 1, path: "/about", element: <About /> },
         { id: 2, path: "/contact", element: <Contact /> },
-        { id: 3, path: `/:split/:userId`, element: <Profile /> },
+        { id: 3, path: `/:split/:userUID`, element: <Profile /> },
         { id: 4, path: `/:split/:userId/settings`, element: <Settings /> },
         { id: 6, path: `/profile/:split/:userUID`, element: <ViewsProfile onUserUID={handleUserSelect} /> },
         { id: 7, path: `/:title/portfolio/:userId/:Id`, element: <AddPortfolio /> },

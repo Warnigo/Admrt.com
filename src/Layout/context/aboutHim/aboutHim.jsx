@@ -17,7 +17,7 @@ const AboutHim = () => {
     // const [partTime, setPartTime] = useState(false);
     const [userData, setUserDate] = useState(null)
     const [userId, setUserId] = useState(null)
-    const { userId: userIdParam } = useParams();
+    const { userUID: userIdParam } = useParams();
 
     useEffect(() => {
         const auth = getAuth();
