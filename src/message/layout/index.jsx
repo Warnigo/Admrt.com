@@ -19,6 +19,7 @@ const MessageIndex = ({ isMobile }) => {
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [emojiModal, setEmojiModal] = useState(false);
     const [findData, setFindData] = useState(null)
+    const [lastMessage, setLastMessage] = useState('');
     const { userId } = useParams();
     const location = useLocation();
     const verifyPath = location.pathname === '/message';
@@ -109,7 +110,6 @@ const MessageIndex = ({ isMobile }) => {
         handleFindUsername();
     }, [userId]);
 
-
     return (
         <div className="flex h-[88vh]  max-w-screen-2xl mx-auto antialiased text-gray-800">
             <div className="flex flex-row h-full w-full overflow-x-hidden  mx-3">
@@ -151,6 +151,7 @@ const MessageIndex = ({ isMobile }) => {
                                                                 <img src={avatars[key] || avatar} className="flex-none w-12 h-12 rounded-full" alt="" />
                                                                 <div className="m-auto">
                                                                     <span className="block text-sm text-gray-700 font-semibold">{key}</span>
+                                                                    <p>{lastMessage}</p>
                                                                 </div>
                                                             </div>
                                                         </button>

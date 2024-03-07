@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import {storage, db, auth} from "../../firebase/firebase";
+import { storage, db, auth } from "../../firebase/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
 import editIcon from '../../image/blackEditeIcon.svg';
 import close from '../../image/closeBackground.svg';
-import {onAuthStateChanged} from "firebase/auth";
-import emptyBg from '../../image/Image (2).svg'
+import { onAuthStateChanged } from "firebase/auth";
+import emptyBg from '../../image/image.png'
+import { Link } from 'react-router-dom'
 
-const EditBackground = ({ userId }) => {
+const EditBackground = ({split, userId }) => {
     const [bgImage, setBgImage] = useState('');
     const [newBgImage, setNewBgImage] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -85,7 +86,7 @@ const EditBackground = ({ userId }) => {
     };
 
     return (
-        <div className="relative h-72 bg-cover bg-center border rounded-lg bg-gray-100" style={{ backgroundImage: bgImage ? `url(${bgImage})` : `url(${emptyBg})` }}>
+        <div className="relative h-72 bg-cover bg-center border rounded-lg bg-gray-100" style={{ backgroundImage: bgImage ? `url(${bgImage})` : emptyBg}}>
             {isEditing ? (
                 <div className="absolute inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
                     <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center">
@@ -122,9 +123,11 @@ const EditBackground = ({ userId }) => {
                             Edit Background
                         </button>
                     </div>
-                    <button className="bg-blue-700 text-white font-semibold py-2 px-4 rounded">
-                        Save Profile
-                    </button>
+                    <Link to={`/profile/${split}/${userId}`}>
+                        <button className="bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+                            View profile
+                        </button>
+                    </Link>
                 </div>
             )}
         </div>

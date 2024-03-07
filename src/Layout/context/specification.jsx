@@ -7,7 +7,7 @@ import edit_svg_blue from '../../image/edit_svg_blue.svg'
 import openSvg from '../../image/chevron-down (1) 2.svg'
 import closed from '../../image/chevron-down (1) 1.svg'
 import targetSvg from '../../svgs/specification/target.svg'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { auth, usersCollection } from '../../firebase/firebase'
 import { VscChromeClose } from "react-icons/vsc";
 import { doc, getDoc, setDoc } from 'firebase/firestore'
@@ -26,6 +26,9 @@ export const Specification = () => {
         availability: '',
         language: ''
     });
+
+    const location = useLocation();
+    const { pathname } = location;
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -124,7 +127,8 @@ export const Specification = () => {
             {open ? (
                 <div className='border rounded-b-xl'>
                     <div className='px-2 md:px-8 mt-6'>
-                        {userUID === meId &&
+                        {pathname !== `/profile/${split}/${userUID}` &&
+                            userUID === meId &&
                             <div className='flex justify-end border-b'>
                                 <div className='flex justify-center border m-1 p-1 rounded-sm w-44 cursor-pointer hover:bg-gray-100'
                                     onClick={() => setModal(true)}
@@ -143,7 +147,7 @@ export const Specification = () => {
                                 </div>
                                 <div
                                     className='text-xs md:text-sm md:font-semibold text-[#2B59FF] flex justify-center items-center  gap-4'>
-                                    <h1>Age {formData.age} ({formData.gender})</h1>
+                                    <h1>Age {formData.age} ({formData.gender || 'none'})</h1>
                                 </div>
                             </li>
                             <li className="menu-item flex justify-between">
@@ -154,7 +158,7 @@ export const Specification = () => {
                                 </div>
                                 <div
                                     className='text-xs md:text-sm md:font-semibold text-[#2B59FF] flex items-center justify-center'>
-                                    <h1>{formData.experitise.join(', ')}</h1>
+                                    <h1>{formData.experitise.join(', ') || "none"}</h1>
                                 </div>
                             </li>
                             <li className="menu-item flex justify-between">
@@ -165,7 +169,7 @@ export const Specification = () => {
                                 </div>
                                 <div
                                     className='text-xs md:text-sm md:font-semibold text-[#2B59FF] flex items-center justify-center'>
-                                    <h1>{formData.topicalTime} <span className='text-gray-500'>hours</span></h1>
+                                    <h1>{formData.topicalTime || 'none'} <span className='text-gray-500'>hours</span></h1>
                                 </div>
                             </li>
                             <li className="menu-item flex justify-between">
@@ -176,7 +180,7 @@ export const Specification = () => {
                                 </div>
                                 <div
                                     className='text-xs md:text-sm md:font-semibold text-[#2B59FF] flex justify-center items-center  gap-4'>
-                                    <h1>{formData.availability}</h1>
+                                    <h1>{formData.availability || 'none'}</h1>
                                 </div>
                             </li>
                             <li className="menu-item flex justify-between">
@@ -187,7 +191,7 @@ export const Specification = () => {
                                 </div>
                                 <div
                                     className='text-xs md:text-sm md:font-semibold text-[#2B59FF] flex justify-center items-center  gap-4'>
-                                    <h1>{formData.language}</h1>
+                                    <h1>{formData.language || 'none'}</h1>
                                 </div>
                             </li>
                         </ul>
@@ -252,8 +256,8 @@ export const Specification = () => {
                                             </button>
                                         </div>
                                     ))}
-                                    <button type="button" 
-                                    className={`bg-blue-600 text-white p-2 rounded-lg ${formData.experitise.length === 3 && 'opacity-50 cursor-not-allowed'}`}
+                                    <button type="button"
+                                        className={`bg-blue-600 text-white p-2 rounded-lg ${formData.experitise.length === 3 && 'opacity-50 cursor-not-allowed'}`}
                                         onClick={handleAddExperitise}
                                         disabled={formData.experitise.length >= 3}
                                     >

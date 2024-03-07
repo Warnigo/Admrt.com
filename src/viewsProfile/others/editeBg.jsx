@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { auth, db, usersCollection } from "../../firebase/firebase";
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
+import img from '../../image/image.png'
 
 const EditBg = () => {
     const { userUID, split } = useParams();
@@ -56,7 +57,7 @@ const EditBg = () => {
                 const userDoc = await getDoc(doc(db, 'users', userUID));
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
-                    const imageUrl = userData.backgroundURL || '';
+                    const imageUrl = userData.backgroundURL || img;
                     setBgImage(imageUrl);
                 } else {
                     console.log('User not found');

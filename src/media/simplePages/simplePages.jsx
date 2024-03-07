@@ -82,7 +82,7 @@ function SiplePages() {
                 <div className="md:flex">
                     <div className="w-full order-2 md:w-2/3 ">
                         <div className={"border p-2 md:p-5 rounded-xl"}>
-                            <EditBackground userId={userId} />
+                            <EditBackground userId={userId} split={split} />
                             <EditeUser />
                             <IntoDescription />
                         </div>
