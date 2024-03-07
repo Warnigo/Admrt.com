@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { auth, db, deleteMessageFromFirebase, saveMessageToFirebase, usersCollection } from '../../firebase/firebase'
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, writeBatch } from "firebase/firestore";
 import { Link, Outlet, useParams, useLocation } from "react-router-dom";
 import { avatar } from '../../modul/main'
 import svg2 from '../../image/search 1.svg'
@@ -63,7 +63,7 @@ const MessageIndex = ({ isMobile }) => {
                 }
             }));
             setAvatars(fetchedAvatars);
-            setUserId(fetchedUserId)
+            setUserId(fetchedUserId);
         } catch (err) {
             console.error(err);
         }
@@ -110,6 +110,22 @@ const MessageIndex = ({ isMobile }) => {
         handleFindUsername();
     }, [userId]);
 
+    const getFirebaseSendSeenTrue = async(userId) => {
+        try {
+            const messagesRef = collection(db, `messages/${userId}/${meId}`);
+            const messagesSnapshot = await getDocs(messagesRef);
+            const batch = writeBatch(db);
+    
+            messagesSnapshot.forEach((doc) => {
+                batch.update(doc.ref, { seen: true });
+            });
+    
+            await batch.commit();
+        } catch (error) {
+            console.error('Error marking messages as seen:', error);
+        }
+    };
+
     return (
         <div className="flex h-[88vh]  max-w-screen-2xl mx-auto antialiased text-gray-800">
             <div className="flex flex-row h-full w-full overflow-x-hidden  mx-3">
@@ -145,7 +161,10 @@ const MessageIndex = ({ isMobile }) => {
                                             )}
                                             {Object.entries(verifyRequest).map(([key, index]) => (
                                                 <div key={key}>
-                                                    <Link to={`/message/direct/${userUid[key]}`} className="flex justify-between border-b hover:bg-gray-50">
+                                                    <Link to={`/message/direct/${userUid[key]}`} 
+                                                    onClick={() => getFirebaseSendSeenTrue(userUid[key])}
+                                                    className="flex justify-between border-b hover:bg-gray-50"
+                                                    >
                                                         <button key={key} className="py-4 flex w-full items-start justify-between cursor-pointer  hover:text-black">
                                                             <div className="flex gap-3">
                                                                 <img src={avatars[key] || avatar} className="flex-none w-12 h-12 rounded-full" alt="" />

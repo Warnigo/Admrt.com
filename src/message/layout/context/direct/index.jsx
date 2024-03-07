@@ -5,6 +5,8 @@ import { collection, doc, getDoc, query, onSnapshot, orderBy } from 'firebase/fi
 import { db } from '../../../../firebase/firebase';
 import { avatar } from '../../../../modul/main';
 import { SlArrowRight } from "react-icons/sl";
+import { IoCheckmark } from "react-icons/io5";
+import { IoCheckmarkDone } from "react-icons/io5";
 
 const DirectIndexPage = ({ isMobile }) => {
     const { userId } = useParams();
@@ -15,6 +17,7 @@ const DirectIndexPage = ({ isMobile }) => {
     const [meUsername, setMeUsername] = useState(null);
     const [messagesSend, setMessagesSend] = useState([]);
     const [meAvatar, setMeAvatar] = useState(null);
+    const [seen, setSeen] = useState(null);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -119,8 +122,8 @@ const DirectIndexPage = ({ isMobile }) => {
                     const formattedTime = messageDate.toLocaleTimeString();
                     const sender = msg.message.sender === meUsername ? 'You' : username;
                     const formattedMessage = `${msg.message.message}`;
+                    const verifySeen = msg.seen;
                     const timeMessage = formattedTime;
-
                     let dateComponent = null;
 
                     if (messageDateString !== lastDate) {
@@ -140,21 +143,30 @@ const DirectIndexPage = ({ isMobile }) => {
                                 {dateComponent}
                             </div>
                             <div className={`col-start-1 col-end-8 p-3 rounded-lg ${sender === 'You' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`flex flex-row items-center ${sender === 'You' ? 'flex-row-reverse' : ''}`}>
-                                    <div
-                                        className={`flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0 ${sender === 'You' ? 'ml-3' : 'mr-3'}`}
-                                    >
-                                        {sender === "You" ? (
-                                            <img src={meAvatar || avatar} className='rounded-full' alt="" />
-                                        ) : (
-                                            <img src={userAvatar || avatar} className='rounded-full' alt="" />
-                                        )}
-                                    </div>
-                                    <div
-                                        className={`relative flex text-sm bg-white py-2 px-4 shadow border rounded-xl ${sender === 'You' ? 'bg-blue-100 flex-row-reverse' : ''}`}
-                                    >
-                                        <div>{formattedMessage}</div>
-                                        <div className={`text-[10px] text-gray-500 flex justify-end items-end ${sender === 'You' ? 'pr-3' : 'pl-3'}`}>{timeMessage}</div>
+                                <div>
+                                    <div className={`flex flex-row items-center ${sender === 'You' ? 'flex-row-reverse' : ''}`}>
+                                        <div
+                                            className={`flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0 ${sender === 'You' ? 'ml-3' : 'mr-3'}`}
+                                        >
+                                            {sender === "You" ? (
+                                                <img src={meAvatar || avatar} className='rounded-full' alt="" />
+                                            ) : (
+                                                <img src={userAvatar || avatar} className='rounded-full' alt="" />
+                                            )}
+                                        </div>
+                                        <div
+                                            className={`relative flex text-sm bg-white gap-2 py-2 px-4 shadow border rounded-xl ${sender === 'You' ? 'bg-blue-100 flex-row-reverse' : ''}`}
+                                        >
+                                            <div>{formattedMessage}</div>
+                                            <div className={`text-[10px] text-gray-500 flex justify-end items-end`}>{timeMessage}</div>
+                                            <div className={`${sender === 'You' ? 'flex justify-end mt-1' : 'hidden'}`}>
+                                                {verifySeen === true ? (
+                                                    <IoCheckmarkDone className='w-4 h-4' />
+                                                ) : (
+                                                    <IoCheckmark className='flex w-3 h-3' />
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

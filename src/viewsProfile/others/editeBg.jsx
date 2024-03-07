@@ -70,9 +70,11 @@ const EditBg = () => {
         fetchUserData();
     }, [userUID]);
 
+    console.log(split);
+
     useEffect(() => {
         const handleSplitCleaning = () => {
-            if (split === 'advertiser') {
+            if (split !== userSplit) {
                 setViewRequest(true);
             } else {
                 setViewRequest(false);

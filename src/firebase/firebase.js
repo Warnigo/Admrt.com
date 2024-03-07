@@ -70,7 +70,7 @@ export async function deleteMessageFromFirebase(senderId, receiverId) {
 export async function saveMessageToFirebase(senderId, receiverId, message) {
   try {
       const messagesCollectionRef = collection(db, `messages/${senderId}/${receiverId}`);
-      await addDoc(messagesCollectionRef, { senderId, receiverId, message, timestamp: new Date() });
+      await addDoc(messagesCollectionRef, { senderId, receiverId, message, timestamp: new Date(), seen: false });
   } catch (error) {
       console.error('Error sending message:', error);
       throw error;
