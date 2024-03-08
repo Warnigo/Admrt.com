@@ -17,7 +17,6 @@ const DirectIndexPage = ({ isMobile }) => {
     const [meUsername, setMeUsername] = useState(null);
     const [messagesSend, setMessagesSend] = useState([]);
     const [meAvatar, setMeAvatar] = useState(null);
-    const [seen, setSeen] = useState(null);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
