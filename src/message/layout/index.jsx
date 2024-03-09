@@ -135,6 +135,7 @@ const MessageIndex = ({ isMobile }) => {
     
         realSeen();
         const interval = setInterval(realSeen, 1000);
+        
         return () => clearInterval(interval);
     }, [location.pathname, userId, getFirebaseSendSeenTrue]);
     

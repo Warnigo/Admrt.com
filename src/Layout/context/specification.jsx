@@ -88,13 +88,16 @@ export const Specification = () => {
     };
 
     const handleAddExperitise = () => {
-        if (formData.experitise.length < 3) {
-            setFormData({
-                ...formData,
-                experitise: [...formData.experitise, '']
-            });
+        if (formData.experitise && Array.isArray(formData.experitise)) {
+            if (formData.experitise.length < 3) {
+                setFormData(prevState => ({
+                    ...prevState,
+                    experitise: [...prevState.experitise, '']
+                }));
+            }
         }
     };
+
 
     const handleRemoveExperitise = (index) => {
         const updatedExperitise = [...formData.experitise];
@@ -158,7 +161,7 @@ export const Specification = () => {
                                 </div>
                                 <div
                                     className='text-xs md:text-sm md:font-semibold text-[#2B59FF] flex items-center justify-center'>
-                                    <h1>{formData.experitise.join(', ') || "none"}</h1>
+                                    <h1>{formData.experitise ? formData.experitise.join(', ') : "none"}</h1>
                                 </div>
                             </li>
                             <li className="menu-item flex justify-between">
@@ -240,7 +243,7 @@ export const Specification = () => {
                                             </select>
                                         </div>
                                     </div>
-                                    {formData.experitise.map((item, index) => (
+                                    {(formData.experitise || []).map((item, index) => (
                                         <div className='m-1 flex gap-4' key={index}>
                                             <input type="text"
                                                 className='border rounded-lg w-full p-2'
@@ -257,9 +260,9 @@ export const Specification = () => {
                                         </div>
                                     ))}
                                     <button type="button"
-                                        className={`bg-blue-600 text-white p-2 rounded-lg ${formData.experitise.length === 3 && 'opacity-50 cursor-not-allowed'}`}
+                                        className={`bg-blue-600 text-white p-2 rounded-lg ${formData.experitise?.length === 3 && 'opacity-50 cursor-not-allowed'}`}
                                         onClick={handleAddExperitise}
-                                        disabled={formData.experitise.length >= 3}
+                                        disabled={formData.experitise?.length >= 3}
                                     >
                                         Add Experitise
                                     </button>
