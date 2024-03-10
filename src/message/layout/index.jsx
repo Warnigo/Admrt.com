@@ -19,7 +19,7 @@ const MessageIndex = ({ isMobile }) => {
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [emojiModal, setEmojiModal] = useState(false);
     const [findData, setFindData] = useState(null)
-    const [lastMessage, setLastMessage] = useState('');
+    const [lastMessage, setLastMessage] = useState();
     const { userId } = useParams();
     const location = useLocation();
     const verifyPath = location.pathname === '/message';
@@ -125,20 +125,19 @@ const MessageIndex = ({ isMobile }) => {
             console.error('Error marking messages as seen:', error);
         }
     }, [meId]);
-    
+
     useEffect(() => {
         const realSeen = () => {
             if (location.pathname.startsWith(`/message/direct/${userId}`)) {
                 getFirebaseSendSeenTrue(userId);
             }
         }
-    
+
         realSeen();
         const interval = setInterval(realSeen, 1000);
-        
+
         return () => clearInterval(interval);
     }, [location.pathname, userId, getFirebaseSendSeenTrue]);
-    
 
     return (
         <div className="flex h-[88vh]  max-w-screen-2xl mx-auto antialiased text-gray-800">
@@ -147,7 +146,7 @@ const MessageIndex = ({ isMobile }) => {
                     <div className="flex flex-col flex-auto  rounded-2xl w-full h-full p-2">
                         <div className="border p-4 rounded-xl">
                             <div>
-                                <h1 className="text-start mx-2 font-semibold text-lg md:text-2xl my-3">Messages</h1>
+                                <Link to={'/message'} className="text-start mx-2 font-semibold text-lg md:text-2xl my-3">Messages</Link>
                                 <div class="my-3">
                                     <form>
                                         <div class="relative w-full">
@@ -184,10 +183,14 @@ const MessageIndex = ({ isMobile }) => {
                                                                 <img src={avatars[key] || avatar} className="flex-none w-12 h-12 rounded-full" alt="" />
                                                                 <div className="m-auto">
                                                                     <span className="block text-sm text-gray-700 font-semibold">{key}</span>
-                                                                    <p>{lastMessage}</p>
                                                                 </div>
                                                             </div>
                                                         </button>
+                                                        {lastMessage > 0 && (
+                                                            <div className="m-auto">
+                                                                <p className="bg-blue-600 px-2.5 py-0.5 rounded-full text-white">{lastMessage}</p>
+                                                            </div>
+                                                        )}
                                                         <button className="m-auto" onClick={() => openModal(key)}>
                                                             <PiDotsThreeOutlineFill className="text-gray-500 w-6 h-6 p-0.5 mr-2 hover:bg-gray-100 rounded-sm" />
                                                         </button>

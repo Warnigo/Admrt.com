@@ -38,8 +38,6 @@ const ImageCropper = ({ closeModal, updateAvatar }) => {
 
             await uploadBytes(storageRef, blob);
 
-            console.log("Image uploaded successfully!");
-
             const fullPath = `users/${userId}/images/${filename}`;
             updateAvatar(fullPath);
             closeModal();
