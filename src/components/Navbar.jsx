@@ -27,6 +27,8 @@ function StickyNavbar({ authenticated }) {
   const [comeRequest, setComeRequest] = useState(null)
   const [hasFalseRequests, setHasFalseRequests] = useState(false);
   const [lookingUserId, setLookingUserId] = useState(null);
+  const [unreadMessageCount, setUnreadMessageCount] = useState(1);
+
 
   useEffect(() => {
     const unsebscribe = auth.onAuthStateChanged(async (user) => {
@@ -100,17 +102,17 @@ function StickyNavbar({ authenticated }) {
     window.location.reload();
   }
 
-  const handleLookForUserId = async(username) => {
-    try{
+  const handleLookForUserId = async (username) => {
+    try {
       const lookForRef = await getDoc(doc(db, 'search', username));
-      if(lookForRef.exists()){
+      if (lookForRef.exists()) {
         const data = lookForRef.data();
         setLookingUserId(data.userId);
       }
-    }catch(err){
+    } catch (err) {
       console.error(err);
     }
-  } 
+  }
 
   const handleChek = async (username) => {
     handleLookForUserId(username);
@@ -154,7 +156,6 @@ function StickyNavbar({ authenticated }) {
       window.location.reload()
     }
   };
-
 
   const ghostUser = (
     <div className="flex">
@@ -290,7 +291,7 @@ function StickyNavbar({ authenticated }) {
             onClick={() => setModal(!modal)}
             onMouseLeave={() => setModal(false)}
           >
-            {comeRequest && Object.keys(comeRequest).some(username => !comeRequest[username]) ? (
+            {comeRequest && Object.keys(comeRequest).some(username => !comeRequest[username]) && unreadMessageCount > 0 ? (
               <img src={RedNotification} alt="" className="w-7 " />
             ) : (
               <img src={Notification} alt="" className="w-7 " />
@@ -302,8 +303,13 @@ function StickyNavbar({ authenticated }) {
                   <p className="text-xs text-blue-500 cursor-pointer hover:bg-gray-300 p-1 rounded-sm">Accept all</p>
                 </div>
                 <div>
+                  <div className="flex justify-between mx-3">
+                    <h1 className="text-sm">You have received {unreadMessageCount} message</h1>
+                    <img src={Close} alt="" className="hover:bg-gray-100 " />
+                  </div>
                   {comeRequest && Object.keys(comeRequest).length > 0 && (
                     <div className="py-3">
+
                       {Object.entries(comeRequest).map(([username, requestStatus]) => {
                         if (!requestStatus) {
                           return (

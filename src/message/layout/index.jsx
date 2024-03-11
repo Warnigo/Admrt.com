@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { auth, db, deleteMessageFromFirebase, saveMessageToFirebase, usersCollection } from '../../firebase/firebase'
-import { collection, doc, getDoc, getDocs, writeBatch } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc, updateDoc, writeBatch } from "firebase/firestore";
 import { Link, Outlet, useParams, useLocation } from "react-router-dom";
 import { avatar } from '../../modul/main'
 import svg2 from '../../image/search 1.svg'
@@ -19,7 +19,7 @@ const MessageIndex = ({ isMobile }) => {
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [emojiModal, setEmojiModal] = useState(false);
     const [findData, setFindData] = useState(null)
-    const [lastMessage, setLastMessage] = useState();
+    const [lastMessages, setLastMessages] = useState({});
     const { userId } = useParams();
     const location = useLocation();
     const verifyPath = location.pathname === '/message';
@@ -139,6 +139,53 @@ const MessageIndex = ({ isMobile }) => {
         return () => clearInterval(interval);
     }, [location.pathname, userId, getFirebaseSendSeenTrue]);
 
+    const calculateLastMessage = useCallback(async (userId) => {
+        try {
+            const messagesRef = collection(db, `messages/${userId}/${meId}`);
+            const messagesSnapshot = await getDocs(messagesRef);
+            let lastMessageCount = 0;
+
+            messagesSnapshot.forEach((doc) => {
+                const messageData = doc.data();
+                if (!messageData.seen) {
+                    lastMessageCount++;
+                }
+            });
+
+            return lastMessageCount;
+        } catch (error) {
+            console.error('Error calculating last message count:', error);
+            return 0;
+        }
+    }, [meId]);
+
+    useEffect(() => {
+        const calculateLastMessages = async () => {
+            const lastMessagesObj = {};
+            await Promise.all(Object.keys(verifyRequest).map(async (key) => {
+                const count = await calculateLastMessage(userUid[key]);
+                lastMessagesObj[key] = count;
+            }));
+            setLastMessages(lastMessagesObj);
+            const values = Object.values(lastMessagesObj);
+            const sumArray = [];
+
+            values.forEach(async(n, index) => {
+                if (index > 0) {
+                    const sum = n + values[index - 1];
+                    sumArray.push(sum);
+                    const userRef = doc(usersCollection, meId);
+                    await setDoc(userRef, { unReadMessages: sum }, { merge: true });
+                }
+            });
+        };
+        const interval = setInterval(() => {
+            calculateLastMessages();
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [verifyRequest, userUid, calculateLastMessage, meId]);
+
     return (
         <div className="flex h-[88vh]  max-w-screen-2xl mx-auto antialiased text-gray-800">
             <div className="flex flex-row h-full w-full overflow-x-hidden  mx-3">
@@ -186,9 +233,9 @@ const MessageIndex = ({ isMobile }) => {
                                                                 </div>
                                                             </div>
                                                         </button>
-                                                        {lastMessage > 0 && (
+                                                        {lastMessages[key] > 0 && (
                                                             <div className="m-auto">
-                                                                <p className="bg-blue-600 px-2.5 py-0.5 rounded-full text-white">{lastMessage}</p>
+                                                                <p className="bg-red-600 px-2.5 py-0.5 rounded-full text-white">{lastMessages[key]}</p>
                                                             </div>
                                                         )}
                                                         <button className="m-auto" onClick={() => openModal(key)}>
@@ -204,7 +251,6 @@ const MessageIndex = ({ isMobile }) => {
                                                             )}
                                                         </div>
                                                     )}
-
                                                 </div>
                                             ))}
                                         </div>

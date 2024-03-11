@@ -43,11 +43,13 @@ function Login() {
 
     if (!/\S+@\S+\.\S+/.test(email)) {
       setEmailError("Invalid email address");
+      setLoading(false)
       return;
     }
 
     if (password.length < 6) {
       setPasswordError("Password must be at least 6 characters");
+      setLoading(false)
       return;
     }
 
