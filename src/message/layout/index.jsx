@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { auth, db, deleteMessageFromFirebase, saveMessageToFirebase, usersCollection } from '../../firebase/firebase'
-import { collection, doc, getDoc, getDocs, setDoc, updateDoc, writeBatch } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc, writeBatch } from "firebase/firestore";
 import { Link, Outlet, useParams, useLocation } from "react-router-dom";
 import { avatar } from '../../modul/main'
 import svg2 from '../../image/search 1.svg'
@@ -166,26 +166,39 @@ const MessageIndex = ({ isMobile }) => {
                 const count = await calculateLastMessage(userUid[key]);
                 lastMessagesObj[key] = count;
             }));
+    
+            
+    
             setLastMessages(lastMessagesObj);
-            const values = Object.values(lastMessagesObj);
-            const sumArray = [];
-
-            values.forEach(async(n, index) => {
-                if (index > 0) {
-                    const sum = n + values[index - 1];
-                    sumArray.push(sum);
-                    const userRef = doc(usersCollection, meId);
-                    await setDoc(userRef, { unReadMessages: sum }, { merge: true });
-                }
-            });
         };
+    
         const interval = setInterval(() => {
             calculateLastMessages();
         }, 2000);
-
+    
         return () => clearInterval(interval);
     }, [verifyRequest, userUid, calculateLastMessage, meId]);
 
+    useEffect(() => {
+        const handleSeens = async () => {
+            let sum = 0;
+            Object.values(lastMessages).forEach((value) => {
+                sum += value;
+            });
+    
+            if (!usersCollection || !meId) {
+                console.error("usersCollection or meId is not defined.");
+                return;
+            }
+    
+            const daf = doc(usersCollection, meId);
+            await setDoc(daf, { seens: sum }, { merge: true });
+        }
+    
+        return () => handleSeens();
+    }, [lastMessages, meId]);
+    
+    
     return (
         <div className="flex h-[88vh]  max-w-screen-2xl mx-auto antialiased text-gray-800">
             <div className="flex flex-row h-full w-full overflow-x-hidden  mx-3">

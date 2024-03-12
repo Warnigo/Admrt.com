@@ -69,23 +69,23 @@ export async function deleteMessageFromFirebase(senderId, receiverId) {
 
 export async function saveMessageToFirebase(senderId, receiverId, message) {
   try {
-      const messagesCollectionRef = collection(db, `messages/${senderId}/${receiverId}`);
-      await addDoc(messagesCollectionRef, { senderId, receiverId, message, timestamp: new Date(), seen: false });
+    const messagesCollectionRef = collection(db, `messages/${senderId}/${receiverId}`);
+    await addDoc(messagesCollectionRef, { senderId, receiverId, message, timestamp: new Date(), seen: false });
   } catch (error) {
-      console.error('Error sending message:', error);
-      throw error;
+    console.error('Error sending message:', error);
+    throw error;
   }
 }
 
 export async function getMessagesFromFirebase(senderId, receiverId) {
   try {
-      const messagesCollectionRef = collection(db, `messages/${senderId}/${receiverId}`);
-      const q = query(messagesCollectionRef, orderBy('timestamp'));
-      const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const messagesCollectionRef = collection(db, `messages/${senderId}/${receiverId}`);
+    const q = query(messagesCollectionRef, orderBy('timestamp'));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
-      console.error('Error getting messages:', error);
-      throw error;
+    console.error('Error getting messages:', error);
+    throw error;
   }
 }
 
@@ -95,17 +95,6 @@ export async function saveUserDataToFirebase(userId, userData) {
     await setDoc(userRef, userData, { merge: true });
   } catch (error) {
     console.error('Error saving user data:', error);
-    throw error;
-  }
-}
-
-export async function saveFeedbackToFirebase(userId, feedbackData) {
-  try {
-    const feedbackCollectionRef = collection(db, 'feedback', userId);
-    const docRef = await addDoc(feedbackCollectionRef, feedbackData);
-    console.log('Feedback added with ID: ', docRef.id);
-  } catch (error) {
-    console.error('Error saving feedback data:', error);
     throw error;
   }
 }

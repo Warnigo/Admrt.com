@@ -27,8 +27,7 @@ function StickyNavbar({ authenticated }) {
   const [comeRequest, setComeRequest] = useState(null)
   const [hasFalseRequests, setHasFalseRequests] = useState(false);
   const [lookingUserId, setLookingUserId] = useState(null);
-  const [unreadMessageCount, setUnreadMessageCount] = useState(1);
-
+  const [unreadMessageCount, setUnreadMessageCount] = useState(0);
 
   useEffect(() => {
     const unsebscribe = auth.onAuthStateChanged(async (user) => {
@@ -46,6 +45,7 @@ function StickyNavbar({ authenticated }) {
             setSplit(splitCall);
             setComeRequest(comeRequestCall);
             setHasFalseRequests(Object.values(comeRequestCall).includes(false));
+            setUnreadMessageCount(userData.seens);
           }
         } catch (error) {
           console.error('Error getting user data:', error);
@@ -156,6 +156,11 @@ function StickyNavbar({ authenticated }) {
       window.location.reload()
     }
   };
+
+  const clickCCloseSeen = async () => {
+    const daf = doc(usersCollection, userId);
+    await updateDoc(daf, { seens: 0 });
+  }
 
   const ghostUser = (
     <div className="flex">
@@ -298,14 +303,15 @@ function StickyNavbar({ authenticated }) {
             )}
             {modal && (
               <div className='absolute shadow-lg bg-gray-100 py-0 z-[1000] border rounded-lg w-[300px]'>
-                <div className="flex items-center justify-between my-2 px-4 border-b">
-                  <p className="text-xs text-blue-500 cursor-pointer hover:bg-gray-300 p-1 rounded-sm">Clear all</p>
-                  <p className="text-xs text-blue-500 cursor-pointer hover:bg-gray-300 p-1 rounded-sm">Accept all</p>
+                <div className="flex justify-center items-center my-2 px-4 border-b">
+                  <p className="text-xs text-blue-500 cursor-pointer p-1 rounded-sm">Notification</p>
                 </div>
                 <div>
                   <div className="flex justify-between mx-3">
                     <h1 className="text-sm">You have received {unreadMessageCount} message</h1>
-                    <img src={Close} alt="" className="hover:bg-gray-100 " />
+                    <button onClick={clickCCloseSeen}>
+                      <img src={Close} alt="" className="hover:bg-gray-100 " />
+                    </button>
                   </div>
                   {comeRequest && Object.keys(comeRequest).length > 0 && (
                     <div className="py-3">
