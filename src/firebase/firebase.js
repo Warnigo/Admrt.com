@@ -6,7 +6,7 @@ import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAkkVy0stmZ5GPpi1AIUGoFnd1wIDHJH70",
-  authDomain: "admrt-com.firebaseapp.com",
+  authDomain: "admrt.com",
   projectId: "admrt-com",
   storageBucket: "admrt-com.appspot.com",
   messagingSenderId: "12110099340",
