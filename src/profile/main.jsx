@@ -1,24 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import 'flowbite';
-import openSvg from '../../image/chevron-down (1) 2.svg'
-import closed from '../../image/chevron-down (1) 1.svg'
-import paypalSvg from '../../svgs/payment/payment.svg'
-import wiseSvg from '../../svgs/payment/wise.svg'
-import zelleSvg from '../../svgs/payment/zille.svg'
-import venmoSvg from '../../svgs/payment/venmo.svg'
-import payoneerSvg from '../../svgs/payment/payoneer.svg'
-import ModalDelete from '../../Modals/ModalDelete';
-import EditBackground from "../../Layout/context/editeBackground";
-import EditeUser from "../../Layout/context/user";
-import IntoDescription from "../../Layout/context/intoDescription";
-import { auth, usersCollection } from "../../firebase/firebase";
-import AboutHim from '../../Layout/context/aboutHim/aboutHim';
-import SocialMedia from '../../Layout/context/socialMedia/socialMedia';
+import openSvg from '../image/chevron-down (1) 2.svg'
+import closed from '../image/chevron-down (1) 1.svg'
+import paypalSvg from '../svgs/payment/payment.svg'
+import wiseSvg from '../svgs/payment/wise.svg'
+import zelleSvg from '../svgs/payment/zille.svg'
+import venmoSvg from '../svgs/payment/venmo.svg'
+import payoneerSvg from '../svgs/payment/payoneer.svg'
+import ModalDelete from '../Modals/ModalDelete';
+import EditBackground from "../Layout/context/editeBackground";
+import EditeUser from "../Layout/context/user";
+import IntoDescription from "../Layout/context/intoDescription";
+import { auth, usersCollection } from "../firebase/firebase";
+import AboutHim from '../Layout/context/aboutHim/aboutHim';
+import SocialMedia from '../Layout/context/socialMedia/socialMedia';
 import { doc, getDoc } from 'firebase/firestore';
-import shape from '../../svgs/about/Shape.svg';
-import Portfolio from '../../Layout/context/portfolio/portfolio';
+import shape from '../svgs/about/Shape.svg';
+import Portfolio from '../Layout/context/portfolio/portfolio';
 import { VscEmptyWindow } from "react-icons/vsc";
-import { Specification } from '../../Layout/context/specification';
+import { Specification } from '../Layout/context/specification';
 
 function SiplePages() {
     const [userId, setUserId] = useState(null);

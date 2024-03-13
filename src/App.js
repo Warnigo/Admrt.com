@@ -11,7 +11,7 @@ import Main from "./components/Main";
 import './App.css'
 import About from "./components/About";
 import Contact from "./components/Contact";
-import Profile from "./Layout/AuthPage/Profile";
+import Profile from "./profile/main";
 import { auth } from "./firebase/firebase";
 import { NotFound } from "./404/404";
 import Settings from "./components/Settings/DateBirthday/Settings";
