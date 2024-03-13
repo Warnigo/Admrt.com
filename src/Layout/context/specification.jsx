@@ -98,7 +98,6 @@ export const Specification = () => {
         }
     };
 
-
     const handleRemoveExperitise = (index) => {
         const updatedExperitise = [...formData.experitise];
         updatedExperitise.splice(index, 1);
