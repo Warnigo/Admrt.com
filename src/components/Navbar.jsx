@@ -296,7 +296,7 @@ function StickyNavbar({ authenticated }) {
             onClick={() => setModal(!modal)}
             onMouseLeave={() => setModal(false)}
           >
-            {comeRequest && Object.keys(comeRequest).some(username => !comeRequest[username]) && unreadMessageCount > 0 ? (
+            {comeRequest && unreadMessageCount > 0 && Object.keys(comeRequest).some(username => !comeRequest[username]) ? (
               <img src={RedNotification} alt="" className="w-7 " />
             ) : (
               <img src={Notification} alt="" className="w-7 " />
