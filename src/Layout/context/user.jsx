@@ -185,14 +185,14 @@ const EditeUser = () => {
               </div>
               <div className="relative p-2 md:p-6 justify-center items-start">
                 <div>
-                  <h1 className='text-center mb-6 text-2xl md:text-3xl font-semibold'>Are you sure to added Experitise</h1>
+                  <h1 className='text-center mb-6 text-2xl md:text-3xl font-semibold'>Add topics you speak about or have advertises in the past</h1>
                 </div>
                 <div className="">
                   <div className="">
                     <div className="mb-4">
                       <div className="flex mt-4">
                         <input className="border rounded-lg w-full py-2 px-3 mr-1 text-grey-darker" placeholder="Add social" value={todoText} onChange={(e) => setTodoText(e.target.value)} />
-                        <button type="submit" className={`p-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 w-20 ${todos.length >= 3 ? 'cursor-not-allowed opacity-50' : ''}`} onClick={handleAddTodo} disabled={todos.length >= 3}>Add</button>
+                        <button type="submit" className={`p-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 w-20 ${todos.length >= 10 ? 'cursor-not-allowed opacity-50' : ''}`} onClick={handleAddTodo} disabled={todos.length >= 3}>Add</button>
                       </div>
                     </div>
                     <div>
@@ -213,6 +213,7 @@ const EditeUser = () => {
                   <h1 className='text-sm w-full font-medium text-blue-800'><span className='text-sm text-gray-500'>Experitise: </span>{experitise.join(', ') || "none"}</h1>
                 </div>
               </div>
+              <p className="text-center">Maximum ten topics may be added</p>
               <div className="flex items-center justify-center p-2 md:p-6 border-t border-solid gap-4 border-blue Gray-200 rounded-b">
                 <button className="bg-gray-700 text-white active:bg-gray-600 font-bold uppercase text-xs md:text-sm p-2 md:px-8 md:py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                   type="button"
