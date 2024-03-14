@@ -87,7 +87,7 @@ const ModalAddSocialMedia = ({ onSelectSocialMedia }) => {
                                         onClick={handleLinkSocialMedia}
                                     >
                                         <h1 className='text-sm'>
-                                            Link Social Media
+                                            Add Media
                                         </h1>
                                     </button>
                                 </div>

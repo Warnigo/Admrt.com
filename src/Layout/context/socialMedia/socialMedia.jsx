@@ -9,7 +9,6 @@ import svg_youtube from '../../../svgs/social-media/Rectangle 6593.svg';
 import svg_linkedin from '../../../svgs/social-media/Rectangle 6594.svg';
 import ModalAddSocialMedia from '../../../Modals/ModalAddSocialMedia';
 import ModalDelete from '../../../Modals/ModalDelete';
-import AboutHim from './aboutHim';
 import CheckMedia from './checkMedia';
 import { auth, usersCollection } from '../../../firebase/firebase'
 import { doc, getDoc } from 'firebase/firestore';
@@ -113,7 +112,6 @@ const SocialMedia = () => {
                         </div>
                     </div>
                 ))}
-                <AboutHim />
             </div>
         </div>
     );
