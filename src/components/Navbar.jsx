@@ -249,7 +249,6 @@ function StickyNavbar({ authenticated }) {
   const getUser = (
     <div className="flex items-center gap-2">
       <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center ml-8">
-        <Search />
         <Typography
           as="li"
           variant="small"
@@ -257,6 +256,18 @@ function StickyNavbar({ authenticated }) {
         >
           <Link to="/" className="flex items-center hover:text-blue-700 hover:duration-500 ">
             <h1>Home</h1>
+          </Link>
+        </Typography>
+
+        <Search />
+
+        <Typography
+          as="li"
+          variant="small"
+          className="p-1 text-black text-lg font-normal mr-3"
+        >
+          <Link to="/filter" className="flex items-center hover:text-blue-700 hover:duration-500 ">
+            <h1>Find adspaces</h1>
           </Link>
         </Typography>
         <Typography

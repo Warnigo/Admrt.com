@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { auth, db } from '../../firebase/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import search from '../../Layout/AuthPage/images/search-normal.svg';
 import { Link } from 'react-router-dom';
 
 const Search = () => {
+  const inputRef = useRef(null);
   const [userId, setUserId] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [usersData, setUsersData] = useState([]);
@@ -41,11 +42,19 @@ const Search = () => {
     user.id.toLowerCase().includes(searchValue.toLowerCase()) && user.userId !== userId
   );
 
+  const handleFocusLost = () => {
+    if (!document.activeElement || document.activeElement !== inputRef.current) {
+      setSearchValue('');
+    }
+  };
+
   return (
     <div className="relative mr-3">
       <div className="relative w-full lg:w-72">
         <input
+          ref={inputRef}
           value={searchValue}
+          onBlur={handleFocusLost}
           onChange={(e) => setSearchValue(e.target.value)}
           className="p-3 w-full h-10 z-20 text-sm text-gray-900 bg-blue-50 rounded-full border outline-none focus:border-blue-500"
           placeholder="Search"
