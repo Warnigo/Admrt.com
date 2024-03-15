@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { VscChromeClose, VscEmptyWindow } from "react-icons/vsc";
 import { auth, db, deletePortfolioFirebase, savePortfolioFirebase } from '../../../firebase/firebase'
@@ -17,6 +17,10 @@ const Portfolio = () => {
   const [viewModal, setViewModal] = useState();
   const [selectPortfolio, setSeletPortfolio] = useState();
   const [Id, setId] = useState()
+  const [IsHoverdelete, setIhoverdelete] = useState(false);
+  const [deleteSelect, setDeleteSelect] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [checkId, setCheckId] = useState([])
 
   const navigate = useNavigate();
 
@@ -32,23 +36,23 @@ const Portfolio = () => {
     return () => unsubscribe()
   }, [userId])
 
-  useEffect(() => {
-    const fetchPortfolios = async () => {
-      try {
-        const portfoliosRef = collection(db, 'portfolio', userId, "portfolios");
-        const snapshot = await getDocs(portfoliosRef);
-        const portfolioData = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setPortfolios(portfolioData);
-      } catch (error) {
-        console.error('Error fetching portfolios:', error);
-      }
-    };
+  const fetchPortfolios = useCallback(async () => {
+    try {
+      const portfoliosRef = collection(db, 'portfolio', userId, "portfolios");
+      const snapshot = await getDocs(portfoliosRef);
+      const portfolioData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setPortfolios(portfolioData);
+    } catch (error) {
+      console.error('Error fetching portfolios:', error);
+    }
+  }, [userId])
 
+  useEffect(() => {
     fetchPortfolios();
-  }, [userId]);
+  }, [fetchPortfolios]);
 
 
   const handleNextButton = async () => {
@@ -102,13 +106,70 @@ const Portfolio = () => {
       const updatedPortfolios = portfolios.filter(portfolio => portfolio.id !== portfolioId);
       setPortfolios(updatedPortfolios);
       setViewModal(false);
+
+      const updatedCheckIds = checkId.filter(id => id !== portfolioId);
+      setCheckId(updatedCheckIds);
     } catch (error) {
       console.error('Error deleting portfolio:', error);
     }
   }
 
+  const handleDeletePortfolioOutside = async () => {
+    try {
+      for (const portfolioId of checkId) {
+        await deletePortfolioFirebase(userId, portfolioId);
+      }
+      setCheckId([]);
+      setDeleteModal(false);
+      setDeleteSelect(false);
+      fetchPortfolios()
+    } catch (error) {
+      console.error('Error deleting portfolios:', error);
+    }
+  }
+
   return (
     <div>
+      {deleteModal && (
+        <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-black bg-opacity-20">
+          <div className="relative w-[80%]  md:w-1/3 mx-auto">
+            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className='px-3 pt-3 rounded-full flex justify-end' onClick={() => setDeleteModal(false)}>
+                <VscChromeClose className=' w-6 h-6 p-1 rounded-full text-white bg-gray-400 cursor-pointer' />
+              </div>
+              <div className="relative p-2 md:p-6  flex-auto flex justify-center items-start">
+                <div>
+                  <h1 className='text-center mb-6 text-2xl md:text-3xl font-semibold'>Are you sure to Delete?</h1>
+                  <h1 className='text-center my-3'>This action will not be reverse-able to make sure to do this delete action.</h1>
+                </div>
+              </div>
+              <div>
+              </div>
+              <div className="flex items-center justify-center p-2 md:p-6 border-t border-solid gap-4 border-blue Gray-200 rounded-b">
+                <button
+                  className="bg-gray-500 text-white active:bg-gray-600 font-bold uppercase text-xs md:text-sm p-2 md:px-8 md:py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  type="button"
+                  onClick={() => {
+                    setDeleteModal(false);
+                    setDeleteSelect(false);
+                  }}
+                >
+                  <h1 className='text-xs md:text-sm'>
+                    Cansel
+                  </h1>
+                </button>
+                <button
+                  className="bg-red-700 text-white active:bg-red-600 font-bold uppercase text-xs md:text-sm p-2 md:px-8 md:py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  type="button"
+                  onClick={handleDeletePortfolioOutside}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {modal && (
         <div>
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none bg-black bg-opacity-25 focus:outline-none">
@@ -190,7 +251,6 @@ const Portfolio = () => {
                     </div>
                   </div>
                 ))}
-
               </div>
             </div>
           </div>
@@ -199,42 +259,100 @@ const Portfolio = () => {
       <div className='border rounded-xl my-4 p-4'>
         <div className='flex justify-between border-b pb-4'>
           <div className='text-2xl font-semibold px-3'>
-            <h1>Portfolio</h1>
+            {deleteSelect ?
+              <div className='flex'>
+                <h1>Delete Portfolio</h1>
+              </div>
+              :
+              <h1>Portfolio</h1>
+            }
           </div>
-          <div className=''>
-            <p className={`absolute text-sm bg-gray-50 border rounded-ls shadow p-2 -mt-11 -ml-9 ${isHovered ? '' : 'hidden'}`}>Add Portfolio</p>
-            {portfolios.length === 6 ? null : (
-              <IoIosAddCircleOutline className='w-8 h-8 mr-1.5 cursor-pointer hover:'
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                onClick={() => setModal(true)}
-              />
+          {deleteSelect ?
+            <div className=''>
+              <button className='mr-2 w-40 border-gray-800 text-gray-800 p-2 border-2 rounded-lg hover:border-black hover:text-black'
+                onClick={() => setDeleteSelect(false)}
+              >
+                Cancel
+              </button>
+              <button className='w-40 bg-red-500 p-2 border-red-600 border-2 rounded-lg text-white hover:border-red-700 hover:bg-red-600'
+                onClick={() => setDeleteModal(true)}
+              >
+                Delete
+              </button>
+            </div>
+            :
+            <div className='flex flex-coll gap-3'>
+              <div className='m-auto cursor-pointer'>
+                {portfolios.length === 0 ? null : (
+                  <MdDelete className='w-6 h-6'
+                    onMouseLeave={() => setIhoverdelete(false)}
+                    onMouseEnter={() => setIhoverdelete(true)}
+                    onClick={() => setDeleteSelect(true)}
+                  />
+                )}
+              </div>
+              <div>
+                <p className={`absolute text-sm bg-gray-50 border rounded-ls shadow p-2 -mt-11 -ml-9 ${isHovered ? '' : 'hidden'}`}>Add Portfolio</p>
+                {portfolios.length === 6 ? null : (
+                  <IoIosAddCircleOutline className='w-8 h-8 mr-1.5 cursor-pointer'
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    onClick={() => setModal(true)}
+                  />
+                )}
+              </div>
+            </div>
+          }
+        </div>
+        <div>
+          {deleteSelect &&
+            <div className='flex justify-center'>
+              <p className=' font-normal mt-2.5'>Select the portfolio you want to delete</p>
+            </div>
+          }
+          <div className='flex'>
+            {portfolios.length > 0 ? (
+              portfolios.map(portfolio => (
+                <div>
+                  {deleteSelect &&
+                    <div className='flex justify-center mt-2'>
+                      <input type="checkbox"
+                        className='w-4 h-4 cursor-pointer'
+                        onChange={(e) => {
+                          const checkedId = e.target.value;
+                          if (e.target.checked) {
+                            setCheckId(prevState => [...prevState, checkedId]);
+                          } else {
+                            const updatedCheckIds = checkId.filter(id => id !== checkedId);
+                            setCheckId(updatedCheckIds);
+                          }
+                        }}
+                        value={portfolio.id}
+                        checked={checkId.includes(portfolio.id)}
+                      />
+                    </div>
+                  }
+                  <div className='p-1 border rounded-lg bg-blue-50 border-blue-400 m-2 cursor-pointer'
+                    onClick={() => deleteSelect ? null : handleViewModalOpen(portfolio.id)}
+                  >
+                    <div key={portfolio.id}>
+                      <h1 className='font-semibold text-sm text-center'>{portfolio.portfolioTitle}</h1>
+                      <img src={portfolio.image} alt={portfolio.portfolioTitle} className='w-44 h-56 object-cover rounded-lg' />
+                      <p className={`text-gray-500 text-sm text-center ${portfolio.description?.length > 24 ? "cursor-pointer" : ""}`}>
+                        {portfolio.description?.slice(0, 24)}{portfolio.description?.length > 24 ? '...' : ''}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className='m-auto text-center py-3'>
+                <h1 className='text-gray-500 font-semibold text-sm'>Empty portfolio</h1>
+                <p className='text-gray-500 text-sm'>You haven't added a portfolio yet! Please <span onClick={() => setModal(true)} className='text-blue-700 font-semibold text-sm hover:text-blue-800 hover:border-b border-gray-400 cursor-pointer'>add portfolio</span></p>
+                <VscEmptyWindow className='w-32 h-32 text-gray-300 m-auto' />
+              </div>
             )}
           </div>
-        </div>
-        <div className='flex'>
-          {portfolios.length > 0 ? (
-            portfolios.map(portfolio => (
-              <div className='p-1 border rounded-lg bg-blue-50 border-blue-400 m-2 cursor-pointer'
-                onClick={() => handleViewModalOpen(portfolio.id)}
-              >
-                <div key={portfolio.id}>
-                  <h1 className='font-semibold text-sm text-center'>{portfolio.portfolioTitle}</h1>
-                  <img src={portfolio.image} alt="" className='w-44 h-56 object-cover rounded-lg' />
-                  <p className={`text-gray-500 text-sm text-center ${portfolio.description?.length > 24 ? "cursor-pointer" : ""}`}>
-                    {portfolio.description?.slice(0, 24)}{portfolio.description?.length > 24 ? '...' : ''}
-                  </p>
-
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className='m-auto text-center py-3'>
-              <h1 className='text-gray-500 font-semibold text-sm'>Empty portfolio</h1>
-              <p className='text-gray-500 text-sm'>You haven't added a portfolio yet! Please <span onClick={() => setModal(true)} className='text-blue-700 font-semibold text-sm hover:text-blue-800 hover:border-b border-gray-400 cursor-pointer'>add portfolio</span></p>
-              <VscEmptyWindow className='w-32 h-32 text-gray-300 m-auto' />
-            </div>
-          )}
         </div>
       </div>
     </div>
