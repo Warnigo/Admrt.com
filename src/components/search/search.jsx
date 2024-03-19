@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 const Search = () => {
   const inputRef = useRef(null);
+  const dropdownRef = useRef(null);
   const [userId, setUserId] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [usersData, setUsersData] = useState([]);
@@ -42,11 +43,21 @@ const Search = () => {
     user.id.toLowerCase().includes(searchValue.toLowerCase()) && user.userId !== userId
   );
 
-  const handleFocusLost = () => {
-    if (!document.activeElement || document.activeElement !== inputRef.current) {
-      setSearchValue('');
+  const handleMouseDown = (event) => {
+    if (inputRef.current && dropdownRef.current) {
+      if (!inputRef.current.contains(event.target) && !dropdownRef.current.contains(event.target)) {
+        setSearchValue('');
+      }
     }
   };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleMouseDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown);
+    };
+  }, []);
 
   return (
     <div className="relative mr-3">
@@ -54,7 +65,6 @@ const Search = () => {
         <input
           ref={inputRef}
           value={searchValue}
-          onBlur={handleFocusLost}
           onChange={(e) => setSearchValue(e.target.value)}
           className="p-3 w-full h-10 z-20 text-sm text-gray-900 bg-blue-50 rounded-full border outline-none focus:border-blue-500"
           placeholder="Search"
@@ -65,12 +75,12 @@ const Search = () => {
         </div>
       </div>
       {searchValue && filteredUsers.length === 0 && (
-        <div className="absolute mt-2 w-full bg-white border rounded-md shadow-lg">
+        <div ref={dropdownRef} className="absolute mt-2 w-full bg-white border rounded-md shadow-lg">
           <p className="py-2 px-4 text-black">User not found</p>
         </div>
       )}
       {searchValue && filteredUsers.length > 0 && (
-        <div className="absolute mt-2 w-full bg-white border rounded-md shadow-lg">
+        <div ref={dropdownRef} className="absolute mt-2 w-full bg-white border rounded-md shadow-lg">
           <ul className='m-1 border border-gray-300 rounded-sm'>
             {filteredUsers.map((user, index) => (
               <Link to={`/profile/${user.split}/${user.userId}`} key={index} onClick={() => setSearchValue('')}>
