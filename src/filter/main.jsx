@@ -102,29 +102,29 @@ const MainFilter = () => {
           </div>
           <div className="mt-5">
             <div>
-              <h1>Type of AdSpace</h1>
+              <h1 className='font-medium'>Type of AdSpace</h1>
               <div className='flex justify-between'>
-                <div className='flex gap-5'>
+                <div className='flex gap-5 mt-4'>
                   <div class="flex font-medium text-gray-700 ">
-                    <input class="accent-blue-600 peer" type="checkbox" name="youtube" id="youtube" checked={filterOptions.mediaFilters.youtube} onChange={handleInputChange} />
+                    <input class="accent-blue-600 peer mt-1.5" type="checkbox" name="youtube" id="youtube" checked={filterOptions.mediaFilters.youtube} onChange={handleInputChange} />
                     <label class="text-gray-900 cursor-pointer peer-checked:border-blue-700 peer-checked:text-black" for="youtube">
                       <h1 class="text-sm md:text-base md:text-start pl-1 md:pl-3 mt-1 md:mt-0.5">YouTube</h1>
                     </label>
                   </div>
                   <div class="flex font-medium text-gray-700 ">
-                    <input class="accent-blue-600 peer" type="checkbox" name="tiktok" id="tiktok" checked={filterOptions.mediaFilters.tiktok} onChange={handleInputChange} />
+                    <input class="accent-blue-600 peer mt-1.5" type="checkbox" name="tiktok" id="tiktok" checked={filterOptions.mediaFilters.tiktok} onChange={handleInputChange} />
                     <label class="text-gray-900 cursor-pointer peer-checked:border-blue-700 peer-checked:text-black" for="tiktok">
                       <h1 class="text-sm md:text-base md:text-start pl-1 md:pl-3 mt-1 md:mt-0.5">TikTok</h1>
                     </label>
                   </div>
                   <div class="flex font-medium text-gray-700 ">
-                    <input class="accent-blue-600 peer" type="checkbox" name="instagram" id="instagram" checked={filterOptions.mediaFilters.instagram} onChange={handleInputChange} />
+                    <input class="accent-blue-600 peer mt-1.5" type="checkbox" name="instagram" id="instagram" checked={filterOptions.mediaFilters.instagram} onChange={handleInputChange} />
                     <label class="text-gray-900 cursor-pointer peer-checked:border-blue-700 peer-checked:text-black" for="instagram">
                       <h1 class="text-sm md:text-base md:text-start pl-1 md:pl-3 mt-1 md:mt-0.5">Instagram</h1>
                     </label>
                   </div>
                   <div class="flex font-medium text-gray-700 ">
-                    <input class="accent-blue-600 peer" type="checkbox" name="facebook" id="facebook" checked={filterOptions.mediaFilters.facebook} onChange={handleInputChange} />
+                    <input class="accent-blue-600 peer mt-1.5" type="checkbox" name="facebook" id="facebook" checked={filterOptions.mediaFilters.facebook} onChange={handleInputChange} />
                     <label class="text-gray-900 cursor-pointer peer-checked:border-blue-700 peer-checked:text-black" for="facebook">
                       <h1 class="text-sm md:text-base md:text-start pl-1 md:pl-3 mt-1 md:mt-0.5">Facebook</h1>
                     </label>

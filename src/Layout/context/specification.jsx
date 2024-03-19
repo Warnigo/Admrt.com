@@ -141,17 +141,7 @@ export const Specification = () => {
                             </div>
                         }
                         <ul className="menu gap-5">
-                            <li className="menu-item flex justify-between">
-                                <div
-                                    className="flex justify-center items-center text-xs md:text-sm md:font-semibold text-gray-400">
-                                    <img className='h-6 my-2 mr-1' src={targetSvg} alt='' />
-                                    <h1>Targeted Audience:</h1>
-                                </div>
-                                <div
-                                    className='text-xs md:text-sm md:font-semibold text-[#2B59FF] flex justify-center items-center  gap-4'>
-                                    <h1>Age {formData.age} ({formData.gender || 'none'})</h1>
-                                </div>
-                            </li>
+                           
                             <li className="menu-item flex justify-between">
                                 <div
                                     className="flex justify-center items-center text-xs md:text-sm md:font-semibold text-gray-400">
@@ -220,28 +210,7 @@ export const Specification = () => {
                             </div>
                             <form onSubmit={handleSaveDatabase}>
                                 <div className='mx-8 mt-5'>
-                                    <div className='flex justify-between gap-4 m-1'>
-                                        <div className='w-5/6'>
-                                            <label className=''>Your age</label>
-                                            <input type="number"
-                                                name="age"
-                                                className='border rounded-lg w-full p-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
-                                                value={formData.age}
-                                                onChange={handleChange}
-                                            />
-                                        </div>
-                                        <div>
-                                            Garden
-                                            <select className='w-full border m-auto p-2 rounded-lg'
-                                                name="gender"
-                                                value={formData.gender}
-                                                onChange={handleChange}
-                                            >
-                                                <option value="male">Male</option>
-                                                <option value="female">Female</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                
                                     {(formData.experitise || []).map((item, index) => (
                                         <div className='m-1 flex gap-4' key={index}>
                                             <input type="text"

@@ -50,7 +50,7 @@ const Search = () => {
 
   return (
     <div className="relative mr-3">
-      <div className="relative w-full lg:w-72">
+      <div className="relative w-full  lg:w-72">
         <input
           ref={inputRef}
           value={searchValue}

@@ -88,7 +88,7 @@ function SiplePages() {
                         </div>
                         <Specification />
                         {split === 'adSpaceHost' && <Portfolio />}
-                        {advertiserProfile ? null :
+                        {/* {advertiserProfile ? null :
                             <div className={`md:flex justify-between border py-2 px-3 md:py-4 md:px-7 ${openPayment ? "rounded-t-xl" : "rounded-xl"}`}>
                                 <div className=''>
                                     <button>
@@ -161,7 +161,8 @@ function SiplePages() {
 
                                 </div>
                             </div>
-                        </div>) : null}
+                        </div>)
+                         : null} */}
                     </div>
                     <div class="w-full py-5 max-[1200px]:px-4 px-10 order-1 md:order-2 md:w-1/3">
                         {advertiserProfile ? null :

@@ -36,7 +36,7 @@ const AboutHim = () => {
                 </div>
                 <div className='border'></div>
                 <div className='my-3'>
-                    <h1>Tell potential advertisers more about you.</h1>
+                    <h1>Learn more about them</h1>
                 </div>
                 <div className='border'></div>
             </div>

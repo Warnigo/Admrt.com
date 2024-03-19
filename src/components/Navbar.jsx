@@ -254,7 +254,7 @@ function StickyNavbar({ authenticated }) {
           variant="small"
           className="p-1 text-black text-lg font-normal mr-3"
         >
-          <Link to="/" className="flex items-center hover:text-blue-700 hover:duration-500 ">
+          <Link to="/" className="flex items-center max-[1280px]:text-base hover:text-blue-700 hover:duration-500 ">
             <h1>Home</h1>
           </Link>
         </Typography>
@@ -264,16 +264,16 @@ function StickyNavbar({ authenticated }) {
         <Typography
           as="li"
           variant="small"
-          className="p-1 text-black text-lg font-normal mr-3"
+          className="p-1 text-black max-[1280px]:text-base text-lg font-normal mr-3"
         >
           <Link to="/filter" className="flex items-center hover:text-blue-700 hover:duration-500 ">
             <h1>Find adspaces</h1>
           </Link>
         </Typography>
-        <Typography
+        {/* <Typography
           as="li"
           variant="small"
-          className="p-1 text-black text-lg font-normal  mr-3"
+          className="p-1 text-black max-[1280px]:text-base text-lg font-normal  mr-3"
         >
           <Link to="/about" className="flex items-center hover:text-blue-700 ">
             <h1>About</h1>
@@ -282,16 +282,16 @@ function StickyNavbar({ authenticated }) {
         <Typography
           as="li"
           variant="small"
-          className="p-1 text-black text-lg font-normal  mr-3"
+          className="p-1 text-black max-[1280px]:text-base text-lg font-normal  mr-3"
         >
           <a href="/contact" className="flex items-center hover:text-blue-700 ">
             <h1>Contact</h1>
           </a>
-        </Typography>
+        </Typography> */}
         <Typography
           as="li"
           variant="small"
-          className="p-1 text-black text-lg font-normal"
+          className="p-1 text-black max-[1280px]:text-base text-lg font-normal"
         >
           <Link to={`/message`} className="flex items-center hover:text-blue-700 ">
             <h1>Message</h1>
@@ -381,15 +381,23 @@ function StickyNavbar({ authenticated }) {
           </button>
           {userFullName ? (
             <>
-              <h1 className="text-black text-center p-2">{userFullName}</h1>
-              <img src={down} alt="" className="w-9" />
+              <h1 className="max-[1280px]:hidden text-black text-center p-2">{userFullName}</h1>
+              <img src={down} alt="" className="w-9 max-[1280px]:hidden" />
             </>
           ) : (
             <h1 className="text-black text-center p-2">Please enter name</h1>
           )}
 
         </div>
-        <ul className={`bg-white top-14 right-0 mt-6 space-y-6 lg:absolute lg:border lg:rounded-md lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? '' : 'lg:hidden'}`}>
+        <ul className={`bg-white top-16 mr-4 right-0 mt-6 space-y-6 lg:absolute lg:border lg:rounded-md lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? '' : 'lg:hidden'}`}>
+        {userFullName ? (
+            <>
+              <h1 className="min-[1280px]:hidden text-black text-lg text-center p-2">{userFullName}</h1>
+              <div className="border"></div>
+            </>
+          ) : (
+            <h1 className="text-black text-center p-2">Please enter name</h1>
+          )}
           {navigation.map((item, idx) => (
             <li key={idx}>
               <Link className="block text-gray-600 hover:text-gray-900 lg:hover:bg-gray-50 lg:p-3" to={item.path}>
@@ -397,7 +405,7 @@ function StickyNavbar({ authenticated }) {
               </Link>
             </li>
           ))}
-          <button onClick={handleLogout} className="block w-full text-justify text-gray-600 hover:text-gray-900 border-t py-3 lg:hover:bg-gray-50 lg:p-3">
+          <button onClick={handleLogout} className="block w-full text-justify text-red-600 hover:text-red-500 border-t py-3 lg:hover:bg-red-50 lg:p-3">
             Logout
           </button>
         </ul>
@@ -406,8 +414,9 @@ function StickyNavbar({ authenticated }) {
   );
 
   return (
+    
     <div className="">
-      <div className="max-w-7xl mx-auto ">
+      <div className="max-w-screen-2xl mx-auto ">
         <Navbar className="sticky bg-transpernt border-none backdrop-none backdrop-blur-none shadow-none top-0 z-10 h-max max-w-full rounded-none px-6 py-6 lg:px-6 lg:py-4">
           <div className="flex items-center justify-between text-blue-gray-900">
             <Typography

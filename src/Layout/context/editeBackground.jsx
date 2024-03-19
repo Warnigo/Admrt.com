@@ -120,7 +120,7 @@ const EditBackground = ({split, userId }) => {
                     <div className="flex items-center">
                         <img src={editIcon} alt="Edit" className="mr-1 w-5" />
                         <button onClick={handleEditBackground} className="text-black font-semibold">
-                            Edit Background
+                            Edit Banner
                         </button>
                     </div>
                     <Link to={`/profile/${split}/${userId}`}>

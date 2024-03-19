@@ -60,7 +60,7 @@ const SocialMedia = () => {
                         </div>
                         <div className='border'></div>
                         <div className='my-3'>
-                              <h1>Please select or copy like to get in touch with him. Add them as a friend on social media</h1>
+                              <h1> select or copy like to get in touch with them. Add them as a friend on social media</h1>
                         </div>
                         <div className='border'></div>
                         <div>
