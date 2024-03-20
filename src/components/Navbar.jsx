@@ -270,24 +270,6 @@ function StickyNavbar({ authenticated }) {
             <h1>Find adspaces</h1>
           </Link>
         </Typography>
-        {/* <Typography
-          as="li"
-          variant="small"
-          className="p-1 text-black max-[1280px]:text-base text-lg font-normal  mr-3"
-        >
-          <Link to="/about" className="flex items-center hover:text-blue-700 ">
-            <h1>About</h1>
-          </Link>
-        </Typography>
-        <Typography
-          as="li"
-          variant="small"
-          className="p-1 text-black max-[1280px]:text-base text-lg font-normal  mr-3"
-        >
-          <a href="/contact" className="flex items-center hover:text-blue-700 ">
-            <h1>Contact</h1>
-          </a>
-        </Typography> */}
         <Typography
           as="li"
           variant="small"
@@ -390,7 +372,7 @@ function StickyNavbar({ authenticated }) {
 
         </div>
         <ul className={`bg-white top-16 mr-4 right-0 mt-6 space-y-6 lg:absolute lg:border lg:rounded-md lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? '' : 'lg:hidden'}`}>
-        {userFullName ? (
+          {userFullName ? (
             <>
               <h1 className="min-[1280px]:hidden text-black text-lg text-center p-2">{userFullName}</h1>
               <div className="border"></div>
@@ -414,7 +396,6 @@ function StickyNavbar({ authenticated }) {
   );
 
   return (
-    
     <div className="">
       <div className="max-w-screen-2xl mx-auto ">
         <Navbar className="sticky bg-transpernt border-none backdrop-none backdrop-blur-none shadow-none top-0 z-10 h-max max-w-full rounded-none px-6 py-6 lg:px-6 lg:py-4">

@@ -40,7 +40,7 @@ const Search = () => {
   }, []);
 
   const filteredUsers = usersData.filter(user =>
-    user.id.toLowerCase().includes(searchValue.toLowerCase()) && user.userId !== userId
+    user.id.toLowerCase().includes(searchValue.toLowerCase()) && user.userId !== userId && user.split === 'adSpaceHost'
   );
 
   const handleMouseDown = (event) => {
