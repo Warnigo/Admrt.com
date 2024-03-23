@@ -1,12 +1,14 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from 'firebase/auth';
 import { getFirestore, collection, doc, addDoc, setDoc, query, getDocs, orderBy, deleteDoc } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getDatabase } from 'firebase/database';
 
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyAkkVy0stmZ5GPpi1AIUGoFnd1wIDHJH70",
-  authDomain: "admrt.com",
+  authDomain: "admrt-com.firebaseapp.com",
   projectId: "admrt-com",
   storageBucket: "admrt-com.appspot.com",
   messagingSenderId: "12110099340",
@@ -14,6 +16,13 @@ const firebaseConfig = {
   measurementId: "G-0SXGS2RHVJ"
 };
 
+const firebaseApp = initializeApp(firebaseConfig);
+const provider = new GoogleAuthProvider();
+  
+provider.setCustomParameters({   
+    prompt : "select_account "
+});
+export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();

@@ -4,7 +4,7 @@ import svg3 from './images/ic_google logo (1).svg';
 import svg4 from './images/ic_fb logo.svg';
 import '../style.css'
 import SlideShow from '../SlideShow'
-import { auth, googleProvider, facebookProvider } from '../../firebase/firebase'
+import { auth, facebookProvider, signInWithGooglePopup } from '../../firebase/firebase'
 import { signInWithPopup } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import modal1 from './images/megaphone 1.svg';
@@ -20,7 +20,7 @@ function Register() {
 
   const signInWithGoogle = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      await signInWithGooglePopup();
       navigate("/");
     } catch (error) {
       console.error(error)
