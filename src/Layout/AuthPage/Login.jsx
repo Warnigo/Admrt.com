@@ -4,11 +4,8 @@ import { eyeOff } from 'react-icons-kit/feather/eyeOff';
 import { eye } from 'react-icons-kit/feather/eye'
 import svg1 from './images/ic_google logo (1).svg'
 import svg2 from './images/ic_fb logo.svg'
-
-
 import SlideShow from "./../../Layout/SlideShow";
-import { auth, googleProvider, facebookProvider, signInWithGooglePopup } from "../../firebase/firebase";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithGooglePopup, facebookProvider } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -66,8 +63,7 @@ function Login() {
 
   const handleGoogleLogin = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
-      // const userId = userCredential.user.uid;
+      await signInWithGooglePopup()
       navigate(`/`);
     } catch (error) {
       console.error(error);
@@ -77,7 +73,7 @@ function Login() {
 
   const handleFacebookLogin = async () => {
     try {
-      await signInWithPopup(auth, facebookProvider);
+      await facebookProvider()
       navigate(`/`);
     } catch (error) {
       console.error(error);
@@ -88,7 +84,6 @@ function Login() {
 
   return (
     <div className="login-container min-h-screen md:flex">
-
       <div className="md:w-1/2">
         <SlideShow />
       </div>

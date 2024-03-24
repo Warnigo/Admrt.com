@@ -4,8 +4,6 @@ import { getFirestore, collection, doc, addDoc, setDoc, query, getDocs, orderBy,
 import { getStorage } from 'firebase/storage';
 import { getDatabase } from 'firebase/database';
 
-
-
 const firebaseConfig = {
   apiKey: "AIzaSyAkkVy0stmZ5GPpi1AIUGoFnd1wIDHJH70",
   authDomain: "admrt-com.firebaseapp.com",
@@ -21,11 +19,13 @@ provider.setCustomParameters({
     prompt : "select_account "
 });
 
+const providerFacebook = new FacebookAuthProvider();
+
 const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
-const facebookProvider = new FacebookAuthProvider();
+const facebookProvider = () => signInWithPopup(auth, providerFacebook);
 const db = getFirestore(app);
 const storage = getStorage(app);
 const database = getDatabase(app);
