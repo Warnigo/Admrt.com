@@ -7,8 +7,7 @@ import svg2 from './images/ic_fb logo.svg'
 
 
 import SlideShow from "./../../Layout/SlideShow";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, googleProvider, facebookProvider } from "../../firebase/firebase";
+import { auth, googleProvider, facebookProvider, signInWithGooglePopup } from "../../firebase/firebase";
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
@@ -54,8 +53,7 @@ function Login() {
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      // const userId = userCredential.user.uid;
+      await signInWithGooglePopup();
       setLoading(false)
       navigate(`/`);
     } catch (error) {
@@ -90,7 +88,7 @@ function Login() {
 
   return (
     <div className="login-container min-h-screen md:flex">
-   
+
       <div className="md:w-1/2">
         <SlideShow />
       </div>

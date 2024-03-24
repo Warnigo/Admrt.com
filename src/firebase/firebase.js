@@ -16,13 +16,12 @@ const firebaseConfig = {
   measurementId: "G-0SXGS2RHVJ"
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
 const provider = new GoogleAuthProvider();
-  
 provider.setCustomParameters({   
     prompt : "select_account "
 });
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+
+const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
@@ -49,6 +48,7 @@ export {
   requestCollection,
   portfolioCollection,
   messageCollection,
+  signInWithGooglePopup,
 };
 
 export async function savePortfolioFirebase(userId, portfolioId, userData) {
