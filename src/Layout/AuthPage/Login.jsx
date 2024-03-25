@@ -5,8 +5,9 @@ import { eye } from 'react-icons-kit/feather/eye'
 import svg1 from './images/ic_google logo (1).svg'
 import svg2 from './images/ic_fb logo.svg'
 import SlideShow from "./../../Layout/SlideShow";
-import { signInWithGooglePopup, facebookProvider } from "../../firebase/firebase";
+import { signInWithGooglePopup, facebookProvider, auth } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -50,7 +51,7 @@ function Login() {
     }
 
     try {
-      await signInWithGooglePopup();
+      await signInWithEmailAndPassword(auth, email, password);
       setLoading(false)
       navigate(`/`);
     } catch (error) {
