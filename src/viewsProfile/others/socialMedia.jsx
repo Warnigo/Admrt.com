@@ -10,10 +10,11 @@ import eye from '../../image/eye 1.svg'
 import AboutHim from './Aboutothers';
 import { auth, usersCollection } from '../../firebase/firebase'
 import { doc, getDoc } from 'firebase/firestore';
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 const SocialMedia = () => {
       const [selectedSocialMedia, setSelectedSocialMedia] = useState([]);
+      const [medieData, setMediaData] = useState();
       const { userUID } = useParams()
 
       useEffect(() => {
@@ -28,6 +29,7 @@ const SocialMedia = () => {
                                     const matchedMedia = Object.keys(media).filter(mediaName => socialMediaPages.some(page => page.name.toLowerCase() === mediaName.toLowerCase()));
                                     const selectedMedia = matchedMedia.map(mediaName => socialMediaPages.find(page => page.name.toLowerCase() === mediaName.toLowerCase()));
                                     setSelectedSocialMedia(selectedMedia);
+                                    setMediaData(media);
                               }
                         } catch (err) {
                               console.error(err);
@@ -70,9 +72,9 @@ const SocialMedia = () => {
                                           <div className='w-5/6 flex justify-between'>
                                                 <div>{socialMedia.name && <h1>{socialMedia.name}</h1>}</div>
                                                 {socialMedia.name && (
-                                                      <div className='flex gap-5'>
+                                                      <Link to={medieData && medieData[socialMedia.name]} className='flex gap-5'>
                                                             <img src={eye} alt="eye" className='w-6 cursor-pointer' />
-                                                      </div>
+                                                      </Link>
                                                 )}
                                           </div>
                                     </div>
