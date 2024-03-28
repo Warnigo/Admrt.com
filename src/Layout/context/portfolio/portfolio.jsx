@@ -186,7 +186,7 @@ const Portfolio = () => {
                   <div className='pt-2'>
                     <div className="">
                       <p className='pl-1'>Name</p>
-                      <p className='px-1 pb-1 text-sm text-gray-500'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                      <p className='px-1 pb-1 text-sm text-gray-500'>This is will be the title of your portfolio</p>
                       <input type="text"
                         placeholder='Writing portfolio name'
                         className={`w-full p-2 border rounded-lg ${errorMessageTitle ? "border-red-600" : ""}`}
