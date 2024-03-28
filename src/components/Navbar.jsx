@@ -273,6 +273,15 @@ function StickyNavbar({ authenticated }) {
         <Typography
           as="li"
           variant="small"
+          className="p-1 text-black max-[1280px]:text-base text-lg font-normal mr-3"
+        >
+          <Link to="/about" className="flex items-center hover:text-blue-700 hover:duration-500 ">
+            <h1>About</h1>
+          </Link>
+        </Typography>
+        <Typography
+          as="li"
+          variant="small"
           className="p-1 text-black max-[1280px]:text-base text-lg font-normal"
         >
           <Link to={`/message`} className="flex items-center hover:text-blue-700 ">

@@ -20,7 +20,7 @@ const Main = ({ authenticated, onUserSelect }) => {
     <>
       <Navbar authenticated={authenticated} onUserSelect={onUserSelect} />
       <Outlet />
-      <Footer />
+      <Footer authenticated={authenticated} />
     </>
   );
 };

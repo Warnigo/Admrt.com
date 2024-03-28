@@ -2,7 +2,8 @@ import React from 'react'
 import white from '../Layout/AuthPage/images/Group white.svg'
 import { Link } from 'react-router-dom'
 
-const Footer = () => {
+const Footer = ({ authenticated }) => {
+  console.log(authenticated);
   return (
     <div>
       <footer class="mt-8 footer bg-[#18181B]">
@@ -17,9 +18,7 @@ const Footer = () => {
               <p class="mt-4 max-w-xs text-neutral-500 text-base font-light">
                 Your Brand. Strategic Ad Spaces. One platform
               </p>
-
             </div>
-
             <div
               class=" grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-2"
             >
@@ -32,12 +31,12 @@ const Footer = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/advertiser/registasion" class="text-neutral-500 text-base font-light transition hover:text-[#2B59FF]">
+                    <Link to={authenticated ? "/" : "/advertiser/registasion"} class="text-neutral-500 text-base font-light transition hover:text-[#2B59FF]">
                       Find The Best Places To Advertise
                     </Link>
                   </li>
                   <li>
-                    <Link to={"/adSpaceHost/registasion"} class="text-neutral-500 text-base font-light transition hover:text-[#2B59FF]">
+                    <Link to={authenticated ? "/" : "/adSpaceHost/registasion"} class="text-neutral-500 text-base font-light transition hover:text-[#2B59FF]">
                       Become An Ad Space Host
                     </Link>
                   </li>

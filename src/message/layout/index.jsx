@@ -340,12 +340,12 @@ const MessageIndex = ({ isMobile }) => {
                                     <button
                                         class="flex items-center justify-center rounded-xl text-white flex-shrink-0"
                                         type="submit"
+                                        disabled={!message}
                                     >
                                         <svg width="24" height="23" viewBox="0 0 24 23" fill="none" xmlns="http://www.w3.org/2000/svg" className="m-auto">
                                             <path d="M23 5.51055L12.1931 21.3588L10.8042 12.5518L3.87163 6.94548L23 5.51055Z" fill="#2B59FF" stroke="#2B59FF" stroke-linecap="round" stroke-linejoin="round" />
                                             <path d="M22.9987 5.50982L10.8394 12.6755" stroke="#2B59FF" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
-
                                     </button>
                                 </div>
                             </form>
